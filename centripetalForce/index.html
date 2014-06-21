@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Rotor Arm Tension</title>
+		<style type="text/css">
+			p {
+				color: white;
+				text-align: center; }
+			legend {
+				color: white;
+				text-align: left; }
+			.fieldset-auto-width {
+         		display: inline-block;
+				text-align: center; 
+				vertical-align:text-top;}
+		</style>
+	    <script type="text/javascript" src="processing.js"></script>
+		<script type="text/javascript">
+			var bound = false;
+			var pjs;
+	
+			function bindJavascript() {
+	        	pjs = Processing.getInstanceById('centripetalForce');
+	        	if(pjs!=null) {
+	          		pjs.bindJavascript(this);
+	          		bound = true; }
+	        	if(!bound) setTimeout(bindJavascript, 250);
+	      	}
+	
+	      	bindJavascript();
+			
+	        function setMass() {
+	            var x = Number(document.getElementById('mass').value);
+	 			document.getElementById('massDisplay').value = x;
+	            pjs.setMass(x);
+			}
+			
+	        function setRadius() {
+	            var x = Number(document.getElementById('radius').value);
+	 			document.getElementById('radiusDisplay').value = x;
+	            pjs.setRadius(x);
+			}
+			
+	        function setRPM() {
+	            var x = Number(document.getElementById('rpm').value);
+	 			document.getElementById('rpmDisplay').value = x;
+	            pjs.setRPM(x);
+			}
+			
+			function showValues(mass, radius, rpm, force) {
+				//inputs
+    			document.getElementById('mass').value = mass;
+    			document.getElementById('radius').value = radius;
+    			document.getElementById('rpm').value = rpm;
+    			document.getElementById('force').value = " " +force;
+  			}
+        </script>
+	</head>
+	<body style="background-color: #252525">
+		<div style="text-align: center;">
+			<p><canvas id="centripetalForce" data-processing-sources="centripetalForce.pde"></canvas><p>
+			
+			<fieldset class="fieldset-auto-width">
+				<legend>Inputs</legend>
+				<p >mass (kg)
+					<input 
+					type="range" 
+					id="mass" 
+					onchange="setMass()"
+					min="1"
+					max="100"
+					step="1"
+					value="20">
+					</input><output type="text" id="massDisplay" value="">20</output>
+				</p>
+				<p>radius (m)
+					<input 
+					type="range" 
+					id="radius" 
+					onchange="setRadius()"
+					min="1"
+					max="10"
+					step="1"
+					value="5">
+					</input><output type="text" id="radiusDisplay" value="">5</output>
+				</p>
+				<p>rpm
+					<input 
+					type="range" 
+					id="rpm" 
+					onchange="setRPM()"
+					min="1"
+					max="20"
+					step="1"
+					value="10">
+					</input><output type="text" id="rpmDisplay" value="">10</output>
+				</p>
+				<p>Rotor arm tension:  <output type="text" id="force" value="">10</output>
+				</p>
+			</fieldset>
+			<!--<fieldset class="fieldset-auto-width">
+				<legend>Outputs</legend>
+				<p id="foo"> </p>
+			</fieldset>-->
+		</div>
+	</body>
+</html>

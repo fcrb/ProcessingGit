@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Inelastic collisions at any angle</title>
+		<style type="text/css">
+			p {
+				color: black;
+				text-align: center; }
+			legend {
+				color: black;
+				text-align: left; }
+			.fieldset-auto-width {
+         		display: inline-block;
+				text-align: center; 
+				border: 1px solid #DDDDDD;}
+		</style>
+	    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+	    <script type="text/javascript" src="processing.js"></script>
+        <script type="text/javascript" src="jquery.knob.js"></script>
+		<script type="text/javascript">
+        $(function() {
+
+            $(".knob").knob({
+                change : function (value) {
+					var inputId = this.i[0].getAttribute("id");
+					var pjs = Processing.getInstanceById('collisionAnyAngle');
+					value = Math.round(value * 0.2) * 5;
+	            	if(inputId == "knob1") {
+						pjs.setHeading(0, value);
+					}
+	            	else if(inputId == "knob2") {
+						pjs.setHeading(1, value);
+					}
+                },
+                draw : function () {
+
+                    // "tron" case
+                    if(this.$.data('skin') == 'tron') {
+                        var a = this.angle(this.cv)  // Angle
+                            , sa = this.startAngle          // Previous start angle
+                            , sat = this.startAngle         // Start angle
+                            , ea                            // Previous end angle
+                            , eat = sat + a                 // End angle
+                            , r = true;
+
+                        this.g.lineWidth = this.lineWidth;
+						var magic1 = 0.3;
+                        this.o.cursor
+                            && (sat = eat - magic1)
+                            && (eat = eat + magic1);
+
+                        if (this.o.displayPrevious) {
+                            ea = this.startAngle + this.angle(this.value);
+                            this.o.cursor
+                                && (sa = ea - magic1)
+                                && (ea = ea + magic1);
+                            this.g.beginPath();
+                            this.g.strokeStyle = this.previousColor;
+                            this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sa, ea, false);
+                            this.g.stroke();
+                        }
+                        return false;
+                    }
+                }
+            });
+
+        });
+
+	        function fade(id) {
+	        	var pjs = Processing.getInstanceById(id);
+	            var f = document.getElementById('fade').checked;
+	            pjs.setFade(f);
+			}
+	        function setSpeed0(id) {
+	        	var pjs = Processing.getInstanceById(id);
+	            var d = document.getElementById('speedCar0').value;
+	            pjs.setSpeed(0, d);
+			}
+	        function setSpeed1(id) {
+	        	var pjs = Processing.getInstanceById(id);
+	            var d = document.getElementById('speedCar1').value;
+	            pjs.setSpeed(1, d);
+			}
+	        function setMass0(id) {
+	        	var pjs = Processing.getInstanceById(id);
+	            var d = document.getElementById('massCar0').value;
+	            pjs.setMass(0, Number(d));
+			}
+	        function setMass1(id) {
+	        	var pjs = Processing.getInstanceById(id);
+	            var d = document.getElementById('massCar1').value;
+	            pjs.setMass(1, d);
+			}
+	        function run(id) {
+	        	var pjs = Processing.getInstanceById(id);
+	            var r = document.getElementById('run').checked;
+	            pjs.run(r);
+			}
+        </script>
+	</head>
+	<body style="background-color: #FFFFFF">
+		<div style="text-align: center;">
+		<fieldset class="fieldset-auto-width">
+			<legend style="color: #FF0000">Red object</legend>
+			<p>Speed
+				<input
+					type="range"  
+					id="speedCar0"   
+					onchange="setSpeed0('collisionAnyAngle')"
+					value="20" 
+					size="4" 
+					min="0" max="200" step="5"
+					style="width: 100px;">
+				</input>
+			</p>
+			<p>Mass
+				<input
+					type="range"  
+					id="massCar0"   
+					onchange="setMass0('collisionAnyAngle')"
+					value="1000" 
+					size="4" 
+					min="100" max="5000" step="100"
+					style="width: 100px">
+				</input>
+			</p>
+			
+			<input 
+				id="knob1" 
+				class="knob" 
+				data-displayInput="true" 
+				data-width="75" 
+				data-height="75" 
+				data-cursor="true"
+				data-bgColor="#BBBBBB" 
+				data-fgColor="#FF0000" 
+				data-thickness=".5" 
+				value="90"
+				data-step="5" data-min="0" data-max="360" />
+
+		</fieldset>
+		<fieldset class="fieldset-auto-width">
+			<legend style="color: #0000FF">Blue object</legend>
+			<p>Speed
+				<input
+					type="range"  
+					id="speedCar1"   
+					onchange="setSpeed1('collisionAnyAngle')"
+					value="20" 
+					size="4" 
+					min="0" max="200" step="5"
+					style="width: 100px;">
+				</input>
+			</p>
+			<p>Mass
+				<input
+					type="range"  
+					id="massCar1"   
+					onchange="setMass1('collisionAnyAngle')"
+					value="1000" 
+					size="4" 
+					min="100" max="5000" step="100"
+					style="width: 100px">
+				</input>
+			</p>
+				
+			<input 
+				id="knob2" 
+				class="knob" 
+				data-displayInput="true" 
+				data-width="75" 
+				data-height="75" 
+				data-cursor="true"
+				data-bgColor="#AAAAAA" 
+				data-fgColor="#0000FF" 
+				data-thickness=".5" 
+				value="360"
+				data-step="5" 
+				data-min="0" 
+				data-max="360" />
+
+		 </fieldset>
+		
+		<p><canvas id="collisionAnyAngle"
+					data-processing-sources="collisionAnyAngle.pde"
+					style="border:1px solid #DDDDDD;"></canvas></p>
+	
+		Run <input 
+					type="checkbox" 
+					id="run" 
+					onclick="run('collisionAnyAngle')">
+		</input>
+		
+		</div>
+	</body>
+</html>

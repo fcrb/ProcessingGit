@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Binary Counter</title>
+		<style type="text/css">
+			p {
+				color: white;
+				text-align: center; }
+			legend {
+				color: white;
+				text-align: left; }
+			.fieldset-auto-width {
+         		display: inline-block;
+				text-align: center; 
+				vertical-align:text-top;}
+		</style>
+	    <script type="text/javascript" src="processing.js"></script>
+		<script type="text/javascript">
+			var bound = false;
+			var pjs;
+	
+			function bindJavascript() {
+	        	pjs = Processing.getInstanceById('bitCounter');
+	        	if(pjs!=null) {
+	          		pjs.bindJavascript(this);
+	          		bound = true; }
+	        	if(!bound) setTimeout(bindJavascript, 250);
+	      	}
+	
+	      	bindJavascript();
+			
+	        function restart() {
+	            pjs.restart();
+			}
+			
+	        function setFPS() {
+	            var x = Number(document.getElementById('fps').value);
+	 			document.getElementById('fpsDisplay').value = x;
+	            pjs.setFramesPerSecond(x);
+			}
+        </script>
+	</head>
+	<body style="background-color: #252525">
+		<div style="text-align: center;">
+			<p><canvas id="bitCounter" data-processing-sources="bitCounter.pde"></canvas><p>
+			
+				<p >frames per second
+					<input 
+					type="range" 
+					id="fps" 
+					onchange="setFPS()"
+					min="1"
+					max="60"
+					step="1"
+					value="2">
+					</input><output type="text" id="fpsDisplay" value="">2</output>
+				</p>
+				<p><button onclick="restart()">Restart</button>
+				</p>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Hermit 5</title>
+	    <script type="text/javascript" src="processing.js"></script>
+        <script type="text/javascript">
+        function numberOfHermits(id) {
+        	var pjs = Processing.getInstanceById(id);
+            var n = document.getElementById('numHermits').value;
+            pjs.setNumHermits(n);
+		}
+        function hermitDiameter(id) {
+        	var pjs = Processing.getInstanceById(id);
+            var d = document.getElementById('hermitDiameter').value;
+            pjs.setHermitDiameter(d);
+		}
+        </script>
+	</head>
+	<body style="background-color:black">
+		<div style="text-align:center;">
+			<p><span style="color:white">Number of Hermits:</span>
+				<input type="text" value="30" size="5" id="numHermits"></input>
+				<button type="button" onclick="numberOfHermits('hermit5')">Change</button>
+			</p>
+			<p><span style="color:white">Hermit diameter:</span>
+				<input type="text" value="20" size="5" id="hermitDiameter"></input>
+				<button type="button" onclick="hermitDiameter('hermit5')">Change</button>
+			</p>
+			<canvas id="hermit5" data-processing-sources="hermit5.pde"></canvas>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Radial Symmetry</title>
+		<style type="text/css">
+			p {
+				color: white;
+				text-align: center; }
+			legend {
+				color: white;
+				text-align: left; }
+			.fieldset-auto-width {
+         		display: inline-block;
+				text-align: center; 
+				vertical-align:text-top;}
+		</style>
+	    <script type="text/javascript" src="processing.js"></script>
+		<script type="text/javascript">
+			var bound = false;
+			var pjs;
+	
+			function bindJavascript() {
+	        	pjs = Processing.getInstanceById('symmetry3');
+	        	if(pjs!=null) {
+	          		pjs.bindJavascript(this);
+	          		bound = true; }
+	        	if(!bound) setTimeout(bindJavascript, 250);
+	      	}
+	
+	      	bindJavascript();
+
+			function showValues( symmetry,  lag,  alphaLevel) {
+	 			document.getElementById('symmetryDisplay').value = symmetry;
+	 			document.getElementById('lagDisplay').value = lag;
+	 			document.getElementById('alphaLevelDisplay').value = alphaLevel;
+			}
+			
+	        function setAlphaLevel(sel) {
+	            var x = Number(sel.value);
+	 			document.getElementById('alphaLevel').value = x;
+	            pjs.setAlphaLevel(x);
+			}
+			
+	        function setLag(sel) {
+	            var x = Number(sel.value);
+	 			document.getElementById('lag').value = x;
+	            pjs.setLag(x);
+			}
+			
+	        function setSymmetry(sel) {
+	            var x = Number(sel.value);
+	 			document.getElementById('symmetry').value = x;
+	            pjs.setSymmetry(x);
+			}
+        </script>
+	</head>
+	<body style="background-color: #FFFFFF">
+		<div style="text-align: center;">
+			<canvas id="symmetry3" data-processing-sources="symmetry3.pde"></canvas>
+		</div>
+		<div style="text-align: center;">
+			<p>
+				<div>Symmetry:
+					<input 
+					type="range" 
+					id="symmetry" 
+					onchange="setSymmetry(this)"
+					min="2"
+					max="20"
+					step="1"
+					value="6">
+					</input><output type="text" id="symmetryDisplay" value="">6</output>
+				</div>
+			</p>
+			<p>
+				<div>Lag:
+					<input 
+					type="range" 
+					id="lag" 
+					onchange="setLag(this)"
+					min="1"
+					max="100"
+					step="1"
+					value="30">
+					</input><output type="text" id="lagDisplay" value="">30</output>
+				</div>
+			</p>
+			<p>
+				<div>Alpha level:
+					<input 
+					type="range" 
+					id="alphaLevel" 
+					onchange="setAlphaLevel(this)"
+					min="0"
+					max="255"
+					step="1"
+					value="30">
+					</input><output type="text" id="alphaLevelDisplay" value="">30</output>
+				</div>
+			</p>
+		</div>
+	</body>
+</html>

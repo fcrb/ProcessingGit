@@ -1,0 +1,1 @@
+Project FLX is a collaborative project in our Art of Computing class. We are building a 3D world in Processing. It is intended to run in a browser.

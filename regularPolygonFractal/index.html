@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Regular Polygon Fractal</title>
+		<style type="text/css">
+			p {
+				color: white;
+				text-align: center; }
+			legend {
+				color: white;
+				text-align: left; }
+			.fieldset-auto-width {
+         		display: inline-block;
+				text-align: center; 
+				vertical-align:text-top;}
+		</style>
+	    <script type="text/javascript" src="processing.js"></script>
+		<script type="text/javascript">
+			var bound = false;
+			var pjs;
+	
+			function bindJavascript() {
+	        	pjs = Processing.getInstanceById('regularPolygonFractal');
+	        	if(pjs!=null) {
+	          		pjs.bindJavascript(this);
+	          		bound = true; }
+	        	if(!bound) setTimeout(bindJavascript, 250);
+	      	}
+	
+	      	bindJavascript();
+
+			function showValues(numVertices, maxLevel, scale) {
+	 			document.getElementById('numberOfVerticesDisplay').value = numVertices;
+	 			document.getElementById('recursionDepthDisplay').value = maxLevel;
+	 			document.getElementById('scaleFactorDisplay').value = scale;
+			}
+			
+	        function setNumberOfVertices(sel) {
+	            var x = Number(sel.value);
+	 			document.getElementById('numberOfVertices').value = x;
+	            pjs.setNumberOfVertices(x);
+			}
+			
+	        function setRecursionDepth(sel) {
+	            var x = Number(sel.value);
+	 			document.getElementById('recursionDepth').value = x;
+	            pjs.setRecursionDepth(x);
+			}
+			
+	        function setScaleFactor(sel) {
+	            var x = Number(sel.value);
+	 			document.getElementById('scaleFactor').value = x;
+	            pjs.setScaleFactor(x);
+			}
+        </script>
+	</head>
+	<body style="background-color: #FFFFFF">
+		<div style="text-align: center;">
+			<canvas id="regularPolygonFractal" data-processing-sources="regularPolygonFractal.pde"></canvas>
+		</div>
+		<div style="text-align: center;">
+			<p>
+				<div>Number of vertices: 
+					<input 
+					type="range" 
+					id="numberOfVertices" 
+					onchange="setNumberOfVertices(this)"
+					min="3"
+					max="10"
+					step="1"
+					value="6">
+					</input><output type="text" id="numberOfVerticesDisplay" value="">6</output>
+				</div>
+			</p>
+			<p>
+				<div>Recursion depth: 
+					<input 
+					type="range" 
+					id="recursionDepth" 
+					onchange="setRecursionDepth(this)"
+					min="1"
+					max="5"
+					step="1"
+					value="5">
+					</input><output type="text" id="recursionDepthDisplay" value="">5</output>
+				</div>
+			</p>
+			<p>
+				<div>Scale factor: 
+					<input 
+					type="range" 
+					id="scaleFactor" 
+					onchange="setScaleFactor(this)"
+					min="0.1"
+					max="0.9"
+					step="0.01"
+					value="0.35">
+					</input><output type="text" id="scaleFactorDisplay" value="">0.35</output>
+				</div>
+			</p>
+		</div>
+	</body>
+</html>
