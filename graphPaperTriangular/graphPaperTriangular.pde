@@ -5,8 +5,8 @@ void setup() {
   size(576, 756, PDF, "graphPaperTriangular_1cm.pdf");
   background(255);
 
-  stroke(192);
-  strokeWeight(72.0/300);
+  stroke(128);
+  strokeWeight(72.0/600);
   //quick hack, hacking the line lengths
   float y = 0;
   while (y < height) {

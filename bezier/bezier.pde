@@ -31,9 +31,9 @@ void draw() {
   bezier(cp.get(0).x, cp.get(0).y, cp.get(1).x, cp.get(1).y, 
   cp.get(2).x, cp.get(2).y, cp.get(3).x, cp.get(3).y); 
 
-  for (ControlPoint point : controlPoints) {
-    point.displayLine();
-  }
+//  for (ControlPoint point : controlPoints) {
+//    point.displayLine();
+//  }
 
   for (ControlPoint point : controlPoints) {
     point.displayPoint();

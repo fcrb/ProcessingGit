@@ -5,8 +5,8 @@ void setup() {
   size(576, 756, PDF, "graphPaperSlantTriangular_1cm.pdf");
   background(255);
 
-  stroke(192);
-  strokeWeight(72.0/300);
+  stroke(128);
+  strokeWeight(72.0/1200);
   float y = 0;
   while (y < height) {
     line(0, y, width, y);

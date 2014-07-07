@@ -1,8 +1,8 @@
 import processing.pdf.*;
 float sideLength;
 //Good values: (PI/4, 0.17), (PI/3, 0.3), (PI/6, 0.06), (PI/5, 0.15)
-float levelFraction = 0.2;
-float rotationAngle = PI * 0.33;
+float levelFraction = 0.21;
+float rotationAngle = PI /3;
 boolean alternateUpDown = false;
 
 void setup() {
@@ -10,12 +10,73 @@ void setup() {
   background(255 );
   strokeWeight(0.072 );
 
-  float sideInCM = 10;
+  float sideInCM = 8;
   sideLength = 72 * sideInCM / 2.54; 
   translate(sideLength *0.1, sideLength * 0.4);
 
   drawParallelogram1by2();
+  //  drawParallelogramTromineoe();
+}  
+
+void drawSide() {
+  //  drawKochSide();
+  //  drawArcSide();
+  //  drawSineWaveSide();
+drawPuzzleSide();
+//  drawDampedSineWaveSide();
 }
+
+void drawArcSide() {
+  //arc from 0,0 to sideLength, 0
+  float radius = sideLength *0.54;
+  float arcInRadians = 2 * asin(sideLength / 2 / radius);
+  arc(sideLength/2, radius * cos(arcInRadians/2), radius * 2, radius * 2, (3 * PI - arcInRadians) /2, (3 * PI + arcInRadians) /2);
+}
+
+void drawPuzzleSide() {
+  //arc from 0,0 to sideLength, 0
+  float r = sideLength *0.15;
+  float d = 2 * r;
+  float theta = PI /4;
+  float x0 = sideLength/2 - 2 * r * cos(theta);
+  line(0, 0, x0, 0);
+  arc(x0, -r, d, d, -theta, PI/2);
+  float yc = -r - 2 * r * sin(theta);
+  arc(sideLength/2, yc, d, d, PI - theta, 2 * PI + theta);
+  float x1 = sideLength - x0;
+  arc(x1, -r, d, d, PI/2, PI+theta);
+  line(x1, 0, sideLength, 0);
+}
+
+void drawSineWaveSide() {
+  int numSegments = 30;
+  float dx = sideLength / numSegments;
+  float amp = sideLength * 0.2;
+  float cycles = 1.5;
+  float prevY = 0, nextY = 0;
+  for (int i = 0; i < numSegments; ++i) {
+    nextY = amp * sin((i+1) * cycles * PI * 2.0 / numSegments);
+    line(i * dx, prevY, (i + 1) * dx, nextY);
+    prevY = nextY;
+  }
+}
+
+void drawDampedSineWaveSide() {
+  int numSegments = 100;
+  float dx = sideLength / numSegments/2;
+  float amp = sideLength * 0.2;
+  float cycles = 120;
+  float prevY = 0, nextY = 0;
+  for (int i = 0; i < numSegments; ++i) {
+    nextY = amp * sin( cycles * PI * 2.0 / (i+1)) * (i+1) / numSegments;
+    float x0 = i * dx;
+    float x1 = (i+1) * dx;
+    line(x0, prevY, x1, nextY);
+    line(sideLength - x0, prevY, sideLength - x1, nextY);
+    prevY = nextY;
+  }
+}
+
 
 void drawParallelogram1by1() {
   drawSide();
@@ -98,10 +159,6 @@ void drawParallelogramTromineoe() {
   translate(sideLength, 0);
   rotate(PI/3);
   drawSideFlipped();
-}
-
-void drawSide() {
-  drawKochSide();
 }
 
 void drawSideFlipped() {

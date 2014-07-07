@@ -1,63 +1,56 @@
 import processing.pdf.*;
 float sideLength;
 //Good values: (PI/4, 0.17), (PI/3, 0.3), (PI/6, 0.06), (PI/5, 0.15)
-float levelFraction = 0.2;
-float rotationAngle = PI * 0.33;
+float sideInCM = 2;//240 on a 12x24 sheet
+float levelFraction = .25;
+float rotationAngle = PI  /3;
 boolean alternateUpDown = false;
+float MAX_SEGMENT_LENGTH = 1;
 
 void setup() {
-  size(800, 600);//, PDF, "tesselationKoch5.pdf");
+  //23.5 by 11.5 inches
+  size(47 * 72 / 2, 23 * 72 / 2, PDF, "tesselationKochSheet.pdf");
   background(255 );
   strokeWeight(0.072 );
 
-  float sideInCM = 10;
   sideLength = 72 * sideInCM / 2.54; 
   translate(sideLength *0.1, sideLength * 0.4);
 
-  drawParallelogram1by2();
-}
-
-void drawParallelogram1by1() {
-  drawSide();
-  translate(sideLength, 0);
-  rotate(PI/3);
-  drawSideFlipped();
-  translate(sideLength, 0);
-  rotate(2 * PI/3);
-  drawSide();
-  translate(sideLength, 0);
-  rotate(PI/3);
-  drawSideFlipped();
-}
-
-void drawRect1by2() {
-  drawSide();
-  translate(sideLength, 0);
-  drawSideFlipped();
-  translate(sideLength, 0);
-  rotate(PI/2);
-  drawSide();
-  translate(sideLength, 0);
-  rotate(PI/2);
-  drawSideFlipped();
-  translate(sideLength, 0);
-  drawSide();
-  translate(sideLength, 0);
-  rotate(PI/2);
-  drawSideFlipped();
-}
-
-void drawSquare1by1() {
-  drawSide();
-  translate(sideLength, 0);
-  rotate(PI/2);
-  drawSideFlipped();
-  translate(sideLength, 0);
-  rotate(PI/2);
-  drawSide();
-  translate(sideLength, 0);
-  rotate(PI/2);
-  drawSideFlipped();
+  //horizontals
+  int row = 0;
+  float y = 0;//height * 0.05;
+  translate(0, y);
+  float dy = sideLength * sqrt(3) / 2;
+  float x;
+  while (y < height) {
+    x = - row++ * sideLength / 2;
+    while (x < 0) {
+      x += sideLength * 2;
+    }
+    pushMatrix();
+    translate(x, 0);
+    while (x < width) {
+      if (y + dy < height && x < width) {
+        //don't draw the last cuts off the bottom and right of the page
+        rotate(PI/3);
+        drawSide();
+        rotate(-PI/3);
+      }
+      x += sideLength;
+      if (x < width) {
+        drawSide();
+        translate(sideLength, 0);
+        x += sideLength;
+      }       
+      if (x + sideLength < width) {
+        drawSideFlipped();
+        translate(sideLength, 0);
+      }
+    }
+    popMatrix();
+    y += dy;
+    translate(0, dy);
+  }
 }
 
 void drawParallelogram1by2() {
@@ -71,29 +64,6 @@ void drawParallelogram1by2() {
   rotate(2 * PI/3);
   drawSideFlipped();
   translate(sideLength, 0);
-  drawSide();
-  translate(sideLength, 0);
-  rotate(PI/3);
-  drawSideFlipped();
-}
-
-void drawParallelogramTromineoe() {
-  drawSide();
-  translate(sideLength, 0);
-  drawSideFlipped();
-  translate(sideLength, 0);
-  rotate(PI/3);
-  drawSide();
-  translate(sideLength, 0);
-  drawSideFlipped();
-  translate(sideLength, 0);
-  rotate(2 * PI/3);
-  drawSide();
-  translate(sideLength, 0);
-  rotate(PI/3);
-  drawSideFlipped();
-  translate(sideLength, 0);
-  rotate(-PI/3);
   drawSide();
   translate(sideLength, 0);
   rotate(PI/3);
@@ -120,7 +90,7 @@ void drawKochSide() {
 }
 
 void drawKoch(float thisSideLength) {
-  if (thisSideLength < 2) {
+  if (thisSideLength < MAX_SEGMENT_LENGTH) {
     line(0, 0, thisSideLength, 0); 
     return;
   }
