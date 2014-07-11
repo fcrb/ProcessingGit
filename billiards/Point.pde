@@ -8,7 +8,7 @@ class Point {
 
   void draw() {
     stroke(255,0,0);
-    point(x, y);
+    point(round(x), round(y));
   }
 }
 
