@@ -1,8 +1,11 @@
-float xCells = 3.2;
-float yCells = 2.5;
+float xCells = 7;
+float yCells = 5;
 float insetFraction = 0.1;
 float cellWidth, xLeft, xRight, yTop, yBottom;
 Ball ball;
+ArrayList<Point> trace;
+int numPoints = 1000;
+float speed = 3;
 
 void setup() {
   size(640, 320);
@@ -12,9 +15,12 @@ void setup() {
   yTop = 0.5 * ( height - (cellWidth * yCells));
   yBottom = yTop + cellWidth * yCells;
   ball = new Ball();
+  trace = new ArrayList<Point>();
+  frameRate(120);
 }
 
 void draw() {
+  if(ball.stopped) return;
   background(255);
 
   //draw table 
@@ -35,5 +41,16 @@ void draw() {
   line(xLeft, yTop, xRight, yTop);
 
   //draw ball
+  for (Point point: trace) {
+    point.draw();
+  }
+
   ball.draw();
+
+  //add ball's location to trace
+  while (trace.size () >= numPoints) {
+    trace.remove(0);
+  }
+  trace.add(new Point(ball.x, ball.y));
 }
+
