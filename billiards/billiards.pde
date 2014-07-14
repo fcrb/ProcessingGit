@@ -48,7 +48,9 @@ void draw() {
   if (ball.stopped) return;
   if (javascript!=null)
     javascript.showValues(xCells, yCells);
-  background(255);
+  background(0);
+  fill(255);
+  rect(xLeft, yTop, xRight - xLeft, yBottom - yTop);
 
   //draw table 
   stroke(192); 
