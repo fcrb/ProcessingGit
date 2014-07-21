@@ -10,7 +10,7 @@ class Complex {
     return real * real + imag * imag;
   }
 
-  int colorMapped() {
+  int grayscaleByQuadrant() {
     if (real > 0) {
       return imag > 0 ? 255 : 0;
     }
@@ -19,6 +19,57 @@ class Complex {
 
   int blackWhite() {
     return real * imag > 0 ? 255 : 0;
+  }
+
+  int grayscaleByAngle() {
+    //map angle between - PI/2 to 3 * PI/2 to 0 to 255
+    float angle;
+    if (real == 0) {
+      angle = imag > 0 ? PI /2 : - PI/2;
+    } 
+    else {
+      angle = atan(imag / real);
+      if (real < 0) {
+        angle = PI - angle;
+      }
+    }
+    return (int) map(angle, -PI /2, 3 * PI/2, 0, 255);
+  }
+
+  int grayscaleByAngle2() {
+    //map angle between - PI/2 to 3 * PI/2 to 0 to 255
+    float angle;
+    if (real == 0) {
+      angle = imag > 0 ? PI /2 : - PI/2;
+    } 
+    else {
+      angle = atan(imag / real);
+      if (real < 0) {
+        angle = PI - angle;
+      }
+    }
+    if (angle > PI /2) {
+      angle =  PI - angle;
+    }
+    return (int) map(angle, -PI /2, PI/2, 0, 255);
+  }
+
+  int grayscaleByAngle3() {
+    //map angle between - PI/2 to 3 * PI/2 to 0 to 255
+    float angle;
+    if (real == 0) {
+      angle = imag > 0 ? PI /2 : - PI/2;
+    } 
+    else {
+      angle = atan(imag / real);
+      if (real < 0) {
+        angle = angle + PI;
+      }
+    }
+    if (angle > PI /2) {
+      angle =  PI - angle;
+    }
+    return (int) map(angle, -PI /2, PI/2, 0, 255);
   }
 
   Complex conjugate() {
@@ -54,18 +105,34 @@ class Complex {
     return new Complex(real * s, imag * s);
   }
 
-  float cosh(float x) {
+  float _cosh(float x) {
     float e_x = exp(x);
     return (e_x + 1/e_x) / 2;
   }
 
-  float sinh(float x) {
+  float _sinh(float x) {
     float e_x = exp(x);
     return (e_x - 1/e_x) / 2;
   }
 
   Complex sine() {
-    return new Complex(sin(real) * cosh(imag), cos(real) * sinh(imag));
+    return new Complex(sin(real) * _cosh(imag), cos(real) * _sinh(imag));
+  }
+
+  Complex cosine() {
+    return new Complex(cos(real) * _cosh(imag), - sin(real) * _sinh(imag));
+  }
+
+  Complex cosh() {
+    return new Complex(_cosh(real) * cos(imag), _sinh(real) * sin(imag));
+  }
+
+  Complex sinh() {
+    return new Complex(_sinh(real) * cos(imag), _cosh(real) * sin(imag));
+  }
+  
+  Complex tanh() {
+    return sinh().divideBy(cosh());
   }
 
   Complex times(Complex z) {
