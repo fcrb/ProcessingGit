@@ -2,7 +2,7 @@ import processing.pdf.*;
 float sideLengthInCm = 1;
 float verticalSpace = sideLengthInCm * sqrt(3) / 2 / 2.54 * 72;
 void setup() {
-  size(576, 756, PDF, "graphPaperTriangular_1cm.pdf");
+  size(576, 756);//, PDF, "graphPaperTriangular_1cm.pdf");
   background(255);
 
   stroke(128);
