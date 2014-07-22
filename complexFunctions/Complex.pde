@@ -10,6 +10,21 @@ class Complex {
     return real * real + imag * imag;
   }
 
+  float theta() {
+    //between pi/2 and -pi/2
+    float theta;
+    if (real == 0) {
+      theta = imag > 0 ? PI /2 : - PI/2;
+    } 
+    else {
+      theta = atan(imag / real);
+      if (real < 0) {
+        theta += PI;
+      }
+    }
+    return theta;
+  }
+
   int grayscaleByQuadrant() {
     if (real > 0) {
       return imag > 0 ? 255 : 0;
@@ -56,16 +71,7 @@ class Complex {
 
   int grayscaleByAngle3() {
     //map angle between - PI/2 to 3 * PI/2 to 0 to 255
-    float angle;
-    if (real == 0) {
-      angle = imag > 0 ? PI /2 : - PI/2;
-    } 
-    else {
-      angle = atan(imag / real);
-      if (real < 0) {
-        angle = angle + PI;
-      }
-    }
+    float angle = theta();
     if (angle > PI /2) {
       angle =  PI - angle;
     }
@@ -115,6 +121,14 @@ class Complex {
     return (e_x - 1/e_x) / 2;
   }
 
+  Complex ln() {
+    float angle = theta();
+    if (angle < 0) {
+      angle += 2 * PI;
+    }
+    return new Complex(log(abs2())/2, angle);
+  }
+
   Complex sine() {
     return new Complex(sin(real) * _cosh(imag), cos(real) * _sinh(imag));
   }
@@ -130,7 +144,7 @@ class Complex {
   Complex sinh() {
     return new Complex(_sinh(real) * cos(imag), _cosh(real) * sin(imag));
   }
-  
+
   Complex tanh() {
     return sinh().divideBy(cosh());
   }

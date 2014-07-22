@@ -1,4 +1,4 @@
-int imageSize = 2560;
+int imageSize = 256;
 float verticalScale = 1;
 float range = PI;
 float aspectRatio = 1;
@@ -48,11 +48,13 @@ Complex f(Complex z) {
   //return z.sinh().cosh().sinh().cosh();//_11
   //return z.sinh().cosh().sinh().cosh().sinh();//_11
   //return z.sinh().sinh().sinh().sinh().sinh();//_12
-  Complex z_ = z.sinh();
-  for (int i = 0; i < 10; ++i) {
-    z_ = z_.sinh();
-  }
-  return z_;//_13
+//  Complex z_ = z.sinh();
+//  for (int i = 0; i < 10; ++i) {
+//    z_ = z_.sinh();
+//  }
+//  return z_;//_13
+
+  return ONE.divideBy(z );
 
   //  return z.raisedTo(3).minus(z).plus(z.times(z).scaleBy(4));
   //  return new Complex(1, 0).divideBy(z).plus(z);
