@@ -1,6 +1,6 @@
 int imageSize = 256;
 float verticalScale = 1;
-float range = PI;
+float range = PI /6;
 float aspectRatio = 1;
 
 Complex ONE = new Complex(1, 0);
@@ -23,7 +23,9 @@ void setup() {
       float y = yMax - j * (yMax - yMin) / height;
       Complex z = new Complex(x, y);
       //      stroke(f(z).colorMapped());
-      stroke(f(z).grayscaleByAngle3());
+//      stroke(f(z).grayscaleByAngle());
+   //   stroke(f(z.swirl().swirl()).convertToColor());//#17
+      stroke(f(z).convertToColor());
       point(i, j);
     }
   }
@@ -34,7 +36,7 @@ void setup() {
 Complex f(Complex z) {
   // Up to image 8, used grayscaleByAngle2, which had a bug
 
-  //  return z.sine();
+ return I.divideBy(z.swirl());
   //  return z.times(I).sine();
   // return z.times(I).sine().minus(z.sine());
   // return z.times(I).sin().minus(ONE.divideBy(z.sin()));
@@ -54,7 +56,7 @@ Complex f(Complex z) {
 //  }
 //  return z_;//_13
 
-  return ONE.divideBy(z );
+//  return ONE.divideBy(z );
 
   //  return z.raisedTo(3).minus(z).plus(z.times(z).scaleBy(4));
   //  return new Complex(1, 0).divideBy(z).plus(z);

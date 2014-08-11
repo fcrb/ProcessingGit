@@ -11,7 +11,7 @@ float dashLength;
 float strWeight = 72.0 / 300;
 
 void setup() {
-  size(480, 480);//, PDF, "creasePattern.pdf");
+  size(480, 480, PDF, "creasePattern.pdf");
   paperWidth = 6 * 72;
   inset = (width - paperWidth) * 0.5;
   dashLength = paperWidth * 0.03;
@@ -20,7 +20,7 @@ void setup() {
   strokeWeight(strWeight);
   translate(inset, inset);
 
-  masuBox();
+  blintz();
 }
 
 void blintz() {

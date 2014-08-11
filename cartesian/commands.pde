@@ -55,6 +55,15 @@ void drawCircle(float x0, float y0, float radius) {
   popMatrix();
 }
 
+void drawFunction(Function f, int numSteps) {
+  float dx = (X_MAX-X_MIN)/numSteps;
+  float x = X_MIN;
+  for(int i = 0; i < numSteps; ++i) {
+    drawLineSegment(x, f.value(x), x+dx, f.value(x+dx));
+    x += dx;
+  }
+}
+
 void drawLineSegment(float x0, float y0, float x1, float y1) {
   pushMatrix();
   line(mapX(x0), mapY(y0), mapX(x1), mapY(y1));

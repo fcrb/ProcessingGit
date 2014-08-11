@@ -11,7 +11,7 @@ class Complex {
   }
 
   float theta() {
-    //between pi/2 and -pi/2
+    //between 3 * pi/2 and -pi/2
     float theta;
     if (real == 0) {
       theta = imag > 0 ? PI /2 : - PI/2;
@@ -23,6 +23,15 @@ class Complex {
       }
     }
     return theta;
+  }
+
+  float angleWrapped() {
+    //continuously varies between pi/2 and -pi/2
+    float angle = theta();
+    if (angle > PI /2) {
+      angle =  PI - angle;
+    }
+    return angle;
   }
 
   int grayscaleByQuadrant() {
@@ -38,44 +47,20 @@ class Complex {
 
   int grayscaleByAngle() {
     //map angle between - PI/2 to 3 * PI/2 to 0 to 255
-    float angle;
-    if (real == 0) {
-      angle = imag > 0 ? PI /2 : - PI/2;
-    } 
-    else {
-      angle = atan(imag / real);
-      if (real < 0) {
-        angle = PI - angle;
-      }
-    }
-    return (int) map(angle, -PI /2, 3 * PI/2, 0, 255);
+    return (int) map(angleWrapped(), -PI /2, PI/2, 0, 255);
   }
 
-  int grayscaleByAngle2() {
-    //map angle between - PI/2 to 3 * PI/2 to 0 to 255
-    float angle;
-    if (real == 0) {
-      angle = imag > 0 ? PI /2 : - PI/2;
-    } 
-    else {
-      angle = atan(imag / real);
-      if (real < 0) {
-        angle = PI - angle;
-      }
-    }
-    if (angle > PI /2) {
-      angle =  PI - angle;
-    }
-    return (int) map(angle, -PI /2, PI/2, 0, 255);
-  }
-
-  int grayscaleByAngle3() {
+  color convertToColor() {
     //map angle between - PI/2 to 3 * PI/2 to 0 to 255
     float angle = theta();
     if (angle > PI /2) {
       angle =  PI - angle;
     }
-    return (int) map(angle, -PI /2, PI/2, 0, 255);
+    float maxColor = 255.9999;
+    int r = (int) map(angleWrapped(), - PI/2, PI / 2, 0, maxColor);
+    int g = (int) map(sinh().sinh().sinh().angleWrapped(), - PI/2, PI / 2, 0, maxColor);
+    int b = (int) map(ONE.divideBy(this).angleWrapped(), - PI/2, PI / 2, 0, maxColor);
+    return color(r, g, b);
   }
 
   Complex conjugate() {
@@ -109,6 +94,10 @@ class Complex {
 
   Complex scaleBy(float s) {
     return new Complex(real * s, imag * s);
+  }
+
+  Complex swirl() {
+    return times(this ).scaleBy(1/sqrt(abs2()) );
   }
 
   float _cosh(float x) {
