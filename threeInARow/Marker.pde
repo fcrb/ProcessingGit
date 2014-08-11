@@ -60,6 +60,7 @@ class Marker {
   }
 
   boolean validMove(int newI, int newJ) {
+    if (player.occupiesCell[newI][newJ]) return false;
     if (otherPlayer().occupiesCell[newI][newJ]) return false;
     return (abs(newI - i) + abs(newJ - j)) == 1;
   }

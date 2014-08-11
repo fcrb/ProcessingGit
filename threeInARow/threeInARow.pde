@@ -58,7 +58,6 @@ boolean gameOver() {
 }
 
 void mousePressed() {
-  println("mousePressed fc="+frameCount);
   if (gameOver() || !player().donePlacingMarkers()) {
     return;
   }
@@ -66,7 +65,6 @@ void mousePressed() {
 }  
 
 void mouseReleased() {
-  println("mouseReleased fc="+frameCount);
   if (gameOver() || !player().donePlacingMarkers()) {
     return;
   }
@@ -74,7 +72,6 @@ void mouseReleased() {
 }  
 
 void mouseClicked() {
-  println("mouseClicked fc="+frameCount);
   if (gameOver()) { 
     return;
   }
