@@ -37,7 +37,7 @@ void draw() {
   textSize(inset * 0.5);
   fill(0);
   //TODO The textWidth snippet should center the message. Buggy.
-  text(message, (width - textWidth(message))*0.5, height - inset * 5/4);
+  text(message, (width - textWidth(message))*0.5 - inset, height - inset * 5/4);
   popMatrix();
 
   //draw  markers

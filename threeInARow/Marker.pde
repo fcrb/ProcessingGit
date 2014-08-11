@@ -19,15 +19,26 @@ class Marker {
   }
 
   void draw() {
-    stroke(0);
-    fill(player.fillColor);
     if (drag) {
       x = mouseX;
       y = mouseY;
+      //draw valid choices
+      for (int i_ = 0; i_ < gridSize; ++i_) {
+        for (int j_ = 0; j_ < gridSize; ++j_) {
+          if (validMove(i_, j_)) {
+            int gray = (int) map(sin(millis()*0.005), -1, 1, 220, 250);
+            noStroke();
+            fill(gray);
+            ellipse(center(i_), center(j_), diameter, diameter);
+          }
+        }
+      }
     } 
     else {
       centerInCell();
     }
+    stroke(0);
+    fill(player.fillColor);
     ellipse(x, y, diameter, diameter);
   }
 
@@ -55,7 +66,11 @@ class Marker {
 
 
   void centerInCell() {
-    x= (i + 0.5) * gridSpacing + inset; 
-    y =(j + 0.5) * gridSpacing + inset;
+    x= center(i); 
+    y =center(j);
+  }
+
+  float center(int i) {
+    return (i + 0.5) * gridSpacing + inset;
   }
 }
