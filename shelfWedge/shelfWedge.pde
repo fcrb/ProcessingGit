@@ -4,20 +4,20 @@ The idea here is to create a library for quickly
  creating cut & fold patterns. 
  */
 float w = 3.5;
-float h = 1;
+float h = 1.1;
 float d = 4;
 
 float c = dist(0, 0, h, d);
 float inchesPerUnit = 1;
-float xShift = (h + h * d /c) * 1.1;
-float yShift = -h * 1.1;
+float xShift = (h + h * d /c) * 1.02;
+float yShift = -h * 1.05;
 int cutCount = 0;
 boolean showLabels = false;
 float HAIRLINE_WEIGHT = 0.072;
 float ETCH_WEIGHT = 2;
 
 void setup() {
-  size(576, 792);//, PDF, "boxPattern.pdf");
+  size(576, 792, PDF, "shelfWedge_35w_40d.pdf");
   //  paperWidth = 10.5 * 72;
   //  inset = (width - paperWidth) * 0.5;
 
