@@ -3,23 +3,31 @@ import processing.pdf.*;
 The idea here is to create a library for quickly 
  creating cut & fold patterns. 
  */
-float w = 3.5;
-float h = 1.1;
-float d = 4;
+float w, h, d, c;
 
-float c = dist(0, 0, h, d);
 float inchesPerUnit = 1;
-float xShift = (h + h * d /c) * 1.02;
-float yShift = -h * 1.05;
+float xShift, yShift;
 int cutCount = 0;
 boolean showLabels = false;
 float HAIRLINE_WEIGHT = 0.072;
-float ETCH_WEIGHT = 2;
+float ETCH_WEIGHT = 0.072;
+float SCORE_LENGTH = 72 *0.05;
 
 void setup() {
-  size(576, 792, PDF, "shelfWedge_35w_40d.pdf");
-  //  paperWidth = 10.5 * 72;
-  //  inset = (width - paperWidth) * 0.5;
+  // 8.5 x 11 paper
+//  size(576, 756, PDF, "shelfWedge_35w_40d2.pdf");
+//  whd(3.5, 1.1, 4);
+
+// 18 x 12 paper
+//  size(864, 1296, PDF, "shelfWedge_6w_6d.pdf");
+//  whd(6, 1.5, 6);
+
+// 18 x 12 paper wide and shallow
+  size(1296, 864, PDF, "shelfWedge_11w_4d.pdf");
+  whd(11, 1.75, 4);
+
+  xShift = (h + h * d /c) * 1.02;
+  yShift = -h * 1.05;
 
   background(255);
 
@@ -52,14 +60,21 @@ void setup() {
   cut(w + h * d /c, -d-h*h/c, w, -d);
 }
 
+void whd(float w_, float h_, float d_) {
+  w = w_; 
+  h = h_; 
+  d = d_;
+  c = dist(0, 0, h, d);
+}
+
 void cut(float x0, float y0, float x1, float y1) {
-  stroke(0);
+  stroke(255, 0, 0);
   strokeWeight(HAIRLINE_WEIGHT);
   cutFoldDefault(x0, y0, x1, y1);
 }
 
 void fold(float x0, float y0, float x1, float y1) {
-  stroke(0);
+  stroke(0, 0, 255);
   strokeWeight(ETCH_WEIGHT);
   cutFoldDefault(x0, y0, x1, y1);
 }
@@ -67,10 +82,14 @@ void fold(float x0, float y0, float x1, float y1) {
 void cutFoldDefault(float x0, float y0, float x1, float y1) {
   line(mapX(x0), mapY(y0), mapX(x1), mapY(y1));
   if (showLabels) {
-  fill(255, 0, 0);
+    fill(255, 0, 0);
     text(""+cutCount, mapX((x0+x1)/2), mapY((y0+y1)/2));
   } 
   ++cutCount;
+}
+
+void score(float x0, float y0, float x1, float y1) {
+  line(mapX(x0), mapY(y0), mapX(x1), mapY(y1));
 }
 
 float mapX(float x) {
