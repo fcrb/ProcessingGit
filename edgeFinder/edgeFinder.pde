@@ -4,10 +4,12 @@ void setup() {
   noSmooth();
   complexExample();
 
-  //  loadPixels();
-  //  EdgeCalculator ec = new EdgeCalculator();
-  //  ec.removeNonEdgePixels();
-  //  updatePixels();
+  loadPixels();
+  EdgeCalculator ec = new EdgeCalculator();
+  ec.removeNonEdgePixels();
+  ec.removeExtraNeighbors();
+  ec.removeExtraNeighbors();
+  updatePixels();
 }
 
 void complexExample() {
