@@ -9,6 +9,8 @@ void setup() {
   ec.removeNonEdgePixels();
   ec.removeExtraNeighbors();
   ec.removeExtraNeighbors();
+  ec.removeExtraNeighbors();
+  ec.removeExtraNeighbors();
   updatePixels();
 }
 

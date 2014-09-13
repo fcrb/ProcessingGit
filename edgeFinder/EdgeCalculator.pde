@@ -1,4 +1,4 @@
-class EdgeCalculator {
+class EdgeCalculator { //<>//
   int WHITE = color(255);
   ArrayList<NeighborPixel> neighbors;
   boolean[][] onEdge;
@@ -46,42 +46,66 @@ class EdgeCalculator {
     //(horizontal or vertical) between neighbors is 1.
     for (int i = 1; i < width-1; ++i) {
       for (int j = 1; j < height-1; ++j) {
-        if (onEdge[i][j]) {
-          int maxDx = -2;
-          int maxDy = -2;
-          int minDx = 2;
-          int minDy = 2;
-          for (NeighborPixel n : neighbors) {
-            if (onEdge[i + n.dx][j + n.dy]) {
-              maxDx = max(maxDx, n.dx);
-              maxDy = max(maxDy, n.dy);
-              minDx = min(minDx, n.dx);
-              minDy = min(minDy, n.dy);
-            }
-          }
-          if ((maxDx - minDx > 1) || (maxDy - minDy > 1) ) {
-            onEdge[i][j] = false;
-          }
+        if (onEdge[i][j] && neighborsAreConnected(i, j)) {
+          onEdge[i][j] = false;
+          pixels[j * width +i] = WHITE;
         }
       }
     }
+  }
+
+  boolean neighborsAreConnected(int x, int y) {
+    int firstNeighborIndex = -1;
+    int prevNeighborIndex = -1;
+    int index = 0;
+    for (NeighborPixel n : neighbors) {
+      if (!isBackground(n.pixel(x, y))) {
+        if (firstNeighborIndex == -1) {
+          firstNeighborIndex = index;
+        }   
+        else {
+          if (prevNeighborIndex % 2 == 0) {
+            //previous is in side of 3x3
+            if (index - prevNeighborIndex > 2) {
+              //TODO
+              //could be this pixel is closer to first pixel
+              return false;
+            }
+          }
+          else {
+            //previous is in corner of 3x3
+            if (index - prevNeighborIndex > 1) {
+              return false;
+            }
+          }
+        }
+        prevNeighborIndex = index;
+      }
+      ++index;
+    }
+    return true;
   }
 
   boolean isOnEdge(int x, int y) {
     if (isBackground(pixels[y * width + x])) {
       return false;
     }
-    //find the pixel value of (up to) 8 neighboring pixels
-    //start at 12 o'clock, go clockwise
-    int numBackgroundNeighbors = 0;
-    for (NeighborPixel n : neighbors) {
-      if (isBackground(n.pixel(x, y))) {
-        numBackgroundNeighbors++;
-      }
-    }
+    int n = numBackgroundNeighbors(x, y);
     //if there are 7-8 background neighbors, this is a spur or speck, so ignore
     //if there are 0 background neighbors, it is an interior point, 
-    return numBackgroundNeighbors > 0 && numBackgroundNeighbors < 7;
+    return n > 0 && n < 7;
+  }
+
+  int numBackgroundNeighbors(int x, int y) {
+    //find the pixel value of (up to) 8 neighboring pixels
+    //start at 12 o'clock, go clockwise
+    int numNeighbors = 0;
+    for (NeighborPixel n : neighbors) {
+      if (isBackground(n.pixel(x, y))) {
+        numNeighbors++;
+      }
+    }
+    return numNeighbors;
   }
 
   boolean isBackground(int clr) {
