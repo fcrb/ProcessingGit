@@ -1,5 +1,36 @@
+ArrayList<NeighborPixel> neighbors;
+//This is a hack that allows me, given a pair of 
+//adjoining pixels, identify the index of the neighbor pixel
+//where I should start looking for the next node in the 
+//path
+int[][] nextNeighborPixelIndex;
+int ZERO_OFFSET = 1;
+int WHITE = color(255);
+
 void setup() {
   size(800, 800);
+  neighbors = new ArrayList<NeighborPixel>();
+  neighbors.add(new NeighborPixel(0, -1));
+  neighbors.add(new NeighborPixel(1, -1));
+  neighbors.add(new NeighborPixel(1, 0));
+  neighbors.add(new NeighborPixel(1, 1));
+  neighbors.add(new NeighborPixel(0, 1));
+  neighbors.add(new NeighborPixel(-1, 1));
+  neighbors.add(new NeighborPixel(-1, 0));
+  neighbors.add(new NeighborPixel(-1, -1));
+
+  nextNeighborPixelIndex = new int[3][3];
+  //if direction to previous node is -1, -1, next node is top center (0).
+  //But can't use negative indices, so add 1 to each array index:
+  nextNeighborPixelIndex[-1 + ZERO_OFFSET][-1 + ZERO_OFFSET] = 0;
+  nextNeighborPixelIndex[0 + ZERO_OFFSET][-1 + ZERO_OFFSET] = 1;
+  nextNeighborPixelIndex[1 + ZERO_OFFSET][-1 + ZERO_OFFSET] = 2;
+  nextNeighborPixelIndex[1 + ZERO_OFFSET][0 + ZERO_OFFSET] = 3;
+  nextNeighborPixelIndex[1 + ZERO_OFFSET][1 + ZERO_OFFSET] = 4;
+  nextNeighborPixelIndex[0 + ZERO_OFFSET][1 + ZERO_OFFSET] = 5;
+  nextNeighborPixelIndex[-1 + ZERO_OFFSET][1 + ZERO_OFFSET] = 6;
+  nextNeighborPixelIndex[-1 + ZERO_OFFSET][0 + ZERO_OFFSET] = 7;
+
   background(255);
   noSmooth();
   complexExample();
@@ -9,6 +40,9 @@ void setup() {
   ec.removeNonEdgePixels();
   ec.removeExtraNeighbors();
   updatePixels();
+}
+
+void init() {
 }
 
 void complexExample() {
