@@ -5,6 +5,14 @@ class EdgePath {
     nodes.add(new EdgeNode(x, y));
   }
 
+  void draw() {
+    for (int i = 1; i < nodes.size(); ++i) {
+      EdgeNode n1 = nodes.get(i-1);
+      EdgeNode n2 = nodes.get(i);
+      line(n1.x, n1.y, n2.x, n2.y);
+    }
+  }
+
   void populatePath(boolean[][] onEdge, boolean[][] onAPath) {
     while (findNextNode (onEdge, onAPath) != null) {
     };
@@ -15,17 +23,10 @@ class EdgePath {
     EdgeNode currentNode = nodes.get(nodes.size() - 1);
     int x = currentNode.x;
     int y = currentNode.y;
-    int startingNeighbor = 0; 
-    if (nodes.size() > 1) {
-      EdgeNode previousNode = nodes.get(nodes.size() - 2);
-      int dx = x - previousNode.x;
-      int dy = y - previousNode.y;
-      startingNeighbor = nextNeighborPixelIndex[dx+ZERO_OFFSET][dy+ZERO_OFFSET];
-    }
 
     //loop through neighbors, find nonwhite, unused pixel
-    for (int i = 0; i < 7; ++i) {
-      NeighborPixel n = neighbors.get((i + startingNeighbor) % 8);
+    for ( NeighborPixel n : neighbors) {
+      //      NeighborPixel n = neighbors.get((i + startingNeighbor) % 8);
       int xNbr = x + n.dx;
       int yNbr = y + n.dy;
       if (onEdge[xNbr][yNbr] && !onAPath[xNbr][yNbr]) {
@@ -45,3 +46,4 @@ class EdgePath {
     return null;
   }
 }
+

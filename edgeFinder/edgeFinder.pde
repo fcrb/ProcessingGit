@@ -1,14 +1,31 @@
+import processing.pdf.*;
+
 ArrayList<NeighborPixel> neighbors;
-//This is a hack that allows me, given a pair of 
-//adjoining pixels, identify the index of the neighbor pixel
-//where I should start looking for the next node in the 
-//path
-int[][] nextNeighborPixelIndex;
-int ZERO_OFFSET = 1;
 int WHITE = color(255);
 
 void setup() {
-  size(800, 800);
+  size(800, 800, PDF, "foo.pdf");
+  createNeighborPixels();
+  background(255);
+  noSmooth();
+
+  //  ellipseExample();
+  complexExample();
+
+  //    loadPixels();
+  EdgeCalculator ec = new EdgeCalculator();
+  ec.removeNonEdgePixels();
+  ec.removeExtraNeighbors();
+  ec.buildVectors();
+  //    updatePixels();
+  background(255);
+  ec.drawVectors(0.072);
+}
+
+void filterAndDraw() {
+}
+
+void createNeighborPixels() {
   neighbors = new ArrayList<NeighborPixel>();
   neighbors.add(new NeighborPixel(0, -1));
   neighbors.add(new NeighborPixel(1, -1));
@@ -18,34 +35,10 @@ void setup() {
   neighbors.add(new NeighborPixel(-1, 1));
   neighbors.add(new NeighborPixel(-1, 0));
   neighbors.add(new NeighborPixel(-1, -1));
-
-  nextNeighborPixelIndex = new int[3][3];
-  //if direction to previous node is -1, -1, next node is top center (0).
-  //But can't use negative indices, so add 1 to each array index:
-  nextNeighborPixelIndex[-1 + ZERO_OFFSET][-1 + ZERO_OFFSET] = 0;
-  nextNeighborPixelIndex[0 + ZERO_OFFSET][-1 + ZERO_OFFSET] = 1;
-  nextNeighborPixelIndex[1 + ZERO_OFFSET][-1 + ZERO_OFFSET] = 2;
-  nextNeighborPixelIndex[1 + ZERO_OFFSET][0 + ZERO_OFFSET] = 3;
-  nextNeighborPixelIndex[1 + ZERO_OFFSET][1 + ZERO_OFFSET] = 4;
-  nextNeighborPixelIndex[0 + ZERO_OFFSET][1 + ZERO_OFFSET] = 5;
-  nextNeighborPixelIndex[-1 + ZERO_OFFSET][1 + ZERO_OFFSET] = 6;
-  nextNeighborPixelIndex[-1 + ZERO_OFFSET][0 + ZERO_OFFSET] = 7;
-
-  background(255);
-  noSmooth();
-  complexExample();
-
-  loadPixels();
-  EdgeCalculator ec = new EdgeCalculator();
-  ec.removeNonEdgePixels();
-  ec.removeExtraNeighbors();
-  updatePixels();
-}
-
-void init() {
 }
 
 void complexExample() {
+  pushMatrix();
   translate(width/2, height/2);
   int numSteps = 100000;
   float xPrevious = 0;
@@ -63,9 +56,11 @@ void complexExample() {
     xPrevious = x;
     yPrevious =  y;
   }
+  popMatrix();
 }
 
 void ellipseExample() {
   strokeWeight(width/5);
   ellipse(width/2, height/2, width /2, height/2);
 }
+

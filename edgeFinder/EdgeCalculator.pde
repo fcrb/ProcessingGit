@@ -1,14 +1,25 @@
-class EdgeCalculator {  //<>//
+class EdgeCalculator { 
   ArrayList<EdgePath> paths;
   boolean[][] onEdge;
 
   EdgeCalculator() {
-    paths = new ArrayList<EdgePath>();
     onEdge = new boolean[width][height];
     findEdgePixels();
   }
+  
+  void drawVectors(float strokeWt) {
+    strokeWeight(strokeWt);
+    for(EdgePath path: paths) {
+      path.draw();
+    }
+  }
 
-  void buildVectors(float strokeWeight) {
+  void buildVectors() {
+    if (paths != null) { 
+      return;
+    }
+
+    paths = new ArrayList<EdgePath>();
     boolean[][] onAPath = new boolean[width][height];
     for (int i = 1; i < width-1; ++i) {
       for (int j = 1; j < height-1; ++j) {
@@ -20,6 +31,7 @@ class EdgeCalculator {  //<>//
         }
       }
     }
+    println("buildVectors() created " + paths.size() + " paths.");
   }
 
   void findEdgePixels() {
@@ -55,10 +67,6 @@ class EdgeCalculator {  //<>//
       }
     }
   }
-  //
-  //  boolean neighborsAreConnected(int x, int y) {
-  //    return numBackgroundNeighbors(x, y) == 6;
-  //  }
 
   boolean neighborsAreConnected(int x, int y) {
     int firstNeighborIndex = -1;
@@ -120,3 +128,4 @@ class EdgeCalculator {  //<>//
     return clr == WHITE;
   }
 }
+
