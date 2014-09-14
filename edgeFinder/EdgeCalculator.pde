@@ -1,10 +1,12 @@
-class EdgeCalculator { //<>//
+class EdgeCalculator { //<>// //<>// //<>// //<>// //<>//
   int WHITE = color(255);
   ArrayList<NeighborPixel> neighbors;
+  ArrayList<EdgePath> paths;
   boolean[][] onEdge;
 
   EdgeCalculator() {
     neighbors = new ArrayList<NeighborPixel>();
+    paths = new ArrayList<EdgePath>();
     neighbors.add(new NeighborPixel(0, -1));
     neighbors.add(new NeighborPixel(1, -1));
     neighbors.add(new NeighborPixel(1, 0));
@@ -15,6 +17,19 @@ class EdgeCalculator { //<>//
     neighbors.add(new NeighborPixel(-1, -1));
     onEdge = new boolean[width][height];
     findEdgePixels();
+  }
+
+  void buildVectors(float strokeWeight) {
+  boolean[][] onAPath = new boolean[width][height];
+    for (int i = 1; i < width-1; ++i) {
+      for (int j = 1; j < height-1; ++j) {
+        if(onEdge[i][j] && ! onAPath[i][j]) {
+          //start a path
+          paths.add(new EdgePath());
+        }
+      }
+    }
+    
   }
 
   void drawEdges(float strokeWeight) {

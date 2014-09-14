@@ -8,9 +8,6 @@ void setup() {
   EdgeCalculator ec = new EdgeCalculator();
   ec.removeNonEdgePixels();
   ec.removeExtraNeighbors();
-  ec.removeExtraNeighbors();
-  ec.removeExtraNeighbors();
-  ec.removeExtraNeighbors();
   updatePixels();
 }
 
