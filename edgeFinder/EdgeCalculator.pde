@@ -7,10 +7,17 @@ class EdgeCalculator {
     findEdgePixels();
   }
   
-  void drawVectors(float strokeWt) {
+  void drawVectors(float strokeWt, float scale) {
     strokeWeight(strokeWt);
     for(EdgePath path: paths) {
-      path.draw();
+      path.draw(scale);
+    }
+  }
+  
+  void drawVectors(float strokeWt, float scale, PGraphics pdf) {
+    pdf.strokeWeight(strokeWt);
+    for(EdgePath path: paths) {
+      path.draw(scale, pdf);
     }
   }
 
@@ -21,6 +28,7 @@ class EdgeCalculator {
 
     paths = new ArrayList<EdgePath>();
     boolean[][] onAPath = new boolean[width][height];
+    int numberOfNodes = 0;
     for (int i = 1; i < width-1; ++i) {
       for (int j = 1; j < height-1; ++j) {
         if (onEdge[i][j] && ! onAPath[i][j]) {
@@ -28,10 +36,11 @@ class EdgeCalculator {
           EdgePath path = new EdgePath(i, j);
           paths.add(path);
           path.populatePath( onEdge, onAPath);
+          numberOfNodes += path.nodes.size();
         }
       }
     }
-    println("buildVectors() created " + paths.size() + " paths.");
+    println("buildVectors() created " + paths.size() + " paths, using " + numberOfNodes + " nodes.");
   }
 
   void findEdgePixels() {

@@ -5,11 +5,19 @@ class EdgePath {
     nodes.add(new EdgeNode(x, y));
   }
 
-  void draw() {
+  void draw(float scale) {
     for (int i = 1; i < nodes.size(); ++i) {
       EdgeNode n1 = nodes.get(i-1);
       EdgeNode n2 = nodes.get(i);
-      line(n1.x, n1.y, n2.x, n2.y);
+      line(n1.x * scale, n1.y * scale, n2.x * scale, n2.y * scale);
+    }
+  }
+
+  void draw(float scale, PGraphics pdf) {
+    for (int i = 1; i < nodes.size(); ++i) {
+      EdgeNode n1 = nodes.get(i-1);
+      EdgeNode n2 = nodes.get(i);
+      pdf.line(n1.x * scale, n1.y * scale, n2.x * scale, n2.y * scale);
     }
   }
 
