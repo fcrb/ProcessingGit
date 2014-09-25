@@ -42,6 +42,18 @@ class EdgeCalculator {
     }
     println("buildVectors() created " + paths.size() + " paths, using " + numberOfNodes + " nodes.");
   }
+  
+  void reduceVectors(float maxErrorFromLine) {
+    for(EdgePath path: paths) {
+      int indexOfFirstNodeInPath = 0;
+      ArrayList<EdgeNode>
+      EdgeNode firstNodeInPath = path.nodes.get(0);
+      
+      for(int i = indexOfFirstNodeInPath; i < path.nodes.size();++i ) {
+        
+      }
+    }
+  }
 
   void findEdgePixels() {
     //skip 1 pixel border all the way around, simplifying 
@@ -137,4 +149,3 @@ class EdgeCalculator {
     return clr == WHITE;
   }
 }
-
