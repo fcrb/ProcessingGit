@@ -6,17 +6,17 @@ class EdgeCalculator {
     onEdge = new boolean[width][height];
     findEdgePixels();
   }
-  
+
   void drawVectors(float strokeWt, float scale) {
     strokeWeight(strokeWt);
-    for(EdgePath path: paths) {
+    for (EdgePath path: paths) {
       path.draw(scale);
     }
   }
-  
+
   void drawVectors(float strokeWt, float scale, PGraphics pdf) {
     pdf.strokeWeight(strokeWt);
-    for(EdgePath path: paths) {
+    for (EdgePath path: paths) {
       path.draw(scale, pdf);
     }
   }
@@ -42,18 +42,46 @@ class EdgeCalculator {
     }
     println("buildVectors() created " + paths.size() + " paths, using " + numberOfNodes + " nodes.");
   }
-  
+
   void reduceVectors(float maxErrorFromLine) {
-    for(EdgePath path: paths) {
-      int indexOfFirstNodeInPath = 0;
-      ArrayList<EdgeNode>
-      EdgeNode firstNodeInPath = path.nodes.get(0);
-      
-      for(int i = indexOfFirstNodeInPath; i < path.nodes.size();++i ) {
-        
+    //for each path, eliminate vectors without losing image quality
+    int numberOfNodes = 0;
+    for (EdgePath path: paths) {
+      ArrayList<EdgeNode> nodesToRemoveFromPath = new ArrayList<EdgeNode>();
+      int indexOfFirstNodeInShortcut = 0;
+      int indexOfLastNodeInShortcut = indexOfFirstNodeInShortcut + 2;
+      //follow the path, creating shortened segments by removing unneeded EdgeNodes 
+      while (indexOfLastNodeInShortcut < path.nodes.size () - 1 ) {
+        EdgeNode firstNodeInShortcut = path.nodes.get(indexOfFirstNodeInShortcut);
+        EdgeNode lastNodeInShortcut = path.nodes.get(indexOfLastNodeInShortcut);
+        Vec2D shortCut = new Vec2D(lastNodeInShortcut.x - firstNodeInShortcut.x, lastNodeInShortcut.y - firstNodeInShortcut.y);
+        //what's the maximum error?
+        float error = 0;
+        for (int i = indexOfFirstNodeInShortcut + 1; i < indexOfLastNodeInShortcut; ++i) {
+          EdgeNode nodeToProject = path.nodes.get(i);
+          Vec2D vecToProject = new Vec2D(nodeToProject.x - firstNodeInShortcut.x, nodeToProject.y - firstNodeInShortcut.y);
+          error = max(error, vecToProject.distanceFromProjectionOnto(shortCut));
+        }
+        if (error > maxErrorFromLine) {
+          //went a step too far
+          --indexOfLastNodeInShortcut;
+          for (int i = indexOfFirstNodeInShortcut + 1; i < indexOfLastNodeInShortcut; ++i) {
+            EdgeNode nodeToRemove = path.nodes.get(i);
+            nodesToRemoveFromPath.add(nodeToRemove);
+          }
+          indexOfFirstNodeInShortcut = indexOfLastNodeInShortcut;
+          indexOfLastNodeInShortcut += 2;
+        } 
+        else {
+          ++indexOfLastNodeInShortcut;
+        }
       }
+      path.removeEdgeNodes(nodesToRemoveFromPath);
+      numberOfNodes += path.nodes.size();
     }
+    println("reduceVectors() created " + paths.size() + " paths, using " + numberOfNodes + " nodes.");
   }
+
 
   void findEdgePixels() {
     //skip 1 pixel border all the way around, simplifying 

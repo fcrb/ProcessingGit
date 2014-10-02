@@ -11,14 +11,14 @@ void setup() {
   background(255);
   noSmooth();
 
-  exampleLissajous();
-  generatePDF("exampleLissajous.pdf");
+//  exampleLissajous();
+//  generatePDF("exampleLissajous.pdf");
 
 
-  //  float angleScale = 1;
-  //  float angleShift = 0;
-  //  exampleFractalTree(angleScale, angleShift);
-//  generatePDF("exampleFractalTree.pdf");
+  float angleScale = 1;
+  float angleShift = 0;
+  exampleFractalTree(angleScale, angleShift);
+  generatePDF("exampleFractalTree.pdf");
 }
 
 void generatePDF(String filename) {
@@ -27,7 +27,9 @@ void generatePDF(String filename) {
   ec.removeNonEdgePixels();
   ec.removeExtraNeighbors();
   ec.buildVectors();
-  ec.reduceVectors();
+  //heuristic...
+  int maxError = (int) (sqrt(width * height) *.25);
+  ec.reduceVectors(maxError);
   updatePixels();
 
   //  beginRecord(PDF, filename);
@@ -120,4 +122,3 @@ private void drawTree(float x1, float y1, float x2, float y2, int level, float a
     + scaleDown * (-sinR * (x2 - x1) + cosR * (y2 - y1)), 
   level + 1, angleScale, angleShift);
 }
-

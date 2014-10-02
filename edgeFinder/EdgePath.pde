@@ -26,31 +26,29 @@ class EdgePath {
     };
   }
 
-  void reducePath() {
-    ArrayList<EdgeNode> nodesToRemove = new ArrayList<EdgeNode>();
-    int lastKeptNodeIndex = 0;
-    int stepsBetweenNodes = 10;
-    EdgeNode startNode = nodes.get(lastKeptNodeIndex);
-    EdgeNode endNode = nodes.get(lastKeptNodeIndex + stepsBetweenNodes);
-    Vec2D newVec = new Vec2D(endNode.x - startNode.x, endNode.y - startNode.y);
-    float newVecLength = newVec.length();
-    float totalDisplacement = 0;
-    for(int i = lastKeptNodeIndex+1; i < lastKeptNodeIndex + stepsBetweenNodes; ++i) {
-      EdgeNode node = nodes.get(i);
-      Vec2D vecToNode = new Vec2D(node.x - startNode.x, node.y - startNode.y);
+  void reducePath(PGraphics pdf) {
+//    ArrayList<EdgeNode> nodesToRemove = new ArrayList<EdgeNode>();
+//    int lastKeptNodeIndex = 0;
+//    int stepsBetweenNodes = 10;
+//    EdgeNode startNode = nodes.get(lastKeptNodeIndex);
+//    EdgeNode endNode = nodes.get(lastKeptNodeIndex + stepsBetweenNodes);
+//    Vec2D newVec = new Vec2D(endNode.x - startNode.x, endNode.y - startNode.y);
+//    float newVecLength = newVec.length();
+//    float totalDisplacement = 0;
+//    for (int i = lastKeptNodeIndex+1; i < lastKeptNodeIndex + stepsBetweenNodes; ++i) {
+//      EdgeNode node = nodes.get(i);
+//      Vec2D vecToNode = new Vec2D(node.x - startNode.x, node.y - startNode.y);
       //displacement is sin(angle between) * length(vecToNode), and 
       //cos angle between is inner product divided by lengths of vecToNode
-      float cosAngleBetween = newVec.innerProduct(vecToNode) / vecToNode.length() / newVecLength;
-      float sinAngleBetween = sqrt(1 - cosAngleBetween * cosAngleBetween);
-      float displacement = sinAngleBetween *  vecToNode.length();
-      totalDisplacement += displacement;
-      
-      
-    }
-    for (int i = 1; i < nodes.size(); ++i) {
-      EdgeNode n = nodes.get(i);
-      pdf.line(n1.x * scale, n1.y * scale, n2.x * scale, n2.y * scale);
-    }
+//      float cosAngleBetween = newVec.innerProduct(vecToNode) / vecToNode.length() / newVecLength;
+//      float sinAngleBetween = sqrt(1 - cosAngleBetween * cosAngleBetween);
+//      float displacement = sinAngleBetween *  vecToNode.length();
+//      totalDisplacement += displacement;
+//    }
+//    for (int i = 1; i < nodes.size(); ++i) {
+//      EdgeNode n = nodes.get(i);
+//      pdf.line(n1.x * scale, n1.y * scale, n2.x * scale, n2.y * scale);
+//    }
   }   
 
   EdgeNode findNextNode( boolean[][] onEdge, boolean[][] onAPath) {
@@ -80,5 +78,8 @@ class EdgePath {
     //might happen if two regions just touch at a point or two.
     return null;
   }
-}
 
+  void removeEdgeNodes(ArrayList<EdgeNode> nodesToRemove) {
+    nodes.removeAll(nodesToRemove );
+  }
+}

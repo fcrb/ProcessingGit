@@ -5,11 +5,11 @@ class NeighborPixel {
     dx = dx_; 
     dy= dy_;
   }
-  
+
   int pixel(int x, int y) {
     return pixels[(y + dy) * width + x + dx];
   }
-  
+
   boolean isBackground(int x, int y) {
     return pixels[(y + dy) * width + x + dx] == WHITE;
   }
