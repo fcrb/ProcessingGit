@@ -14,11 +14,14 @@ void setup() {
 //  exampleLissajous();
 //  generatePDF("exampleLissajous.pdf");
 
+  exampleMobileSpar();
+  generatePDF("exampleMobileSpar.pdf");
 
-  float angleScale = 1;
-  float angleShift = 0;
-  exampleFractalTree(angleScale, angleShift);
-  generatePDF("exampleFractalTree.pdf");
+
+  //  float angleScale = 1.1;
+  //  float angleShift = 0;
+  //  exampleFractalTree(angleScale, angleShift);
+  //  generatePDF("exampleFractalTree.pdf");
 }
 
 void generatePDF(String filename) {
@@ -28,7 +31,7 @@ void generatePDF(String filename) {
   ec.removeExtraNeighbors();
   ec.buildVectors();
   //heuristic...
-  int maxError = (int) (sqrt(width * height) *.25);
+  float maxError = 1;
   ec.reduceVectors(maxError);
   updatePixels();
 
@@ -93,7 +96,7 @@ void exampleFractalTree(float angleScale, float angleShift) {
 }
 
 private void drawTree(float x1, float y1, float x2, float y2, int level, float angleScale, float angleShift) {
-  int maxLevel = 7;
+  int maxLevel = 8;
   if (level > maxLevel) {
     return;
   }
@@ -121,4 +124,27 @@ private void drawTree(float x1, float y1, float x2, float y2, int level, float a
   x2 + scaleDown * (cosR * (x2 - x1) + sinR * (y2 - y1)), y2
     + scaleDown * (-sinR * (x2 - x1) + cosR * (y2 - y1)), 
   level + 1, angleScale, angleShift);
+}
+
+void exampleMobileSpar() {
+  background(255);
+  noFill();
+  translate(width/2,height/2);
+  int numCircles = 30;
+  float maxRadius = width / 8;
+  float curvatureScalar = 0.12;
+  float curveScalar = 3;
+  float strokeWtScale = 0.35;
+  float separationScale = 1;
+  float x = -width/2 * 0.9;
+  float y = 0;
+
+  for (int i = 1; i <= numCircles; ++i ) {
+    float radius = abs(maxRadius * sin((i + 5) * 0.01));
+    float dx = radius * separationScale;
+    x += dx ;
+    y -= curveScalar * curvatureScalar * sin(i * curvatureScalar) * dx ;
+    strokeWeight(radius * strokeWtScale);
+    ellipse(x, y, 2 * radius, 2 * radius);
+  }
 }

@@ -26,29 +26,68 @@ class EdgePath {
     };
   }
 
-  void reducePath(PGraphics pdf) {
-//    ArrayList<EdgeNode> nodesToRemove = new ArrayList<EdgeNode>();
-//    int lastKeptNodeIndex = 0;
-//    int stepsBetweenNodes = 10;
-//    EdgeNode startNode = nodes.get(lastKeptNodeIndex);
-//    EdgeNode endNode = nodes.get(lastKeptNodeIndex + stepsBetweenNodes);
-//    Vec2D newVec = new Vec2D(endNode.x - startNode.x, endNode.y - startNode.y);
-//    float newVecLength = newVec.length();
-//    float totalDisplacement = 0;
-//    for (int i = lastKeptNodeIndex+1; i < lastKeptNodeIndex + stepsBetweenNodes; ++i) {
-//      EdgeNode node = nodes.get(i);
-//      Vec2D vecToNode = new Vec2D(node.x - startNode.x, node.y - startNode.y);
-      //displacement is sin(angle between) * length(vecToNode), and 
-      //cos angle between is inner product divided by lengths of vecToNode
-//      float cosAngleBetween = newVec.innerProduct(vecToNode) / vecToNode.length() / newVecLength;
-//      float sinAngleBetween = sqrt(1 - cosAngleBetween * cosAngleBetween);
-//      float displacement = sinAngleBetween *  vecToNode.length();
-//      totalDisplacement += displacement;
-//    }
-//    for (int i = 1; i < nodes.size(); ++i) {
-//      EdgeNode n = nodes.get(i);
-//      pdf.line(n1.x * scale, n1.y * scale, n2.x * scale, n2.y * scale);
-//    }
+  void reducePath(float maxErrorFromLine) {
+    ArrayList<EdgeNode> nodesToRemoveFromPath = new ArrayList<EdgeNode>();
+    int indexOfFirstNodeInShortcut = 0;
+    int indexOfLastNodeInShortcut = indexOfFirstNodeInShortcut + 2;
+    //follow the path, creating shortened segments by removing unneeded EdgeNodes 
+    while (indexOfLastNodeInShortcut < nodes.size () ) {
+      EdgeNode firstNodeInShortcut = nodes.get(indexOfFirstNodeInShortcut);
+      EdgeNode lastNodeInShortcut = nodes.get(indexOfLastNodeInShortcut);
+      Vec2D shortCut = new Vec2D(lastNodeInShortcut.x - firstNodeInShortcut.x, lastNodeInShortcut.y - firstNodeInShortcut.y);
+//      println("reducePath() shortCut="+shortCut);
+      //what's the maximum error?
+      float error = 0;
+      for (int i = indexOfFirstNodeInShortcut + 1; i < indexOfLastNodeInShortcut; ++i) {
+        EdgeNode nodeToProject = nodes.get(i);
+        Vec2D vecToProject = new Vec2D(nodeToProject.x - firstNodeInShortcut.x, nodeToProject.y - firstNodeInShortcut.y);
+        error = max(error, vecToProject.distanceFromProjectionOnto(shortCut));
+//       if( error > maxErrorFromLine ) {
+//      println("reducePath() shortCut="+shortCut);
+//      println("reducePath() vecToProject="+vecToProject);
+//       }
+      }
+      if (error > maxErrorFromLine || indexOfLastNodeInShortcut == nodes.size() - 1 ) {
+        //went a step too far
+        --indexOfLastNodeInShortcut;
+        for (int i = indexOfFirstNodeInShortcut + 1; i < indexOfLastNodeInShortcut; ++i) {
+          EdgeNode nodeToRemove = nodes.get(i);
+          nodesToRemoveFromPath.add(nodeToRemove);
+        }
+        indexOfFirstNodeInShortcut = indexOfLastNodeInShortcut;
+        indexOfLastNodeInShortcut = indexOfFirstNodeInShortcut + 2;
+      } 
+      else {
+        ++indexOfLastNodeInShortcut;
+      }
+    }
+    nodes.removeAll(nodesToRemoveFromPath);
+  }
+
+
+  void reducePathOLD(PGraphics pdf) {
+    //    ArrayList<EdgeNode> nodesToRemove = new ArrayList<EdgeNode>();
+    //    int lastKeptNodeIndex = 0;
+    //    int stepsBetweenNodes = 10;
+    //    EdgeNode startNode = nodes.get(lastKeptNodeIndex);
+    //    EdgeNode endNode = nodes.get(lastKeptNodeIndex + stepsBetweenNodes);
+    //    Vec2D newVec = new Vec2D(endNode.x - startNode.x, endNode.y - startNode.y);
+    //    float newVecLength = newVec.length();
+    //    float totalDisplacement = 0;
+    //    for (int i = lastKeptNodeIndex+1; i < lastKeptNodeIndex + stepsBetweenNodes; ++i) {
+    //      EdgeNode node = nodes.get(i);
+    //      Vec2D vecToNode = new Vec2D(node.x - startNode.x, node.y - startNode.y);
+    //displacement is sin(angle between) * length(vecToNode), and 
+    //cos angle between is inner product divided by lengths of vecToNode
+    //      float cosAngleBetween = newVec.innerProduct(vecToNode) / vecToNode.length() / newVecLength;
+    //      float sinAngleBetween = sqrt(1 - cosAngleBetween * cosAngleBetween);
+    //      float displacement = sinAngleBetween *  vecToNode.length();
+    //      totalDisplacement += displacement;
+    //    }
+    //    for (int i = 1; i < nodes.size(); ++i) {
+    //      EdgeNode n = nodes.get(i);
+    //      pdf.line(n1.x * scale, n1.y * scale, n2.x * scale, n2.y * scale);
+    //    }
   }   
 
   EdgeNode findNextNode( boolean[][] onEdge, boolean[][] onAPath) {
@@ -77,9 +116,5 @@ class EdgePath {
     //hmmm. We looked, and could not find a new node. It seems this
     //might happen if two regions just touch at a point or two.
     return null;
-  }
-
-  void removeEdgeNodes(ArrayList<EdgeNode> nodesToRemove) {
-    nodes.removeAll(nodesToRemove );
   }
 }

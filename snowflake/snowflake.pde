@@ -1,14 +1,14 @@
 int SIZE = 150;
-int DEPTH = 6;
-float THICKNESS = 2;
+int DEPTH = 4;
+float THICKNESS = 10;
 float[] fractions = new float[DEPTH];
 int[] angles = new int[DEPTH];
 int saves = 0;
-float flakeColor = 255;
+float flakeColor = 0;
 
 void setup() {
   size(500,500);
-  stroke(255);
+  stroke(0);
   pushMatrix();
   strokeWeight(THICKNESS);
   fill(flakeColor);

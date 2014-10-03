@@ -47,39 +47,10 @@ class EdgeCalculator {
     //for each path, eliminate vectors without losing image quality
     int numberOfNodes = 0;
     for (EdgePath path: paths) {
-      ArrayList<EdgeNode> nodesToRemoveFromPath = new ArrayList<EdgeNode>();
-      int indexOfFirstNodeInShortcut = 0;
-      int indexOfLastNodeInShortcut = indexOfFirstNodeInShortcut + 2;
-      //follow the path, creating shortened segments by removing unneeded EdgeNodes 
-      while (indexOfLastNodeInShortcut < path.nodes.size () - 1 ) {
-        EdgeNode firstNodeInShortcut = path.nodes.get(indexOfFirstNodeInShortcut);
-        EdgeNode lastNodeInShortcut = path.nodes.get(indexOfLastNodeInShortcut);
-        Vec2D shortCut = new Vec2D(lastNodeInShortcut.x - firstNodeInShortcut.x, lastNodeInShortcut.y - firstNodeInShortcut.y);
-        //what's the maximum error?
-        float error = 0;
-        for (int i = indexOfFirstNodeInShortcut + 1; i < indexOfLastNodeInShortcut; ++i) {
-          EdgeNode nodeToProject = path.nodes.get(i);
-          Vec2D vecToProject = new Vec2D(nodeToProject.x - firstNodeInShortcut.x, nodeToProject.y - firstNodeInShortcut.y);
-          error = max(error, vecToProject.distanceFromProjectionOnto(shortCut));
-        }
-        if (error > maxErrorFromLine) {
-          //went a step too far
-          --indexOfLastNodeInShortcut;
-          for (int i = indexOfFirstNodeInShortcut + 1; i < indexOfLastNodeInShortcut; ++i) {
-            EdgeNode nodeToRemove = path.nodes.get(i);
-            nodesToRemoveFromPath.add(nodeToRemove);
-          }
-          indexOfFirstNodeInShortcut = indexOfLastNodeInShortcut;
-          indexOfLastNodeInShortcut += 2;
-        } 
-        else {
-          ++indexOfLastNodeInShortcut;
-        }
-      }
-      path.removeEdgeNodes(nodesToRemoveFromPath);
+      path.reducePath( maxErrorFromLine);
       numberOfNodes += path.nodes.size();
     }
-    println("reduceVectors() created " + paths.size() + " paths, using " + numberOfNodes + " nodes.");
+    println("reduceVectors(): " + paths.size() + " paths, using " + numberOfNodes + " nodes.");
   }
 
 

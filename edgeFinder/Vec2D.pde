@@ -28,7 +28,7 @@ class Vec2D {
 
   Vec2D projectOnto(Vec2D v) {
     float vLength = v.length();
-    float lambda = innerProduct(v) / vLength * vLength ;
+    float lambda = innerProduct(v) / (vLength * vLength) ;
     return v.scaleBy(lambda);
   }
 
@@ -40,6 +40,10 @@ class Vec2D {
   float distanceFromProjectionOnto(Vec2D v) {
     Vec2D projection = projectOnto(v);
     return distanceFrom(projection);
+  }
+  
+  String toString() {
+    return "Vec2D("+x+','+y+')';
   }
   
 }
