@@ -6,16 +6,19 @@ int WHITE = color(255);
 void setup() {
   //High resolution of the bitmap version is needed 
   //if our vector-based drawing is to look smooth.
-  size(8000, 8000);
+  size(500, 500);
   createNeighborPixels();
   background(255);
   noSmooth();
 
-//  exampleLissajous();
-//  generatePDF("exampleLissajous.pdf");
+  //  exampleLissajous();
+  //  generatePDF("exampleLissajous.pdf");
 
-  exampleMobileSpar();
-  generatePDF("exampleMobileSpar.pdf");
+  //  exampleMobileSpar();
+  //  generatePDF("exampleMobileSpar.pdf");
+
+  exampleFromFile();
+  generatePDF("exampleSnowflake.pdf");
 
 
   //  float angleScale = 1.1;
@@ -41,11 +44,11 @@ void generatePDF(String filename) {
   //  endRecord();
 
   //Now you can scale down the size. 
-  PGraphics pdf = createGraphics(800, 800, PDF, filename);
+  PGraphics pdf = createGraphics(300, 300, PDF, filename);
   pdf.beginDraw();
 
   float strokeWt = 0.072;
-  float scale = 0.05;
+  float scale = 0.5;
   ec.drawVectors(strokeWt, scale, pdf);
 
   pdf.dispose();
@@ -129,7 +132,7 @@ private void drawTree(float x1, float y1, float x2, float y2, int level, float a
 void exampleMobileSpar() {
   background(255);
   noFill();
-  translate(width/2,height/2);
+  translate(width/2, height/2);
   int numCircles = 30;
   float maxRadius = width / 8;
   float curvatureScalar = 0.12;
@@ -147,4 +150,10 @@ void exampleMobileSpar() {
     strokeWeight(radius * strokeWtScale);
     ellipse(x, y, 2 * radius, 2 * radius);
   }
+}
+
+void exampleFromFile() {
+  PImage img;
+  img = loadImage("snowflake43.png");
+  image(img, 0, 0);
 }
