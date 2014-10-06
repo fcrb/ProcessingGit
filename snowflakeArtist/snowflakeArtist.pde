@@ -14,12 +14,24 @@ void bindJavascript(JavaScript js) {
 JavaScript javascript;
 
 void setup() {
-  size(640, 640);
+  size(800, 800);
   background(255);
   stroke(0);
   strokeWeight(penWidth);
   strokeCap(ROUND);
   fill(0);
+}
+
+void keyPressed() {
+  char[] keyCodes = new char[] {
+    '1', '2', '3', '4', '5', '6','7','8','9'
+  };
+  for (int i = 0; i < keyCodes.length; ++i) {
+
+    if (key == keyCodes[i]) {
+      setPenWidth(5*(i+3));
+    }
+  }
 }
 
 void setPenWidth(int w) {
