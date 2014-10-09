@@ -17,7 +17,7 @@ boolean readyToDraw = false;
 //JavaScript javascript;
 
 void setup() {
-  size(480, 480);
+  size(600, 600);
 
   strokes = new ArrayList<Stroke>();
   MAX_RADIUS = width * 0.48;
@@ -117,7 +117,6 @@ void hexLine(float x0, float y0, float x1, float y1, float lineWidth) {
   endShape(CLOSE);
   popMatrix();
 }
-
 class Stroke {
   float x0, y0, x1, y1, strokeWt;
 
