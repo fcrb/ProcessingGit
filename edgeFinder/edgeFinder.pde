@@ -11,14 +11,14 @@ void setup() {
   background(255);
   noSmooth();
 
-  //  exampleLissajous();
-  //  generatePDF("exampleLissajous.pdf");
+  exampleLissajous();
+  generatePDF("exampleLissajous.pdf");
 
   //  exampleMobileSpar();
   //  generatePDF("exampleMobileSpar.pdf");
 
-  exampleFromFile();
-  generatePDF("exampleSnowflake.pdf");
+//  exampleFromFile();
+//  generatePDF("exampleSnowflake.pdf");
 
 
   //  float angleScale = 1.1;
