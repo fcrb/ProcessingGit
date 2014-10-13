@@ -7,9 +7,11 @@ void setup() {
 
 void draw() {
   background(255);
+  pushMatrix();
   translate(width/2, height/2);
   drawGrid(-width/2, -height/2, 20, 100, 12);
   drawMouseCoordinates(-width/2, -height/2, 9);
-  robbie.goTo(0,0);
+  popMatrix();
+  robbie.goTo(mouseX, mouseY);
   robbie.draw();
 }

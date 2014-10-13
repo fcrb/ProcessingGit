@@ -1,7 +1,10 @@
 /*
 Example usage:
+  pushMatrix();
   translate(width/2, height/2);
-  drawGrid(-width/2, -height/2, 20, 100, 10);
+  drawGrid(-width/2, -height/2, 20, 100, 12);
+  drawMouseCoordinates(-width/2, -height/2, 9);
+  popMatrix();
 */
 
 void drawGrid(int xStart, int yStart, int minorIncrement, int majorIncrement, float textHeight) {
