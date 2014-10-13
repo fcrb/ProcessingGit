@@ -7,7 +7,9 @@ void setup() {
 
 void draw() {
   background(255);
-//  robbie.goTo(width/2, height/2);
-  robbie.goTo(mouseX, mouseY);
+  translate(width/2, height/2);
+  drawGrid(-width/2, -height/2, 20, 100, 12);
+  drawMouseCoordinates(-width/2, -height/2, 9);
+  robbie.goTo(0,0);
   robbie.draw();
 }
