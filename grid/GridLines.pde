@@ -32,6 +32,7 @@ void drawGridLines(int xStart, int yStart, int gridInterval, int color_) {
 }
 
 void drawGridLabels(int xStart, int yStart, int gridInterval, float textHeight) {
+  textSize(textHeight);
   fill(150);
   xStart -= xStart % gridInterval;
   yStart -= yStart % gridInterval;
@@ -50,4 +51,11 @@ void drawGridLabels(int xStart, int yStart, int gridInterval, float textHeight) 
     String yAxisLabel = ""+y;
     text(yAxisLabel, - textWidth(yAxisLabel)/2, y + textHeight/2);
   }
+}
+
+void drawMouseCoordinates(float xLeft, float yTop, float textHeight) {
+  fill(127);
+  String label = "("+(mouseX + xLeft) + ","+(mouseY+ yTop)+")";
+  textSize(textHeight);
+  text(label, xLeft + 5, yTop + textHeight);
 }
