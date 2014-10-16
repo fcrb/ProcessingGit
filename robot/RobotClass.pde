@@ -14,8 +14,8 @@ class Robot {
     float bodyWidth  = 20 * scale;
     float bodyHeight = 40 * scale;
     //neck
-    //    float neckHeight = bodyHeight * 0.2* (1 + cos(millis()*0.005));
-    float neckHeight = bodyHeight * 0.2;
+        float neckHeight = bodyHeight * 0.2* (1 + cos(millis()*0.005));
+//    float neckHeight = bodyHeight * 0.2;
     float yNeckTop = - bodyHeight * 0.5 - neckHeight;
     float neckWidth = bodyWidth * 0.5;
     fill(0, 0, 255);
