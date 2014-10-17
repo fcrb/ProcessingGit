@@ -23,8 +23,13 @@ void setup() {
 }
 
 void keyPressed() {
+  if (key == 'c') {
+    background(255);
+    return;
+  }   
+
   char[] keyCodes = new char[] {
-    '1', '2', '3', '4', '5', '6','7','8','9'
+    '1', '2', '3', '4', '5', '6', '7', '8', '9'
   };
   for (int i = 0; i < keyCodes.length; ++i) {
 

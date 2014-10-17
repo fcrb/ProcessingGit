@@ -7,6 +7,30 @@ class EdgeCalculator {
     findEdgePixels();
   }
 
+  void addPixelLayer() {
+    for (int i = 1; i < width-1; ++i) {
+      for (int j = 1; j < height-1; ++j) {
+        if (onEdge[i][j]) {
+          for (int dx = -1; dx < 2; ++dx) {
+            for (int dy = -1; dy < 2; ++dy) {
+              pixels[(j+dy) * width + i + dx] = 0 ;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  void removePixelLayer() {
+    for (int i = 1; i < width-1; ++i) {
+      for (int j = 1; j < height-1; ++j) {
+        if (onEdge[i][j]) {
+          pixels[j * width + i ] = WHITE ;
+        }
+      }
+    }
+  }
+
   void drawVectors(float strokeWt, float scale) {
     strokeWeight(strokeWt);
     for (EdgePath path: paths) {

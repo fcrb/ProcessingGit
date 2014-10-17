@@ -14,6 +14,14 @@ void setup() {
 
   noLoop();
 
+  polynomialDemo();
+
+  background(255);
+  graph.draw();
+  exit();
+}
+
+void polynomialDemo() {
   graph = new Graph(-2.2, 2.2, -1.1, 0.5);
   graph.addFunctor(new Functor() {
     public float value(float x) {
@@ -27,9 +35,5 @@ void setup() {
     }
   }
   );
-  background(255);
-  //  beginRecord(PDF, "graphyOutput.pdf");
-  graph.draw();
-  //  endRecord();
-  exit();
 }
+
