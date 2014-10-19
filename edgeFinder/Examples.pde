@@ -10,7 +10,7 @@ void exampleLissajous() {
     float angle = 2 * PI / numSteps * i;
     x = width * .45 * cos(15 * angle);
     y = height * .45 * cos(17 * angle);
-    if (i>0) {
+    if (i > 0) {
       float sw = 8000 / (500 + dist(x, y, 0, 0) / width * 800)* width/400;
       strokeWeight(sw);
       line(xPrevious, yPrevious, x, y);
@@ -21,9 +21,20 @@ void exampleLissajous() {
   popMatrix();
 }
 
-void exampleEllipse() {
-  strokeWeight(width/5);
-  ellipse(width/2, height/2, width /2, height/2);
+void exampleEllipses() {
+  translate(width/2, height/2);
+  noFill();
+  float strkWeight = width * 0.02;
+  float x = width * 0.15;
+  float y = 0;
+  float w = width * 0.5;
+  float h = height * 0.35;
+  int n = 12;
+  strokeWeight(strkWeight);
+  for (int i = 0; i < n; ++i) {
+    ellipse(x, y, w, h);
+    rotate(2 * PI / n);
+  }
 }
 
 void exampleFractalTree(float angleScale, float angleShift) {

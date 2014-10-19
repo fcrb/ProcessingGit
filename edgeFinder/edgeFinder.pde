@@ -10,15 +10,17 @@ boolean needsRedraw = false;
 void setup() {
   //High resolution of the bitmap version is needed 
   //if our vector-based drawing is to look smooth.
-  size(5000, 5000);
+  size(600, 600);
   initializeEdgeCalculator();
   background(255);
   noSmooth();
 
   widthInInches = 4;
 
-  pdfFileName = "exampleRegularPolygonFractal.pdf";
-  exampleRegularPolygonFractal();
+  pdfFileName = "exampleEllipses.pdf";
+  exampleEllipses();
+//  pdfFileName = "exampleRegularPolygonFractal.pdf";
+//  exampleRegularPolygonFractal();
 //  pdfFileName = "exampleStarOfDavid.pdf";
 //  exampleStarOfDavid();
   //  pdfFileName = "exampleLissajous.pdf";
