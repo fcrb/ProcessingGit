@@ -37,9 +37,6 @@ void drawEllipses() {
   noFill();
   strokeWeight(strkWeight);
   float sizeMultiplier = 0.5;// ((float)0.5) / (ellipseWidth + distanceToEllipseCenter);
-  println("ellipseWidth="+ellipseWidth);
-  println("distanceToEllipseCenter="+distanceToEllipseCenter);
-  println("sizeMultiplier="+sizeMultiplier);
   float phi = ellipseRotation * PI /180;
   float x = width * distanceToEllipseCenter * cos(phi) * sizeMultiplier;
   float y = - height * distanceToEllipseCenter * sin(phi * sizeMultiplier);
@@ -50,7 +47,6 @@ void drawEllipses() {
 }
 
 void setStrokeWeight(float s) {
-  println("setStrokeWeight="+s);
   strkWeight = s;
   redraw();
 }
