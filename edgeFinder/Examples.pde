@@ -37,6 +37,22 @@ void exampleEllipses() {
   }
 }
 
+void drawEllipses(float strkWeight, float distanceToEllipseCenter, 
+float ellipseRotation, float ellipseWidth, float h, int n)
+{
+  translate(width/2, height/2);
+  noFill();
+  strokeWeight(strkWeight);
+  float sizeMultiplier = 0.5;// ((float)0.5) / (ellipseWidth + distanceToEllipseCenter);
+  float phi = ellipseRotation * PI /180;
+  float x = width * distanceToEllipseCenter * cos(phi) * sizeMultiplier;
+  float y = - height * distanceToEllipseCenter * sin(phi * sizeMultiplier);
+  for (int i = 0; i < n; ++i) {
+    ellipse(x, y, ellipseWidth * width * sizeMultiplier, h * height * sizeMultiplier);
+    rotate(2 * PI / n);
+  }
+}
+
 void exampleFractalTree(float angleScale, float angleShift) {
   drawTree(width * 0.5f, height * 0.95f, width * 0.5f, height * 0.83f, 0, angleScale, angleShift);
 }
@@ -116,7 +132,7 @@ void exampleMobileSpar() {
 
 void exampleFromFile() {
   PImage img;
-  img = loadImage("snowflake43.png");
+  img = loadImage("snowflake001.png");
   image(img, 0, 0);
 }
 

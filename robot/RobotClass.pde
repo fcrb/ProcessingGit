@@ -1,51 +1,70 @@
 class Robot {
-  float x, y;
-  float scale = 4;
+  float x = 0;//location of robot
+  float y = 0;//location of robot
+  float scale = 1; //size of robot
+  int robotColor;
+  
+  Robot(int robotColor_, float scale_) {
+    robotColor = robotColor_;
+    scale = scale_;
+  }
 
-  void goTo(float x_, float y_) {
+  void moveTo(float x_, float y_) {
     x = x_;
     y = y_;
   }
 
   void draw() {
+
+    //draw a grid to help me draw my robot
     pushMatrix();
     noStroke();
+    fill(robotColor);
     translate(x, y);
-    float bodyWidth  = 20 * scale;
-    float bodyHeight = 40 * scale;
-   //propulsion
-      int stepsInCycle = 20;
-    for(int i = 0; i < stepsInCycle; ++i) {
-      float verticalOffset = frameCount % stepsInCycle;
-    fill(255 - i*10, 0, 0);
-      ellipse(0, bodyHeight * 0.45+ i*10 + verticalOffset, bodyWidth  - 3*i , bodyWidth/10);
+
+    //draw body of robot
+    float bodyWidth = 100 * scale;
+    float bodyHeight = 150 * scale;
+    float yTopOfBody = -bodyHeight/2;
+    rect(-bodyWidth/2, yTopOfBody, bodyWidth, bodyHeight);
+
+    //draw neck of robot
+    float neckWidth = 30 * scale;
+    float neckHeight = 80*(1+cos(millis() * 0.001 / scale)) * scale;
+    float yTopOfNeck = yTopOfBody - neckHeight;
+    rect(-neckWidth/2, yTopOfNeck, neckWidth, neckHeight);
+
+    //draw head of robot
+    float headWidth = 140 * scale;
+    float headHeight = 30 * scale;
+    float yTopOfHead = yTopOfNeck - headHeight;
+    rect(-headWidth/2, yTopOfHead, headWidth, headHeight);
+
+    //draw eyes of robot
+    float eyeDistanceFromCenter = headWidth *0.4;
+    float eyeDiameter = headHeight * 0.7;
+    float pupilDiameter = eyeDiameter * 0.5;
+    float eyeYCenter = yTopOfHead + headHeight/2;
+    float yTopOfHead = yTopOfNeck - headHeight;
+    fill(255);
+    float eyeHeightScalar = 0.5 * (1 + cos(millis() * 0.001));
+    ellipse(-eyeDistanceFromCenter, eyeYCenter, eyeDiameter, eyeDiameter * eyeHeightScalar);
+    ellipse(eyeDistanceFromCenter, eyeYCenter, eyeDiameter, eyeDiameter * eyeHeightScalar);
+    fill(0, 50);
+    ellipse(-eyeDistanceFromCenter, eyeYCenter, pupilDiameter, pupilDiameter * eyeHeightScalar);
+    ellipse(eyeDistanceFromCenter, eyeYCenter, pupilDiameter, pupilDiameter * eyeHeightScalar);
+    popMatrix();
+  }
+
+  void easeTowards(float targetX, float targetY, float easing) {
+    float dx = targetX - x;
+    if (abs(dx) > 1) {
+      x += dx * easing;
     }
 
-   //body
-    fill(127);
-    rect(- bodyWidth/2, - bodyHeight/2, bodyWidth, bodyHeight);
-    //neck
-    float neckHeight = bodyHeight * 0.2* (1 + cos(millis()*0.005));
-    float yNeckTop = - bodyHeight * 0.5 - neckHeight;
-    float neckWidth = bodyWidth * 0.5;
-    fill(0, 0, 255);
-    rect(-neckWidth/2, yNeckTop, neckWidth, neckHeight);
-    //head
-    float headHeight = bodyWidth * 0.6;
-    float yHeadTop = yNeckTop - headHeight;
-    float headWidth = bodyWidth * 1.5;
-    fill(0, 255, 0);
-    rect(-headWidth/2, yHeadTop, headWidth, headHeight);
-    //eyes
-    float eyeDiameter = headHeight  * 0.6;
-    float pupilDiameter = eyeDiameter  * 0.6;
-    float xDistFromCenter  = headWidth * 0.3;
-    float yEye = yHeadTop + headHeight/2;
-    Eye eye = new Eye(xDistFromCenter, yEye, eyeDiameter, pupilDiameter);
-    eye.draw();
-    eye = new Eye(-xDistFromCenter, yEye, eyeDiameter, pupilDiameter);
-    eye.draw();
-     popMatrix();
+    float dy = targetY - y;
+    if (abs(dy) > 1) {
+      y += dy * easing;
+    }
   }
 }
-

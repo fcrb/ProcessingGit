@@ -10,19 +10,28 @@ boolean needsRedraw = false;
 void setup() {
   //High resolution of the bitmap version is needed 
   //if our vector-based drawing is to look smooth.
-  size(600, 600);
+  size(2000, 2000);
   initializeEdgeCalculator();
   background(255);
   noSmooth();
 
-  widthInInches = 4;
+  //  widthInInches = 4;
 
-  pdfFileName = "exampleEllipses.pdf";
-  exampleEllipses();
-//  pdfFileName = "exampleRegularPolygonFractal.pdf";
-//  exampleRegularPolygonFractal();
-//  pdfFileName = "exampleStarOfDavid.pdf";
-//  exampleStarOfDavid();
+  //  pdfFileName = "exampleEllipses.pdf";
+  //  exampleEllipses();
+  //  pdfFileName = "exampleRegularPolygonFractal.pdf";
+  //  exampleRegularPolygonFractal();
+  //  pdfFileName = "exampleStarOfDavid.pdf";
+  //  exampleStarOfDavid();
+  // createEdgeOnlyPDF("starOfDavid_1_5in.pdf", 72*1.5);
+  float strkWeight = 18 * width / 500;
+  float distanceToEllipseCenter = 0.5;
+  float ellipseRotation = 36;
+  float ellipseWidth = 0.74;
+  float h = 0.6;
+  int n = 13;
+  drawEllipses( strkWeight, distanceToEllipseCenter, ellipseRotation, ellipseWidth, h, n);
+  createEdgeOnlyPDF("ellipses001.pdf", 72*2);
   //  pdfFileName = "exampleLissajous.pdf";
   //  exampleLissajous();
 
@@ -30,7 +39,7 @@ void setup() {
   //  exampleMobileSpar();
 
   //  exampleFromFile();
-  //  createEdgeOnlyPDF("exampleSnowflake.pdf");
+  //  createEdgeOnlyPDF("exampleSnowflake001.pdf", 3*72);
 
 
   //  float angleScale = 1.1;
