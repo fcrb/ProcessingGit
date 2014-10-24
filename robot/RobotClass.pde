@@ -45,7 +45,6 @@ class Robot {
     float eyeDiameter = headHeight * 0.7;
     float pupilDiameter = eyeDiameter * 0.5;
     float eyeYCenter = yTopOfHead + headHeight/2;
-    float yTopOfHead = yTopOfNeck - headHeight;
     fill(255);
     float eyeHeightScalar = 0.5 * (1 + cos(millis() * 0.001));
     ellipse(-eyeDistanceFromCenter, eyeYCenter, eyeDiameter, eyeDiameter * eyeHeightScalar);

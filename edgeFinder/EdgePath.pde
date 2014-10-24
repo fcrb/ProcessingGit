@@ -6,19 +6,29 @@ class EdgePath {
   }
 
   void draw(float scale) {
-    for (int i = 1; i < nodes.size(); ++i) {
-      EdgeNode n1 = nodes.get(i-1);
-      EdgeNode n2 = nodes.get(i);
-      line(n1.x * scale, n1.y * scale, n2.x * scale, n2.y * scale);
+//    for (int i = 1; i < nodes.size(); ++i) {
+//      EdgeNode n1 = nodes.get(i-1);
+//      EdgeNode n2 = nodes.get(i);
+//      line(n1.x * scale, n1.y * scale, n2.x * scale, n2.y * scale);
+//    }
+    beginShape();
+    for(EdgeNode node : nodes) {
+      vertex(node.x * scale, node.y * scale);
     }
+    endShape();
   }
 
   void draw(float scale, PGraphics pdf) {
-    for (int i = 1; i < nodes.size(); ++i) {
-      EdgeNode n1 = nodes.get(i-1);
-      EdgeNode n2 = nodes.get(i);
-      pdf.line(n1.x * scale, n1.y * scale, n2.x * scale, n2.y * scale);
+//    for (int i = 1; i < nodes.size(); ++i) {
+//      EdgeNode n1 = nodes.get(i-1);
+//      EdgeNode n2 = nodes.get(i);
+//      pdf.line(n1.x * scale, n1.y * scale, n2.x * scale, n2.y * scale);
+//    }
+    pdf.beginShape();
+    for(EdgeNode node : nodes) {
+      pdf.vertex(node.x * scale, node.y * scale);
     }
+    pdf.endShape();
   }
 
   void populatePath(boolean[][] onEdge, boolean[][] onAPath) {

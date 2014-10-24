@@ -21,6 +21,26 @@ void exampleLissajous() {
   popMatrix();
 }
 
+void lissajous2(float f1, float f2, float sw) {
+  background(255);
+  translate(width/2, height/2);
+  int numSteps = 50000;
+  float xPrevious = 0;
+  float yPrevious = 0;
+  float x, y;
+  for (int i = 0; i <= numSteps; ++i) {
+    float angle = 8 * PI / numSteps * i;
+    x = width * .45  * cos (f1 * angle) * cos(f2 * angle);
+    y = height * .45 * sin (f1 * angle);
+    if (i>0) {
+      strokeWeight(sw);
+      line(xPrevious, yPrevious, x, y);
+    }
+    xPrevious = x;
+    yPrevious =  y;
+  }
+}
+
 void exampleEllipses() {
   translate(width/2, height/2);
   noFill();
