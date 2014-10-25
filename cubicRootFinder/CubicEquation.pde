@@ -1,6 +1,6 @@
 class CubicEquation {
   float a3, a2, a1, a0;
-  float[] roots =  new float[3];
+  float[] roots;
 
   CubicEquation(float a3_, float a2_, float a1_, float a0_) {
     a3 = a3_;
@@ -16,9 +16,17 @@ class CubicEquation {
       y_ = y(x);
       x -= y_ / dydx(x);
     }
-    roots[0] = x;
     //now find quadratic
-    roots[1]=Float.NaN;
+    float a = a3_;
+    float b = a2_ + a * x;
+    float c = a1_ + b * x;
+    float discriminant = b * b - 4 * a * c;
+    if (discriminant < 0) {
+      roots = new float[] { x };
+    } else {
+      discriminant = sqrt(discriminant);
+      roots = new float[] { x, (-b + discriminant)/(a+a), (-b - discriminant)/(a+a)};
+    }
   }
 
   float y(float x) {
