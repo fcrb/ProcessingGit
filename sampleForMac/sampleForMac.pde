@@ -7,7 +7,6 @@ void setup() {
 void draw() {
   noStroke();
   fill(255);
-
   ellipse(mouseX, mouseY, 100, 50);
 
   fill(bgColor, 80);

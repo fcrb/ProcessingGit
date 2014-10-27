@@ -15,26 +15,26 @@ void setup() {
   background(255);
   noSmooth();
 
-  //  widthInInches = 4;
+  widthInInches = 4;
 
   //  pdfFileName = "exampleEllipses.pdf";
   //  exampleEllipses();
-  //  pdfFileName = "exampleRegularPolygonFractal.pdf";
-  //  exampleRegularPolygonFractal();
+//  pdfFileName = "exampleRegularPolygonFractal.pdf";
+//  exampleRegularPolygonFractal();
   //  pdfFileName = "exampleStarOfDavid.pdf";
   //  exampleStarOfDavid();
   // createEdgeOnlyPDF("starOfDavid_1_5in.pdf", 72*1.5);
-  
-//  float strkWeight = 18 * width / 500;
-//  float distanceToEllipseCenter = 0.5;
-//  float ellipseRotation = 36;
-//  float ellipseWidth = 0.74;
-//  float h = 0.6;
-//  int n = 13;
-//  drawEllipses( strkWeight, distanceToEllipseCenter, ellipseRotation, ellipseWidth, h, n);
-//  createEdgeOnlyPDF("ellipses001_0_75in.pdf", 72*1.5);
-  lissajous2(7,2,10);
-  
+
+  //  float strkWeight = 18 * width / 500;
+  //  float distanceToEllipseCenter = 0.5;
+  //  float ellipseRotation = 36;
+  //  float ellipseWidth = 0.74;
+  //  float h = 0.6;
+  //  int n = 13;
+  //  drawEllipses( strkWeight, distanceToEllipseCenter, ellipseRotation, ellipseWidth, h, n);
+  //  createEdgeOnlyPDF("ellipses001_0_75in.pdf", 72*1.5);
+  //  lissajous2(7,2,10);
+
   //  pdfFileName = "exampleLissajous.pdf";
   //  exampleLissajous();
 
@@ -65,7 +65,8 @@ void keyPressed() {
   }
   if (key == '+') {
     loadPixels();
-    EdgeCalculator ec = new EdgeCalculator();
+    EdgeCalculator ec;
+    ec = new EdgeCalculator();
     ec.addPixelLayer();
     updatePixels();
   }

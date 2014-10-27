@@ -1,10 +1,10 @@
-class EllipticGraph {
+class EllipticGraph { //<>//
   float xMin, xMax, yMin, yMax;
   float gridInterval;
   //  float a30, a21, a12, a03, a20, a11, a02, 
   float[][] a;//coefficients of elliptic, row is x exponent, col is y exponent
 
-  Graph(float xMin_, float xMax_, float yMin_, float interval, float[][] a_) {
+  EllipticGraph(float xMin_, float xMax_, float yMin_, float interval, float[][] a_) {
     xMin = xMin_;
     xMax = xMax_;
     yMin = yMin_;
@@ -20,22 +20,42 @@ class EllipticGraph {
   }
 
   void drawElliptic() {
-    float dx = (xMax - xMin) / width * 2;
+    stroke(0);
+    //iterate on x
+    float dx = (xMax - xMin) / width ;
     for (int i = 0; i < width; ++i) {
       float x = xMin + i * dx;
-      CubicEquation cubic = cubic(x);
+      CubicEquation cubic = cubicForX(x);
       float[] yValues = cubic.roots;
-      for(float y : yValues) {
-        point(x, y);
+      for (float y : yValues) {
+        point(i, yToScreenY(y));
+      }
+    }
+    //iterate on y to fill in gaps
+    float dy = (yMax - yMin) / height ;
+    for (int i = 0; i < height; ++i) {
+      float y = yMax - (i+1) * dy;
+      CubicEquation cubic = cubicForY(y);
+      float[] xValues = cubic.roots;
+      for (float x : xValues) {
+        point(xToScreenX(x), i);
       }
     }
   }
 
-  CubicEquation cubic(float x) {
+  CubicEquation cubicForX(float x) {
     float a3 = a[0][3];
     float a2 = a[0][2]+ x * a[1][2];
     float a1 = a[0][1]+ x * ( a[1][1] + x * a[2][1]);
-    float a1 = a[0][0]+ x * ( a[1][0] + x * (a[2][0] + x * a[3][0]));
+    float a0 = a[0][0]+ x * ( a[1][0] + x * (a[2][0] + x * a[3][0]));
+    return new CubicEquation(a3, a2, a1, a0);
+  }
+
+  CubicEquation cubicForY(float y) {
+    float a3 = a[3][0];
+    float a2 = a[2][0]+ y * a[2][1];
+    float a1 = a[1][0]+ y * ( a[1][1] + y * a[1][2]);
+    float a0 = a[0][0]+ y * ( a[0][1] + y * (a[0][2] + y * a[0][3]));
     return new CubicEquation(a3, a2, a1, a0);
   }
 
