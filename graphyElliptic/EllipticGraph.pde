@@ -42,6 +42,10 @@ class EllipticGraph { //<>//
       }
     }
   }
+  
+  float dyMultiple(float x, float y) {
+    return 0;
+  }
 
   CubicEquation cubicForX(float x) {
     float a3 = a[0][3];

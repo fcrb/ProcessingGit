@@ -150,9 +150,9 @@ void exampleMobileSpar() {
   }
 }
 
-void exampleFromFile() {
+void exampleFromFile( String fileName) {
   PImage img;
-  img = loadImage("snowflake001.png");
+  img = loadImage(fileName);
   image(img, 0, 0);
 }
 

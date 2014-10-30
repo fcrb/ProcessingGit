@@ -7,6 +7,14 @@ class EdgeCalculator {
     findEdgePixels();
   }
 
+  void blackenAnyNonWhite() {
+    int i = 0;
+    for (int pixel : pixels) {
+      float bright = (red(pixel) + green(pixel) + blue(pixel)) / 3;
+      pixels[i++] = bright > 127 ? WHITE : BLACK;
+    }
+  }
+
   void addPixelLayer() {
     for (int i = 1; i < width-1; ++i) {
       for (int j = 1; j < height-1; ++j) {

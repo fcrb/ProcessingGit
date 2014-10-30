@@ -2,8 +2,8 @@ import processing.pdf.*;
 float sideLength;
 //Good values: (PI/4, 0.17), (PI/3, 0.3), (PI/6, 0.06), (PI/5, 0.15)
 float sideInCM = 2;//240 on a 12x24 sheet
-float levelFraction = .25;
-float rotationAngle = PI  /3;
+float levelFraction = .17;
+float rotationAngle = PI  /4;
 boolean alternateUpDown = false;
 float MAX_SEGMENT_LENGTH = 1;
 

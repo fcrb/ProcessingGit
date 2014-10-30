@@ -2,6 +2,7 @@ import processing.pdf.*;
 
 ArrayList<NeighborPixel> neighbors;
 int WHITE = color(255);
+int BLACK = color(0);
 float PIXELS_PER_INCH = 72;
 String pdfFileName;
 float widthInInches;
@@ -10,12 +11,10 @@ boolean needsRedraw = false;
 void setup() {
   //High resolution of the bitmap version is needed 
   //if our vector-based drawing is to look smooth.
-  size(800, 800);
+  size(370, 372);
   initializeEdgeCalculator();
   background(255);
   noSmooth();
-
-  widthInInches = 4;
 
   //  pdfFileName = "exampleEllipses.pdf";
   //  exampleEllipses();
@@ -41,8 +40,8 @@ void setup() {
   //  pdfFileName = "exampleMobileSpar.pdf";
   //  exampleMobileSpar();
 
-  //  exampleFromFile();
-  //  createEdgeOnlyPDF("exampleSnowflake001.pdf", 3*72);
+  exampleFromFile("celticBraid.png");
+  createEdgeOnlyPDF("celticBraid.pdf", 12*72);
 
 
   //  float angleScale = 1.1;
@@ -82,6 +81,7 @@ void keyPressed() {
 void createEdgeOnlyPDF(String filename, float pixelWidth) {
   loadPixels();
   EdgeCalculator ec = new EdgeCalculator();
+  ec.blackenAnyNonWhite();
   ec.removeNonEdgePixels();
   ec.removeExtraNeighbors();
   ec.buildVectors();
