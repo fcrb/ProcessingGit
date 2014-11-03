@@ -1,15 +1,15 @@
-float brightnessThreshold = 205;
+float brightnessThreshold = 120;
 
 void setup() {
 //  size(635, 1300);
-  size(265, 150);
+  size(1957, 1013);
   PImage img;
   //  img =  loadImage("scott-kim-mirror-alphabet-inversion-or-ambigram.jpg");
-  img =  loadImage("cards.jpg");
+  img =  loadImage("baconCode.jpg");
   image(img, 0, 0);
   loadPixels();
   //  toBlackWhite();
-  colorToGray();
+  toBlackWhite();
   updatePixels();
   save("cardsBW.jpg");
 }
@@ -45,4 +45,3 @@ void greenToWhite() {
     ++i;
   }
 }
-
