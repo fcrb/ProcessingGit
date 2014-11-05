@@ -11,15 +11,15 @@ boolean needsRedraw = false;
 void setup() {
   //High resolution of the bitmap version is needed 
   //if our vector-based drawing is to look smooth.
-  size(370, 372);
+  size(1600, 1600);
   initializeEdgeCalculator();
   background(255);
   noSmooth();
 
   //  pdfFileName = "exampleEllipses.pdf";
   //  exampleEllipses();
-//  pdfFileName = "exampleRegularPolygonFractal.pdf";
-//  exampleRegularPolygonFractal();
+  //  pdfFileName = "exampleRegularPolygonFractal.pdf";
+  //  exampleRegularPolygonFractal();
   //  pdfFileName = "exampleStarOfDavid.pdf";
   //  exampleStarOfDavid();
   // createEdgeOnlyPDF("starOfDavid_1_5in.pdf", 72*1.5);
@@ -32,7 +32,12 @@ void setup() {
   //  int n = 13;
   //  drawEllipses( strkWeight, distanceToEllipseCenter, ellipseRotation, ellipseWidth, h, n);
   //  createEdgeOnlyPDF("ellipses001_0_75in.pdf", 72*1.5);
-  //  lissajous2(7,2,10);
+//  lissajousCircular(2, 3, 120* width / 1600);
+//  float ringDiameter = height/12;
+//  strokeWeight(ringDiameter/2);
+////      ellipse(width/2, height/10, ringDiameter, ringDiameter);
+//  int inches = 4;
+// createEdgeOnlyPDF("lissajousCircular2_3_120_"+inches+"in.pdf", inches*72);
 
   //  pdfFileName = "exampleLissajous.pdf";
   //  exampleLissajous();
@@ -40,8 +45,9 @@ void setup() {
   //  pdfFileName = "exampleMobileSpar.pdf";
   //  exampleMobileSpar();
 
-  exampleFromFile("celticBraid.png");
-  createEdgeOnlyPDF("celticBraid.pdf", 12*72);
+int inches = 4;
+    exampleFromFile("snowflake002.png");
+   createEdgeOnlyPDF("snowflake002"+inches+"in.pdf", inches*72);
 
 
   //  float angleScale = 1.1;
@@ -81,7 +87,7 @@ void keyPressed() {
 void createEdgeOnlyPDF(String filename, float pixelWidth) {
   loadPixels();
   EdgeCalculator ec = new EdgeCalculator();
-  ec.blackenAnyNonWhite();
+//  ec.blackenAnyNonWhite();
   ec.removeNonEdgePixels();
   ec.removeExtraNeighbors();
   ec.buildVectors();
@@ -118,3 +124,4 @@ void initializeEdgeCalculator() {
   neighbors.add(new NeighborPixel(-1, 0));
   neighbors.add(new NeighborPixel(-1, -1));
 }
+

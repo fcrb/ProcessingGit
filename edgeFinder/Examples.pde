@@ -21,24 +21,29 @@ void exampleLissajous() {
   popMatrix();
 }
 
-void lissajous2(float f1, float f2, float sw) {
+void lissajousCircular(float f1, float f2, float sw) {
   background(255);
+  pushMatrix();
   translate(width/2, height/2);
   int numSteps = 50000;
   float xPrevious = 0;
   float yPrevious = 0;
   float x, y;
+  float insetFraction = 0.9;
+  float MAX_RADIUS = dist(0,0,width,height) * insetFraction / 2;
   for (int i = 0; i <= numSteps; ++i) {
     float angle = 8 * PI / numSteps * i;
-    x = width * .45  * cos (f1 * angle) * cos(f2 * angle);
-    y = height * .45 * sin (f1 * angle);
+    x = width * insetFraction/2  * cos (f1 * angle) * cos(f2 * angle);
+    y = height * insetFraction/2 * sin (f1 * angle);
     if (i>0) {
-      strokeWeight(sw);
+      float adjustedSw = sw * MAX_RADIUS / (MAX_RADIUS + dist(0,0,x,y)) ;
+      strokeWeight(adjustedSw);
       line(xPrevious, yPrevious, x, y);
     }
     xPrevious = x;
     yPrevious =  y;
   }
+  popMatrix();
 }
 
 void exampleEllipses() {
