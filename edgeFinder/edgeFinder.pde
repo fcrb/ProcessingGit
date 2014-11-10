@@ -11,7 +11,7 @@ boolean needsRedraw = false;
 void setup() {
   //High resolution of the bitmap version is needed 
   //if our vector-based drawing is to look smooth.
-  size(1600, 1600);
+  size(2000, 2000);
   initializeEdgeCalculator();
   background(255);
   noSmooth();
@@ -24,20 +24,19 @@ void setup() {
   //  exampleStarOfDavid();
   // createEdgeOnlyPDF("starOfDavid_1_5in.pdf", 72*1.5);
 
-  //  float strkWeight = 18 * width / 500;
-  //  float distanceToEllipseCenter = 0.5;
-  //  float ellipseRotation = 36;
-  //  float ellipseWidth = 0.74;
-  //  float h = 0.6;
-  //  int n = 13;
-  //  drawEllipses( strkWeight, distanceToEllipseCenter, ellipseRotation, ellipseWidth, h, n);
-  //  createEdgeOnlyPDF("ellipses001_0_75in.pdf", 72*1.5);
-//  lissajousCircular(2, 3, 120* width / 1600);
-//  float ringDiameter = height/12;
-//  strokeWeight(ringDiameter/2);
-////      ellipse(width/2, height/10, ringDiameter, ringDiameter);
-//  int inches = 4;
-// createEdgeOnlyPDF("lissajousCircular2_3_120_"+inches+"in.pdf", inches*72);
+  float strkWeight = 10.0 * width / 480;
+  float distanceToEllipseCenter = 0.45;//0.35 fills center
+  float ellipseRotation = 0;
+  float ellipseWidth = 0.9;
+  int n = 16;
+    drawEllipses( strkWeight, distanceToEllipseCenter, ellipseRotation, ellipseWidth, n);
+    createEdgeOnlyPDF("ellipses_10_045_0_09_16_4in.pdf", 72*4);
+  //  lissajousCircular(2, 3, 120* width / 1600);
+  //  float ringDiameter = height/12;
+  //  strokeWeight(ringDiameter/2);
+  ////      ellipse(width/2, height/10, ringDiameter, ringDiameter);
+  //  int inches = 4;
+  // createEdgeOnlyPDF("lissajousCircular2_3_120_"+inches+"in.pdf", inches*72);
 
   //  pdfFileName = "exampleLissajous.pdf";
   //  exampleLissajous();
@@ -45,10 +44,13 @@ void setup() {
   //  pdfFileName = "exampleMobileSpar.pdf";
   //  exampleMobileSpar();
 
-int inches = 4;
-    exampleFromFile("snowflake002.png");
-   createEdgeOnlyPDF("snowflake002"+inches+"in.pdf", inches*72);
+  //int inches = 8;
+  //    exampleFromFile("FreyasRoom.png");
+  //  createEdgeOnlyPDF("FreyasRoom"+inches+"in.pdf", inches*72);
 
+  //  createEdgeOnlyPDF("FreyasRoom"+inches+"in.pdf", inches*72);
+
+//  merryChristmas();
 
   //  float angleScale = 1.1;
   //  float angleShift = 0;
@@ -87,7 +89,7 @@ void keyPressed() {
 void createEdgeOnlyPDF(String filename, float pixelWidth) {
   loadPixels();
   EdgeCalculator ec = new EdgeCalculator();
-//  ec.blackenAnyNonWhite();
+  //  ec.blackenAnyNonWhite();
   ec.removeNonEdgePixels();
   ec.removeExtraNeighbors();
   ec.buildVectors();
@@ -105,7 +107,7 @@ void createEdgeOnlyPDF(String filename, float pixelWidth) {
   PGraphics pdf = createGraphics((int) pixelWidth, (int) pixelWidth, PDF, filename);
   pdf.beginDraw();
 
-  float strokeWt = 0.072;
+  float strokeWt = 0.005;
   float scale = pixelWidth / width;
   ec.drawVectors(strokeWt, scale, pdf);
 

@@ -30,13 +30,13 @@ void lissajousCircular(float f1, float f2, float sw) {
   float yPrevious = 0;
   float x, y;
   float insetFraction = 0.9;
-  float MAX_RADIUS = dist(0,0,width,height) * insetFraction / 2;
+  float MAX_RADIUS = dist(0, 0, width, height) * insetFraction / 2;
   for (int i = 0; i <= numSteps; ++i) {
     float angle = 8 * PI / numSteps * i;
     x = width * insetFraction/2  * cos (f1 * angle) * cos(f2 * angle);
     y = height * insetFraction/2 * sin (f1 * angle);
     if (i>0) {
-      float adjustedSw = sw * MAX_RADIUS / (MAX_RADIUS + dist(0,0,x,y)) ;
+      float adjustedSw = sw * MAX_RADIUS / (MAX_RADIUS + dist(0, 0, x, y)) ;
       strokeWeight(adjustedSw);
       line(xPrevious, yPrevious, x, y);
     }
@@ -63,7 +63,7 @@ void exampleEllipses() {
 }
 
 void drawEllipses(float strkWeight, float distanceToEllipseCenter, 
-float ellipseRotation, float ellipseWidth, float h, int n)
+float ellipseRotation, float ellipseWidth, int n)
 {
   translate(width/2, height/2);
   noFill();
@@ -73,7 +73,7 @@ float ellipseRotation, float ellipseWidth, float h, int n)
   float x = width * distanceToEllipseCenter * cos(phi) * sizeMultiplier;
   float y = - height * distanceToEllipseCenter * sin(phi * sizeMultiplier);
   for (int i = 0; i < n; ++i) {
-    ellipse(x, y, ellipseWidth * width * sizeMultiplier, h * height * sizeMultiplier);
+    ellipse(x, y, ellipseWidth * width * sizeMultiplier, ellipseWidth * height * sizeMultiplier);
     rotate(2 * PI / n);
   }
 }
@@ -155,6 +155,23 @@ void exampleMobileSpar() {
   }
 }
 
+void merryChristmas() {
+
+  PGraphics pdf = createGraphics(width, height, PDF, "merryChristmas.pdf");
+  beginRecord(pdf);
+  exampleFromFile("merryChristmas.png");
+  EdgeCalculator ec = new EdgeCalculator();
+  ec.blackenAnyNonWhite();
+  //  ec.removeNonEdgePixels();
+  //  ec.removeExtraNeighbors();
+  //  ec.buildVectors();
+  //  //heuristic...
+  //  float maxError = 1;
+  //  ec.reduceVectors(maxError);
+  updatePixels();
+  endRecord();
+}
+
 void exampleFromFile( String fileName) {
   PImage img;
   img = loadImage(fileName);
@@ -204,3 +221,4 @@ void polygon(float x, float y, float radius, int npoints) {
   }
   endShape(CLOSE);
 }
+

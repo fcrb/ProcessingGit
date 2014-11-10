@@ -15,12 +15,11 @@ void setup() {
   //High resolution of the bitmap version is needed 
   //if our vector-based drawing is to look smooth.
   size(480, 480);
-  strkWeight = 5;
-  distanceToEllipseCenter = 0.3;
-  ellipseRotation = 45;
-  ellipseWidth = 0.5;
-  h = 0.35;
-  n = 12;
+  strkWeight = 10;
+  distanceToEllipseCenter = 0.6;
+  ellipseRotation = 0;
+  ellipseWidth = 0.7;
+  n = 18;
   noLoop();
 }
 
@@ -41,7 +40,7 @@ void drawEllipses() {
   float x = width * distanceToEllipseCenter * cos(phi) * sizeMultiplier;
   float y = - height * distanceToEllipseCenter * sin(phi * sizeMultiplier);
   for (int i = 0; i < n; ++i) {
-    ellipse(x, y, ellipseWidth * width * sizeMultiplier, h * height * sizeMultiplier);
+    ellipse(x, y, ellipseWidth * width * sizeMultiplier, ellipseWidth * height * sizeMultiplier);
     rotate(2 * PI / n);
   }
 }

@@ -1,25 +1,26 @@
 boolean mouseIsBeingDragged = false;
 int widthColorWheel = 225;
 int heightColorWheel = 225;
-//int wheelInset = 10;
 int selectedColor = color(255);
 int WHITE = color(255);
 int BLACK = color(0);
 PImage img;
 
 void setup() {
-  size(800, 600);
+  size(400, 300);
   background(255);
   img = loadImage("colorWheel.png" );
 }
 
 void draw() {
   if (mouseIsBeingDragged) {
+    //draw the path being taken by the mouse point
     strokeWeight(8);
     noSmooth();
     stroke(0);
     line(pmouseX, pmouseY, mouseX, mouseY);
   }
+  //draw the color wheel and selected color swatch
   image(img, 0, 0);
   noStroke();
   fill(selectedColor);
@@ -28,29 +29,39 @@ void draw() {
   ellipse(radiusColorSwatch, radiusColorSwatch, diameterColorSwatch, diameterColorSwatch);
 }
 
-void fillPixel(int x, int y) {
-  if (selectedColor == WHITE) {
-    return;
-  }
-  if (inColorWheel(x, y) || x < 1 || x >= width || y < 1 || y >= height) {
-    return;
-  }
-  int pxlIndex = y * width + x;
-  int pxl = pixels[pxlIndex];
-  if (pxl == BLACK) {
-    return;
-  }
-  if (pxl == WHITE) {
-    pixels[pxlIndex] = selectedColor;
-    fillPixel(x, y - 1);
-    fillPixel(x, y + 1);
-    fillPixel(x - 1, y);
-    fillPixel(x + 1, y);
+boolean inColorWheel(int x, int y) {
+  return (x < widthColorWheel && y < heightColorWheel);
+}
+
+void mouseClicked() {
+  if (inColorWheel(mouseX, mouseY) ) {
+    loadPixels();
+    selectedColor = pixels[width * mouseY + mouseX];
+  } 
+  else {
+    fillPixels(mouseX, mouseY);
   }
 }
 
+void mouseDragged() {
+  mouseIsBeingDragged = true;
+}
+
+void mouseMoved() {
+  mouseIsBeingDragged = false;
+}
+
+class Point {
+  int x, y;
+
+  Point(int x_, int y_) {
+    x = x_; 
+    y = y_;
+  }
+}
 
 void fillPixels(int x, int y) {
+  loadPixels();
   ArrayList<Point> pixelsToFill = new ArrayList<Point>();
   pixelsToFill.add(new Point(x, y));
 
@@ -80,31 +91,5 @@ void fillPixels(int x, int y) {
       }
     }
   }
-}
-
-boolean mouseInColorWheel() {
-  return inColorWheel(mouseX, mouseY);
-}
-
-boolean inColorWheel(int x, int y) {
-  return (x < widthColorWheel && y < heightColorWheel);
-}
-
-void mouseClicked() {
-  loadPixels();
-  if (mouseInColorWheel() ) {
-    selectedColor = pixels[width * mouseY + mouseX];
-  } 
-  else {
-    fillPixels(mouseX, mouseY);
-    updatePixels();
-  }
-}
-
-void mouseDragged() {
-  mouseIsBeingDragged = true;
-}
-
-void mouseMoved() {
-  mouseIsBeingDragged = false;
+  updatePixels();
 }

@@ -11,7 +11,8 @@ class EdgeCalculator {
     int i = 0;
     for (int pixel : pixels) {
       float bright = (red(pixel) + green(pixel) + blue(pixel)) / 3;
-      pixels[i++] = bright > 127 ? WHITE : BLACK;
+//      pixels[i++] = bright > 150 ? WHITE : BLACK;
+      pixels[i++] = bright < 80 ? WHITE : BLACK;
     }
   }
 

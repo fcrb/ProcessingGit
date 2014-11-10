@@ -2,10 +2,10 @@ import processing.pdf.*;
 int numCircles;
 
 void setup() {
-  size(1000, 1000, PDF, "overlappingCircles.pdf");
+  size(1000, 1000);//, PDF, "overlappingCircles.pdf");
 
   PGraphics pgMerge =  ellipseGraphics(0,0);
-  numCircles= 6;
+  numCircles= 12;
   for (int i = 0; i < numCircles; ++i) {
     float ctrRadius = width /6 ;
     pgMerge = mergeGraphics(pgMerge, nextEllipse(i, ctrRadius));
