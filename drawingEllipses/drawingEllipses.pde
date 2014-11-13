@@ -1,6 +1,9 @@
-int gridSize = 30;
-float stringLength = 20;
-float focusDistanceFromCenter = 4;
+float stringLength = 48;
+float distanceBetweenFoci = 22;
+
+
+int gridSize = (int)(800 / stringLength);
+float focusDistanceFromCenter = distanceBetweenFoci * 0.5;
 float angle0 = -PI/2;
 float angle1 = -PI/2;
 float xNib;
@@ -9,7 +12,7 @@ ArrayList<Point> nibs = new ArrayList<Point>();
 int maxNibs = 1000;
 
 void setup() {
-  size(640, 360);
+  size(800, 800);
   frameRate(60);
 }
 
@@ -30,15 +33,6 @@ void draw() {
     line(-width/2, i, width/2, i);
     line(-width/2, -i, width/2, -i);
   }
-
-  //draw foci
-  stroke(255);
-  strokeWeight(2);
-  float focusDiameter = gridSize * 0.1;
-  ellipse(- gridSize * focusDistanceFromCenter, 0
-    , focusDiameter, focusDiameter);
-  ellipse( gridSize * focusDistanceFromCenter, 0
-    , focusDiameter, focusDiameter);
 
   //draw string
   stroke(200);
@@ -86,6 +80,16 @@ void draw() {
   ellipse(gridSize * xNib, gridSize * yNib, 5, 5);
   line(gridSize * xNib, gridSize * yNib, -gridSize * focusDistanceFromCenter, 0);
   line(gridSize * xNib, gridSize * yNib, gridSize * focusDistanceFromCenter, 0);
+
+
+  //draw foci
+  stroke(255, 0, 0);
+  strokeWeight(2);
+  float focusDiameter = gridSize * 0.1;
+  ellipse(- gridSize * focusDistanceFromCenter, 0
+    , focusDiameter, focusDiameter);
+  ellipse( gridSize * focusDistanceFromCenter, 0
+    , focusDiameter, focusDiameter);
 
 }
 

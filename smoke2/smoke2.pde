@@ -1,6 +1,6 @@
 ArrayList<SmokePuff> smoke;
 void setup() {
-  size(640, 480);
+  size(320, 240);
   background(0);
   smoke = new ArrayList<SmokePuff>();
 }

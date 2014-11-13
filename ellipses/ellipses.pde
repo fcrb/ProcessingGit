@@ -1,4 +1,4 @@
-float strkWeight, distanceToEllipseCenter, ellipseRotation, ellipseWidth, h;
+float strkWeight, distanceToEllipseCenter, ellipseRotation, ellipseWidth, heightFactor;
 int n = 5;
 
 interface JavaScript {
@@ -15,18 +15,19 @@ void setup() {
   //High resolution of the bitmap version is needed 
   //if our vector-based drawing is to look smooth.
   size(480, 480);
-  strkWeight = 10;
-  distanceToEllipseCenter = 0.6;
-  ellipseRotation = 0;
-  ellipseWidth = 0.7;
-  n = 18;
+  strkWeight = 5;
+  distanceToEllipseCenter = 0.15;
+  ellipseRotation = 45;
+  ellipseWidth = 0.5;
+  heightFactor = 0.15;
+  n = 12;
   noLoop();
 }
 
 void draw() {
   background(255);
   if (javascript!=null) 
-    javascript.showValues(n, strkWeight, distanceToEllipseCenter, ellipseRotation, ellipseWidth, h);
+    javascript.showValues(n, strkWeight, distanceToEllipseCenter, ellipseRotation, ellipseWidth, heightFactor);
   drawEllipses();
 }
 
@@ -40,7 +41,7 @@ void drawEllipses() {
   float x = width * distanceToEllipseCenter * cos(phi) * sizeMultiplier;
   float y = - height * distanceToEllipseCenter * sin(phi * sizeMultiplier);
   for (int i = 0; i < n; ++i) {
-    ellipse(x, y, ellipseWidth * width * sizeMultiplier, ellipseWidth * height * sizeMultiplier);
+    ellipse(x, y, ellipseWidth * width * sizeMultiplier, heightFactor * height * sizeMultiplier);
     rotate(2 * PI / n);
   }
 }
@@ -66,7 +67,7 @@ void setEllipseWidth(float w_) {
 }
 
 void setEllipseHeight(float s) {
-  h = s;
+  heightFactor = s;
   redraw();
 }
 

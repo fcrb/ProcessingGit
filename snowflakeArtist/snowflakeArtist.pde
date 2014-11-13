@@ -1,17 +1,18 @@
+import processing.pdf.*;
+
+ArrayList<NeighborPixel> neighbors;
+int WHITE = color(255);
+int BLACK = color(0);
+float PIXELS_PER_INCH = 72;
+String pdfFileName;
+float widthInInches;
+boolean needsRedraw = false;
+
 int SYMMETRY = 6;
 int penWidth = 5;
 float xOld, yOld;
 boolean drawingInProgress = false;
-
-interface JavaScript {
-  void showValues(int penWidth);
-}
-
-void bindJavascript(JavaScript js) {
-  javascript = js;
-}
-
-JavaScript javascript;
+int imageCounter = 100;
 
 void setup() {
   size(800, 800);
@@ -20,11 +21,23 @@ void setup() {
   strokeWeight(penWidth);
   strokeCap(ROUND);
   fill(0);
+  initializeEdgeCalculator();
+  background(255);
+  noSmooth();
 }
 
 void keyPressed() {
   if (key == 'c') {
     background(255);
+    return;
+  }   
+  if (key == 's') {
+    save("snowflake"+(imageCounter++)+".png" );
+    return;
+  }   
+
+  if (key == 'p') {
+    createEdgeOnlyPDF("snowflake"+(imageCounter++)+".pdf", 72*12);
     return;
   }   
 
@@ -49,8 +62,6 @@ void eraseDrawing() {
 }
 
 void draw() {
-  if (javascript!=null) 
-    javascript.showValues(penWidth);
   if (!mousePressed ) {
     drawingInProgress = false;
     return;
@@ -73,3 +84,39 @@ void draw() {
   xOld = x;
   yOld = y;
 }
+
+void createEdgeOnlyPDF(String filename, float pixelWidth) {
+  loadPixels();
+  EdgeCalculator ec = new EdgeCalculator();
+  ec.removeNonEdgePixels();
+  ec.removeExtraNeighbors();
+  ec.buildVectors();
+  //heuristic...
+  float maxError = 1;
+  ec.reduceVectors(maxError);
+  updatePixels();
+
+  //Now you can scale down the size. 
+  PGraphics pdf = createGraphics((int) pixelWidth, (int) pixelWidth, PDF, "pdf/"+filename);
+  pdf.beginDraw();
+
+  float strokeWt = 0.005;
+  float scale = pixelWidth / width;
+  ec.drawVectors(strokeWt, scale, pdf);
+
+  pdf.dispose();
+  pdf.endDraw();
+}
+
+void initializeEdgeCalculator() {
+  neighbors = new ArrayList<NeighborPixel>();
+  neighbors.add(new NeighborPixel(0, -1));
+  neighbors.add(new NeighborPixel(1, -1));
+  neighbors.add(new NeighborPixel(1, 0));
+  neighbors.add(new NeighborPixel(1, 1));
+  neighbors.add(new NeighborPixel(0, 1));
+  neighbors.add(new NeighborPixel(-1, 1));
+  neighbors.add(new NeighborPixel(-1, 0));
+  neighbors.add(new NeighborPixel(-1, -1));
+}
+

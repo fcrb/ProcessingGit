@@ -11,7 +11,8 @@ boolean needsRedraw = false;
 void setup() {
   //High resolution of the bitmap version is needed 
   //if our vector-based drawing is to look smooth.
-  size(2000, 2000);
+  int size = 1000;
+  size(size, size);
   initializeEdgeCalculator();
   background(255);
   noSmooth();
@@ -24,13 +25,14 @@ void setup() {
   //  exampleStarOfDavid();
   // createEdgeOnlyPDF("starOfDavid_1_5in.pdf", 72*1.5);
 
-  float strkWeight = 10.0 * width / 480;
-  float distanceToEllipseCenter = 0.45;//0.35 fills center
-  float ellipseRotation = 0;
-  float ellipseWidth = 0.9;
-  int n = 16;
-    drawEllipses( strkWeight, distanceToEllipseCenter, ellipseRotation, ellipseWidth, n);
-    createEdgeOnlyPDF("ellipses_10_045_0_09_16_4in.pdf", 72*4);
+  float strkWeight = 12.0 * width / 480;
+  float distanceToEllipseCenter = -0.16;//0.35 fills center
+  float ellipseRotation = 38;
+  float ellipseWidth = 0.35;
+ float  heightFactor = 0.19;
+  int n = 18;
+    drawEllipses2( strkWeight, distanceToEllipseCenter, ellipseRotation, ellipseWidth, heightFactor, n);
+    createEdgeOnlyPDF("ellipses_12_n016_38_035_019_18.pdf", 72*12);
   //  lissajousCircular(2, 3, 120* width / 1600);
   //  float ringDiameter = height/12;
   //  strokeWeight(ringDiameter/2);
