@@ -4,18 +4,29 @@ int[] rotations;//a rotation is the number of rotations by PI/3
 int level = 5;
 
 void setup() {
-  size(800, 800, PDF, "kochSnowflake.pdf");
+  size(800, 800);
   background(255);
   strokeWeight(0.005);
   buildRotations();
   float sizeScalar = 0.8;
-  translate(width * (1 - sizeScalar)/2, height * (0.5 + sizeScalar * 0.285 ));
-  float sideLength = width * sizeScalar * pow(1.0/3,level);
+  float sideLength = width * sizeScalar;
+  PGraphics pdf = createGraphics(width, height, PDF, "kochSnowflake.pdf");
+  pdf.beginDraw();
+  pdf.beginShape();
+
+  float x = width * (1 - sizeScalar)/2;
+  float y = height * (0.5 + sizeScalar * 0.285);
+  pdf.vertex(x, y);
   for (int rotation : rotations) {
-    line(0, 0, sideLength, 0);
-    translate(sideLength, 0);
-    rotate(PI / 3 * rotation);
+    x += cos(totalRotation* PI /3) * segmentLength;
+    y += sin(totalRotation* PI /3) * segmentLength;
+    totalRotation = (totalRotation + rotation) % 6;
+    pdf.vertex(x, y);
   }
+  pdf.endShape();
+  pdf.dispose();
+  pdf.endDraw();
+  exit();
 }
 
 void buildRotations() {
@@ -34,4 +45,3 @@ void buildRotations() {
     rotations = newRotations;
   }
 }
-

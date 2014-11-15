@@ -1,20 +1,20 @@
 import processing.pdf.*;
 
-String inputFileName = "threeHexagons.png";
-String outputFileName = "threeHexagons_grey.png";
+String inputFileName = "GoThrones.png";
+String outputFileName = "GoThrones_bw.png";
 boolean invertBlackAndWhite = false;
-int threshold = 80;
+int threshold = 127;
 
 PGraphicsPDF pdf;
 
-int WHITE = color(255);
+int WHITE = color(255, 0);
 int BLACK = color(0);
 
 void setup() {
-  size(884,850);
+  size(1582,1464);
   PImage img = loadImage(inputFileName);
   image(img, 0, 0);
-  toGrey();
+  convertToBlackWhite();
 //  addLabels("2013 IAA BMW i3 Honeycomb structure by youkeys - Flickr: DSC01710_DxO.","Licensed under Creative Commons Attribution 2.0 via Wikimedia Commons");
   save(outputFileName);
 }
