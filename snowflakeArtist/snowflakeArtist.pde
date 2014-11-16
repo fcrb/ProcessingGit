@@ -1,9 +1,5 @@
 import processing.pdf.*;
 
-ArrayList<NeighborPixel> neighbors;
-int WHITE = color(255);
-int BLACK = color(0);
-float PIXELS_PER_INCH = 72;
 String pdfFileName;
 float widthInInches;
 boolean needsRedraw = false;
@@ -16,12 +12,12 @@ int imageCounter = 100;
 
 void setup() {
   size(800, 800);
+  initializeEdgeCalculator();
   background(255);
   stroke(0);
   strokeWeight(penWidth);
   strokeCap(ROUND);
   fill(0);
-  initializeEdgeCalculator();
   background(255);
   noSmooth();
 }

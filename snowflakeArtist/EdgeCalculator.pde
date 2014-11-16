@@ -11,7 +11,6 @@ class EdgeCalculator {
     int i = 0;
     for (int pixel : pixels) {
       float bright = (red(pixel) + green(pixel) + blue(pixel)) / 3;
-//      pixels[i++] = bright > 150 ? WHITE : BLACK;
       pixels[i++] = bright < 80 ? WHITE : BLACK;
     }
   }
@@ -40,13 +39,6 @@ class EdgeCalculator {
     }
   }
 
-  void drawVectors(float strokeWt, float scale) {
-    strokeWeight(strokeWt);
-    for (EdgePath path: paths) {
-      path.draw(scale);
-    }
-  }
-
   void drawVectors(float strokeWt, float scale, PGraphics pdf) {
     pdf.strokeWeight(strokeWt);
     for (EdgePath path: paths) {
@@ -66,10 +58,13 @@ class EdgeCalculator {
       for (int j = 1; j < height-1; ++j) {
         if (onEdge[i][j] && ! onAPath[i][j]) {
           //create a path. Add this as first node
+          onAPath[i][j] = true;
           EdgePath path = new EdgePath(i, j);
-          paths.add(path);
           path.populatePath( onEdge, onAPath);
-          numberOfNodes += path.nodes.size();
+          if (path.nodes.size() > 1) {
+            paths.add(path);
+            numberOfNodes += path.nodes.size();
+          }
         }
       }
     }
@@ -90,8 +85,8 @@ class EdgeCalculator {
   void findEdgePixels() {
     //skip 1 pixel border all the way around, simplifying 
     //implementation
-    for (int i = 1; i < width-1; ++i) {
-      for (int j = 1; j < height-1; ++j) {
+    for (int i = 0; i < width; ++i) {
+      for (int j = 0; j < height; ++j) {
         onEdge[i][j] = isOnEdge(i, j);
       }
     }
@@ -125,7 +120,24 @@ class EdgeCalculator {
     int firstNeighborIndex = -1;
     int prevNeighborIndex = -1;
     int index = 0;
+    //for each neighbor of (x,y), see if it reachable 
+    // from all other neighbors without stepping on x,y.
+    //First, gather up live neighbors
+    ArrayList<NeighborPixel> liveNeighbors = new ArrayList<NeighborPixel>();
     for (NeighborPixel n : neighbors) {
+      if(!isBackground(n.pixel(x, y))) {
+        liveNeighbors.add(n);
+      }
+    }
+    if(liveNeighbors.size() == 2) {
+      //must be at most one row and on column apart
+      NeighborPixel n0 = liveNeighbors.get(0);
+      NeighborPixel n1 = liveNeighbors.get(1);
+      return abs(n0.dx - n1.dx) < 2 && abs(n0.dy - n1.dy) < 2;
+    }
+    println("3+ neighbors at"+x+','+y);
+    for (NeighborPixel n : neighbors) {
+      //only check neighbors that are on the edge
       if (!isBackground(n.pixel(x, y))) {
         if (firstNeighborIndex == -1) {
           firstNeighborIndex = index;
@@ -158,9 +170,10 @@ class EdgeCalculator {
       return false;
     }
     int n = numBackgroundNeighbors(x, y);
+    
     //if there are 7-8 background neighbors, this is a spur or speck, so ignore
     //if there are 0 background neighbors, it is an interior point, 
-    return n > 0 && n < 7;
+    return n > 0 && n < 8;
   }
 
   int numBackgroundNeighbors(int x, int y) {
@@ -181,3 +194,4 @@ class EdgeCalculator {
     return clr == WHITE;
   }
 }
+

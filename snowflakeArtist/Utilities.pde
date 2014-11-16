@@ -2,7 +2,7 @@ ArrayList<NeighborPixel> neighbors;
 int WHITE = color(255);
 int BLACK = color(0);
 float PIXELS_PER_INCH = 72;
-float maxError = 0.25;
+float maxError = 1;
 
 class NeighborPixel {
   int dx, dy;
