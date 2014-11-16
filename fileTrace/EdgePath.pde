@@ -1,29 +1,50 @@
+int colorCounter = 0;
+int[] pathColors = new int[] {
+  color(255, 0, 0), color(0, 255, 0), color(0, 0, 255)
+};
+
+class EdgeNode {
+  int x, y;
+
+  EdgeNode(int x_, int y_) {    
+    x = x_;
+    y = y_;
+  }
+}
+
 class EdgePath {
   ArrayList<EdgeNode> nodes = new  ArrayList<EdgeNode>();
+  int pathColor;
 
   EdgePath(int x, int y) {
     nodes.add(new EdgeNode(x, y));
-  }
-
-  void draw(float scale) {
-    beginShape();
-    for(EdgeNode node : nodes) {
-      vertex(node.x * scale, node.y * scale);
-    }
-    endShape();
+    colorCounter = (colorCounter+1)%3;
+    pathColor = pathColors[colorCounter];
   }
 
   void draw(float scale, PGraphics pdf) {
     pdf.beginShape();
-    for(EdgeNode node : nodes) {
+    for (EdgeNode node : nodes) {
       pdf.vertex(node.x * scale, node.y * scale);
     }
     pdf.endShape();
   }
 
   void populatePath(boolean[][] onEdge, boolean[][] onAPath) {
-    while (findNextNode (onEdge, onAPath) != null) {
-    };
+    EdgeNode nextNode = null;
+    EdgeNode lastNode = null;
+    stroke(pathColor);
+    do {
+      nextNode = findNextNode (onEdge, onAPath);
+      if (nextNode != null) {
+        pixels[nextNode.x +  nextNode.y * width] = pathColor;
+        lastNode = nextNode;
+      }
+    }   
+    while (null != nextNode);
+    if (lastNode != null) {
+      println("Last node=" + lastNode.x + ',' + lastNode.y);
+    }
   }
 
   void reducePath(float maxErrorFromLine) {
@@ -65,24 +86,26 @@ class EdgePath {
     int y = currentNode.y;
 
     //loop through neighbors, find nonwhite, unused pixel
+    EdgeNode firstNode = nodes.get(0);
     for ( NeighborPixel n : neighbors) {
-      //      NeighborPixel n = neighbors.get((i + startingNeighbor) % 8);
-      int xNbr = x + n.dx;
-      int yNbr = y + n.dy;
-      if (onEdge[xNbr][yNbr] && !onAPath[xNbr][yNbr]) {
-        EdgeNode newEdgeNode = new EdgeNode(xNbr, yNbr);
-        onAPath[xNbr][yNbr] = true;
-        nodes.add(newEdgeNode);
-        EdgeNode firstNode = nodes.get(0);
-        if (xNbr == firstNode.x && yNbr == firstNode.y) {
-          //we've looped, so report there is no next node
-          return null;
+      if (!n.isBackground(x, y)) {
+        int xNbr = x + n.dx;
+        int yNbr = y + n.dy;
+        if (onEdge[xNbr][yNbr] && !onAPath[xNbr][yNbr]) {
+          EdgeNode newEdgeNode = new EdgeNode(xNbr, yNbr);
+          onAPath[xNbr][yNbr] = true;
+          nodes.add(newEdgeNode);
+          if (xNbr == firstNode.x && yNbr == firstNode.y) {
+            //we've looped, so report there is no next node
+            return null;
+          }
+          return newEdgeNode;
         }
-        return newEdgeNode;
       }
     }
-    //hmmm. We looked, and could not find a new node. It seems this
-    //might happen if two regions just touch at a point or two.
+    //hmmm. 
+    println("WHOA!!!");
     return null;
   }
 }
+

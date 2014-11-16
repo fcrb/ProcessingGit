@@ -1,9 +1,9 @@
 import processing.pdf.*;
 
-String inputFileName = "GoThrones_bw";
+String inputFileName = "horcrux_bw";
 
 void setup() {
-  size(1436,1444);
+size(2404,2083);//  size(32, 39);
   initializeEdgeCalculator();
   background(255);
   noSmooth();

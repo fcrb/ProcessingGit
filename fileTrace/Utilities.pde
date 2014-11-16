@@ -2,7 +2,7 @@ ArrayList<NeighborPixel> neighbors;
 int WHITE = color(255);
 int BLACK = color(0);
 float PIXELS_PER_INCH = 72;
-float maxError = 0.05;
+float maxError = 1;
 
 void createEdgeOnlyPDF(String filename, float pixelWidth) {
   loadPixels();
@@ -14,7 +14,7 @@ void createEdgeOnlyPDF(String filename, float pixelWidth) {
   updatePixels();
 
   //Now you can scale down the size. 
-  PGraphics pdf = createGraphics((int) pixelWidth, (int) (height * pixelWidth / width), PDF, "pdf/"+filename);
+  PGraphics pdf = createGraphics(1 +(int) pixelWidth, 1 + (int) (height * pixelWidth / width), PDF, "pdf/"+filename);
   pdf.beginDraw();
 
   float strokeWt = 0.02;

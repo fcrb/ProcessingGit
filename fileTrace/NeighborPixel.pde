@@ -7,10 +7,18 @@ class NeighborPixel {
   }
 
   int pixel(int x, int y) {
+    //If on edge, assume area outside of picture is background color
+    if(isOutOfPicture(x,y)) {
+      return WHITE;
+    }
     return pixels[(y + dy) * width + x + dx];
   }
 
   boolean isBackground(int x, int y) {
-    return pixels[(y + dy) * width + x + dx] == WHITE;
+    return pixel(x,y) == WHITE;
+  }
+
+  boolean isOutOfPicture(int x, int y) {
+    return x + dx < 1 || x + dx >= width ||y + dy < 1 || y + dy >= height;
   }
 }
