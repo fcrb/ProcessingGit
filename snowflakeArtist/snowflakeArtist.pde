@@ -80,39 +80,3 @@ void draw() {
   xOld = x;
   yOld = y;
 }
-
-void createEdgeOnlyPDF(String filename, float pixelWidth) {
-  loadPixels();
-  EdgeCalculator ec = new EdgeCalculator();
-  ec.removeNonEdgePixels();
-  ec.removeExtraNeighbors();
-  ec.buildVectors();
-  //heuristic...
-  float maxError = 1;
-  ec.reduceVectors(maxError);
-  updatePixels();
-
-  //Now you can scale down the size. 
-  PGraphics pdf = createGraphics((int) pixelWidth, (int) pixelWidth, PDF, "pdf/"+filename);
-  pdf.beginDraw();
-
-  float strokeWt = 0.005;
-  float scale = pixelWidth / width;
-  ec.drawVectors(strokeWt, scale, pdf);
-
-  pdf.dispose();
-  pdf.endDraw();
-}
-
-void initializeEdgeCalculator() {
-  neighbors = new ArrayList<NeighborPixel>();
-  neighbors.add(new NeighborPixel(0, -1));
-  neighbors.add(new NeighborPixel(1, -1));
-  neighbors.add(new NeighborPixel(1, 0));
-  neighbors.add(new NeighborPixel(1, 1));
-  neighbors.add(new NeighborPixel(0, 1));
-  neighbors.add(new NeighborPixel(-1, 1));
-  neighbors.add(new NeighborPixel(-1, 0));
-  neighbors.add(new NeighborPixel(-1, -1));
-}
-
