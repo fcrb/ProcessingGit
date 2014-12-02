@@ -1,9 +1,9 @@
-int numCircles = 6;
+int numCircles = 7;
 float polygonSideLength;
 void setup() {
-  size(400, 400);
-  noLoop();
-  polygonSideLength = width * 0.025;
+  size(480, 480);
+//  noLoop();
+  polygonSideLength = width * 0.023;
 }
 
 void draw() {
@@ -12,12 +12,13 @@ void draw() {
   noFill();
   strokeWeight(2 );
   translate(width/2, height/2);
+//  rotate(frameCount * 0.008);
   float radiusIncrement = width / 2 / (numCircles + 1);
   float angleDelta = -PI/18;
-  for (int i = 1; i <= numCircles; ++i) {
+  for (int i = 3; i <= numCircles; ++i) {
     float radius = radiusIncrement * i;
     int numPolygons = i * 14;
-    int rectColor = 0;
+    int rectColor = 60;
     for (int polyCtr = 0; polyCtr < numPolygons; ++polyCtr) {
       pushMatrix();
       float angle = polyCtr * 2 * PI / numPolygons;
