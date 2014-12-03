@@ -1,7 +1,7 @@
 import processing.pdf.*;
 
-int numVerticesOnTop = 20;
-float upperBendFactor = 0.5;
+int numVerticesOnTop = 19;
+float upperBendFactor = 0.55;
 float lowerBendFactor = 0.4;
 float rightShift = -0.4;
 int lengthInches = 26;

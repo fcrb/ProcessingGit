@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>paraEnvelope</title>
+		<style type="text/css">
+			p {
+				color: white;
+				text-align: center; }
+			legend {
+				color: white;
+				text-align: left; }
+			.fieldset-auto-width {
+         		display: inline-block;
+				text-align: center; }
+		</style>
+	    <script type="text/javascript" src="processing.js"></script>
+		<script type="text/javascript">
+		var bound = false;
+                        var pjs;
+                        function bindJavascript() {
+                        pjs = Processing.getInstanceById('paraEnvelope');
+                        if(pjs!=null) {
+                                pjs.bindJavascript(this);
+                                bound = true; }
+                        if(!bound) setTimeout(bindJavascript, 250);
+                }
+
+                bindJavascript();
+                
+                
+			function showValues(d) {
+	 			document.getElementById('stepSizeDisplay').value = d;
+			}
+                
+	        function showAxis() {
+	            var s = document.getElementById('showAxis').checked;
+	            pjs.showAxis(s);
+			}
+	        function stepSize() {
+	            var d = document.getElementById('stepSize').value;
+	            pjs.setStepSize(d);
+			}
+	        function functor() {
+	            var f = document.getElementById('functor').value;
+	            pjs.setFunctor(f);
+	        }
+	        function changeFrame() {
+	            var minX = document.getElementById('minX').value;
+	            var maxX = document.getElementById('maxX').value;
+	            var minY = document.getElementById('minY').value;
+	            var maxY = document.getElementById('maxY').value;
+	            pjs.changeFrame(minX, maxX, minY, maxY);
+	        }
+	        
+	        </script>
+	</head>
+	<body style="background-color: #252525">
+		<div style="text-align: center;">
+			<p><canvas id="paraEnvelope" data-processing-sources="paraEnvelope.pde"></canvas></p>
+			<fieldset class="fieldset-auto-width">
+				<legend>Envelope parameters</legend>
+				<p>Function:
+					<select id="functor" onchange="functor();">
+   						<option>Parabola</option>
+   						<option>Cubic</option>
+   						<option>Exponential</option>
+   						<option>Sine</option>
+   						<option>Cotangent</option>
+   						<option>Cosecant</option>
+					</select>
+				</p>
+				<p>Step Size:
+					<input
+					type="range"  
+					id="stepSize"   
+					onchange="stepSize()"
+					value="0.3" 
+					size="4" 
+					min="0.02" max="1" step ="0.02"
+					style="width: 100px">
+					</input><output type="text" id="stepSizeDisplay" value="">0.3</output>
+				</p>
+				<p>Minimum x:
+					<input
+					type="number"
+					id="minX"
+					onchange="changeFrame()"
+					value="-4"
+					min="-8" max="0" step ="0.5"">
+					</input>
+				</p>
+				<p>Maximum x:
+					<input
+					type="number"
+					id="maxX"
+					onchange="changeFrame()"
+					value="4"
+					min="0" max="8" step ="0.5"">
+					</input>
+				</p>
+				<p>Minimum y:
+					<input
+					type="number"
+					id="minY"
+					onchange="changeFrame()"
+					value="-4"
+					min="-8" max="0" step ="0.5"">
+					</input>
+				</p>
+				<p>Maximum y:
+					<input
+					type="number"
+					id="maxY"
+					onchange="changeFrame()"
+					value="4"
+					min="0" max="8" step ="0.5"">
+					</input>
+				</p>
+				<p>Show Axis:
+					<input 
+					type="checkbox" 
+					id="showAxis" 
+					onclick="showAxis()">
+					</input>
+				</p>
+			</fieldset>
+		</div>
+	</body>
+</html>
