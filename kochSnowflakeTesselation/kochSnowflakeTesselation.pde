@@ -1,9 +1,12 @@
 import processing.pdf.*;
 
+//parameters
+int level = 4;
+int  triangleSideInches = 2 ;
+
 int[] rotations;//a rotation is the number of rotations by PI/3
-int level = 5;
 float sizeScalar = 0.2;
-float  triangleSideInPixels = 288;
+float  triangleSideInPixels = triangleSideInches * 72;
 float segmentLength;
 
 void setup() {
@@ -14,7 +17,8 @@ void setup() {
   println(segmentLength);
   buildRotations();
 
-  PGraphics pdf = createGraphics(width, height, PDF, "kochSnowflakeTesselation4in.pdf");
+  PGraphics pdf = createGraphics(width, height, PDF,
+  "kochSnowflakeTesselation_level"+level+"_"+triangleSideInches+"in.pdf");
   pdf.beginDraw();
   pdf.strokeWeight(0.01);
   float x = - triangleSideInPixels * 2;
@@ -70,4 +74,3 @@ void drawKoch(float x, float y, PGraphics pdf) {
   }
   pdf.endShape();
 }
-

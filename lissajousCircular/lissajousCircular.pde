@@ -1,12 +1,12 @@
 import processing.pdf.*;
 
-int hFreq = 4;
-int vFreq = 5;
-int sw = 25;
-float[] widthsInInches =  new float[]{0.75, 1, 1.25, 1.5};
+int hFreq = 5;
+int vFreq = 13;
+int sw = 32;
+float[] widthsInInches =  new float[]{1};
 
 void setup() {
-  size(2000, 4000);//  size(32, 39);
+  size(1000, 1000);//  size(32, 39);
   initializeEdgeCalculator();
   background(255);
   noSmooth();
@@ -16,7 +16,7 @@ void setup() {
     int wholePart = (int) w;
     String wString = ""+wholePart + '_' + nf( round(100 * (w - wholePart)), 2);
     createEdgeOnlyPDF("lissajousCircular_"+hFreq+"h_"+vFreq+"v_"+sw+"sw_"+wString+"in.pdf", 72 * w );
-//    createEdgeOnlyPDFSheet("lissajousCircular_"+hFreq+"h_"+vFreq+"v_"+sw+"sw"+wString+"in.pdf", 72 * w );
+//    createEdgeOnlyPDFSheet("lissajousCircular_"+hFreq+"h_"+vFreq+"v_"+sw+"sw"+wString+"in.pdf", 72 * w , 12, 1);
   }
 }
 
@@ -40,4 +40,7 @@ void lissajousCircular() {
     xPrevious = x;
     yPrevious =  y;
   }
+  //add loop for wire
+  float diameter = width * 0.09;
+  ellipse(0, -height * 0.41, diameter,diameter);
 }

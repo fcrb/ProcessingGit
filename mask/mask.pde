@@ -4,7 +4,7 @@ int WHITE = color(255);
 int BLACK = color(0);
 
 void setup() {
-  size(200, 200);
+  size(800, 800);
 
   drawDemoMask();
   maskArray = copyScreenPixels();
@@ -24,8 +24,8 @@ void drawDemoMask() {
   fill(255);
   noSmooth();
   noStroke();
-  for (int i = 0; i < 5; ++i) {
-    ellipse(random(width), random(height), width/3, height/3);
+  for (int i = 0; i < 50; ++i) {
+    ellipse(random(width), random(height), width/10, height/10);
   }
 }
 
@@ -56,4 +56,3 @@ int[] copyScreenPixels() {
   }
   return pixelsCopy;
 }
-

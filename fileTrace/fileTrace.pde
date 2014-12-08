@@ -18,4 +18,3 @@ void setup() {
     createEdgeOnlyPDFSheet(inputFileName+'/'+inputFileName+'_'+wString+"inSheet.pdf", 72 * w, 6,2);
   }
 }
-

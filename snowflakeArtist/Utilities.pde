@@ -4,6 +4,30 @@ int BLACK = color(0);
 float PIXELS_PER_INCH = 72;
 float maxError = 0.25;
 
+class MousePoint {
+  int x, y;
+
+  MousePoint(int x_, int y_) {
+    x = x_;
+    y = y_;
+  }
+}
+
+class MousePath {
+  ArrayList<MousePoint> points = new ArrayList<MousePoint>();
+  void addMousePoint(int x, int y) {
+    points.add(new MousePoint(x, y));
+  }
+
+  MousePoint first() {
+    return points.get(0);
+  }
+
+  int length() {
+    return points.size();
+  }
+}
+
 class NeighborPixel {
   int dx, dy;
 
@@ -14,52 +38,19 @@ class NeighborPixel {
 
   int pixel(int x, int y) {
     //If on edge, assume area outside of picture is background color
-    if(isOutOfPicture(x,y)) {
+    if (isOutOfPicture(x, y)) {
       return WHITE;
     }
     return pixels[(y + dy) * width + x + dx];
   }
 
   boolean isBackground(int x, int y) {
-    return pixel(x,y) == WHITE;
+    return pixel(x, y) == WHITE;
   }
 
   boolean isOutOfPicture(int x, int y) {
     return x + dx < 1 || x + dx >= width ||y + dy < 1 || y + dy >= height;
   }
-}
-
-void createEdgeOnlyPDF(String filename, float pixelWidth) {
-  loadPixels();
-  EdgeCalculator ec = new EdgeCalculator();
-  ec.removeNonEdgePixels();
-  ec.removeExtraNeighbors();
-  ec.buildVectors();
-  ec.reduceVectors(maxError);
-  updatePixels();
-
-  //Now you can scale down the size. 
-  PGraphics pdf = createGraphics(1 +(int) pixelWidth, 1 + (int) (height * pixelWidth / width), PDF, "pdf/"+filename);
-  pdf.beginDraw();
-
-  float strokeWt = 0.02;
-  float scale = pixelWidth / width;
-  ec.drawVectors(strokeWt, scale, pdf);
-
-  pdf.dispose();
-  pdf.endDraw();
-}
-
-void initializeEdgeCalculator() {
-  neighbors = new ArrayList<NeighborPixel>();
-  neighbors.add(new NeighborPixel(0, -1));
-  neighbors.add(new NeighborPixel(1, -1));
-  neighbors.add(new NeighborPixel(1, 0));
-  neighbors.add(new NeighborPixel(1, 1));
-  neighbors.add(new NeighborPixel(0, 1));
-  neighbors.add(new NeighborPixel(-1, 1));
-  neighbors.add(new NeighborPixel(-1, 0));
-  neighbors.add(new NeighborPixel(-1, -1));
 }
 
 class Vec2D {
@@ -105,9 +96,41 @@ class Vec2D {
     Vec2D projection = projectOnto(v);
     return distanceFrom(projection);
   }
-  
+
   String toString() {
     return "Vec2D("+x+','+y+')';
   }
-  
+}
+
+void createEdgeOnlyPDF(String filename, float pixelWidth) {
+  loadPixels();
+  EdgeCalculator ec = new EdgeCalculator();
+  ec.removeNonEdgePixels();
+  ec.removeExtraNeighbors();
+  ec.buildVectors();
+  ec.reduceVectors(maxError);
+  updatePixels();
+
+  //Now you can scale down the size. 
+  PGraphics pdf = createGraphics(1 +(int) pixelWidth, 1 + (int) (height * pixelWidth / width), PDF, "pdf/"+filename);
+  pdf.beginDraw();
+
+  float strokeWt = 0.02;
+  float scale = pixelWidth / width;
+  ec.drawVectors(strokeWt, scale, pdf);
+
+  pdf.dispose();
+  pdf.endDraw();
+}
+
+void initializeEdgeCalculator() {
+  neighbors = new ArrayList<NeighborPixel>();
+  neighbors.add(new NeighborPixel(0, -1));
+  neighbors.add(new NeighborPixel(1, -1));
+  neighbors.add(new NeighborPixel(1, 0));
+  neighbors.add(new NeighborPixel(1, 1));
+  neighbors.add(new NeighborPixel(0, 1));
+  neighbors.add(new NeighborPixel(-1, 1));
+  neighbors.add(new NeighborPixel(-1, 0));
+  neighbors.add(new NeighborPixel(-1, -1));
 }
