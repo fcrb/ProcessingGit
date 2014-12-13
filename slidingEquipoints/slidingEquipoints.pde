@@ -1,5 +1,5 @@
 int linesPerQuadrant = 50;
-int numCopies = 2;
+int numCopies = 1;
 boolean finished = false;
 void setup() {
   size(860, 860);
@@ -7,7 +7,7 @@ void setup() {
 }
 
 void draw() {
-  drawFast();
+  drawSlow();
 //  save("flower.png");
 }
 

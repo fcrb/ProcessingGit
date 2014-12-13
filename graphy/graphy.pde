@@ -1,39 +1,50 @@
 import processing.pdf.*;
 
-PFont myFont;
-Graph graph;
+String FILE_NAME = "graphyOutput";
 
-void setup() {
-  size(640, 480, PDF, "graphyOutput.pdf");
-  textMode(SHAPE);
-  // Uncomment the following two lines to see the available fonts 
-  //  String[] fontList = PFont.list();
-  //  println(fontList);
-  myFont = createFont("CMUSerif-Roman", 12);
-  textFont(myFont);
+int WIDTH_PIXELS = 640;
+int HEIGHT_PIXELS = 480;
+int MAX_INTERVALS_ON_X_AXIS = 14;
 
-  noLoop();
+double X_MIN = -6.8;
+double X_MAX = 6.8;
+double Y_MIN = -5;
+double Y_MAX = 0.9;
 
-  polynomialDemo();
+int NUMBER_FONT_SIZE = 12;
+int FUNCTION_FONT_SIZE = 36;
 
-  background(255);
-  graph.draw();
-  exit();
-}
+boolean EQUALIZE_AXES = true;
+boolean SHOW_GRID = true;
 
-void polynomialDemo() {
-  graph = new Graph(-2.2, 2.2, -1.1, 0.5);
-  graph.addFunctor(new Functor() {
-    public float value(float x) {
-      return x*x;
+void createGraph() {
+  //Create and add Functions
+  Function f = new Function() {
+    public double value(double x) {
+      return 1/(1+x*x);
     }
-  }
-  );
-  graph.addFunctor(new Functor() {
-    public float value(float x) {
-      return x*x*x - x;
-    }
-  }
-  );
-}
+  };
+  f.stroke(255, 0, 0, 150);
+  f.strokeWeight(1);
+  f.label("f");
 
+  Function g = new NumericalDerivative(f);
+  g.stroke(200);
+  g.label("f'");
+
+  Function h = new NumericalDerivative(g);
+  h.label("f''");
+
+  Function j = new NumericalDerivative(h);
+  j.label("f'''");
+
+  graph.addFunction(f);
+  graph.addFunction(g);
+  graph.addFunction(h);
+  graph.addFunction(j);
+
+  //Create and add Functions
+  Point p = new Point(0, 1);
+  p.fill(0, 0, 100, 200);
+  graph.addPoint(p);
+}

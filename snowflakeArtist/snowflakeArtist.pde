@@ -3,6 +3,7 @@ import processing.pdf.*;
 String pdfFileName;
 float widthInInches;
 boolean needsRedraw = false;
+boolean includeRing = false;
 
 int SYMMETRY = 6;
 int penWidth = 12;
@@ -12,7 +13,7 @@ int imageCounter = 100;
 ArrayList<MousePath> mousePaths;
 
 void setup() {
-  size(960, 960);
+  size(840, 840);
   initializeEdgeCalculator();
   background(255);
   stroke(0);
@@ -42,6 +43,11 @@ void keyPressed() {
   if (key == 'p') {
     printingReviewOn = true;
     createEdgeOnlyPDF(fileName+".pdf", 72*12);
+    return;
+  }   
+
+  if (key == 'r') {
+    includeRing = !includeRing;
     return;
   }   
 
@@ -79,7 +85,7 @@ void eraseDrawing() {
 }
 
 void draw() {
-  if(printingReviewOn) {
+  if (printingReviewOn) {
     return;
   }
   background(255);
@@ -110,5 +116,12 @@ void draw() {
       }
       previousPoint = point;
     }
+  }
+  if (includeRing) {
+    strokeWeight(width/40);
+    stroke(0);
+    fill(255);
+    ellipse(0, -height * 0.45, width/20, width/20);
+    strokeWeight(penWidth);
   }
 }
