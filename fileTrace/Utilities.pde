@@ -13,16 +13,16 @@ class NeighborPixel {
     dy= dy_;
   }
 
-  int pixel(int x, int y) {
+  int pixel(int[] pxls, int x, int y) {
     //If on edge, assume area outside of picture is background color
     if (isOutOfPicture(x, y)) {
       return WHITE;
     }
-    return pixels[(y + dy) * width + x + dx];
+    return pxls[(y + dy) * width + x + dx];
   }
 
-  boolean isBackground(int x, int y) {
-    return pixel(x, y) == WHITE;
+  boolean isBackground(int[] pxls, int x, int y) {
+    return pixel(pxls, x, y) == WHITE;
   }
 
   boolean isOutOfPicture(int x, int y) {
@@ -30,20 +30,22 @@ class NeighborPixel {
   }
 }
 
-EdgeCalculator outline() {
-  loadPixels();
-  EdgeCalculator ec = new EdgeCalculator();
-  ec.removeNonEdgePixels();
-  ec.removeExtraNeighbors();
-  ec.buildVectors();
-  ec.reduceVectors(maxError);
-  updatePixels();
-  return ec;
+void outline() {
+  //  loadPixels();
+  //  EdgeCalculator ec = new EdgeCalculator();
+  //  ec.blackenAnyNonWhite();
+  //  for (int i = 0; i < 10; ++i ) {
+  //    ec.removeNonEdgePixels();
+  //    ec.removeExtraNeighbors();
+  //  }
+  
+  edgeCalculator.buildVectors();
+  edgeCalculator.reduceVectors(maxError);
+  //  updatePixels();
+  //  return ec;
 }
 
 void createEdgeOnlyPDF(String filename, float pixelWidth) {
-  EdgeCalculator ec =  outline();
-
   int drawingWidth = 1 +(int) pixelWidth;
   int drawingHeight = 1 + (int) (height * pixelWidth / width);
 
@@ -53,43 +55,43 @@ void createEdgeOnlyPDF(String filename, float pixelWidth) {
   PGraphics pdf = createGraphics(drawingWidth, drawingHeight, PDF, "pdf/"+filename);
   pdf.beginDraw();
 
-  ec.drawVectors(strokeWt, scale, pdf);
+  edgeCalculator.drawVectors(strokeWt, scale, pdf);
 
   pdf.dispose();
   pdf.endDraw();
 }
 
 void createEdgeOnlyPDFSheet(String filename, float pixelWidth, int numX, int numY) {
-  EdgeCalculator ec = outline();
-
-  int drawingWidth = 1 +(int) pixelWidth;
-  int drawingHeight = 1 + (int) (height * pixelWidth / width);
-  float strokeWt = 0.072;
-  float scale = pixelWidth / width;
-
-  //make it 24x18
-  int maxWidth = numX * (drawingWidth + sheetPadding) + sheetPadding;
-  int maxHeight = numY * (drawingHeight + sheetPadding)+ sheetPadding;
-  PGraphics pdf = createGraphics(maxWidth, maxHeight, PDF, "pdf/"+filename);
-  pdf.beginDraw();
-
-  int yTranslate = sheetPadding;
-  for(int i = 0; i < numY; ++i) {
-    int xTranslate = sheetPadding;
-    for(int j = 0; j < numX; ++j) {
-      pdf.pushMatrix();
-      pdf.translate(xTranslate, yTranslate);
-      ec.drawVectors(strokeWt, scale, pdf);
-      pdf.popMatrix();
-      xTranslate += drawingWidth + sheetPadding;
-    }
-    yTranslate += drawingHeight + sheetPadding;
-  }
-  pdf.dispose();
-  pdf.endDraw();
+  //  EdgeCalculator ec = outline();
+  //
+  //  int drawingWidth = 1 +(int) pixelWidth;
+  //  int drawingHeight = 1 + (int) (height * pixelWidth / width);
+  //  float strokeWt = 0.072;
+  //  float scale = pixelWidth / width;
+  //
+  //  //make it 24x18
+  //  int maxWidth = numX * (drawingWidth + sheetPadding) + sheetPadding;
+  //  int maxHeight = numY * (drawingHeight + sheetPadding)+ sheetPadding;
+  //  PGraphics pdf = createGraphics(maxWidth, maxHeight, PDF, "pdf/"+filename);
+  //  pdf.beginDraw();
+  //
+  //  int yTranslate = sheetPadding;
+  //  for (int i = 0; i < numY; ++i) {
+  //    int xTranslate = sheetPadding;
+  //    for (int j = 0; j < numX; ++j) {
+  //      pdf.pushMatrix();
+  //      pdf.translate(xTranslate, yTranslate);
+  //      ec.drawVectors(strokeWt, scale, pdf);
+  //      pdf.popMatrix();
+  //      xTranslate += drawingWidth + sheetPadding;
+  //    }
+  //    yTranslate += drawingHeight + sheetPadding;
+  //  }
+  //  pdf.dispose();
+  //  pdf.endDraw();
 }
 
-void initializeEdgeCalculator() {
+void initializeNeighborPixelArray() {
   neighbors = new ArrayList<NeighborPixel>();
   neighbors.add(new NeighborPixel(0, -1));
   neighbors.add(new NeighborPixel(1, -1));
@@ -149,4 +151,3 @@ class Vec2D {
     return "Vec2D("+x+','+y+')';
   }
 }
-

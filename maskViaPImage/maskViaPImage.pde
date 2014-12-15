@@ -4,7 +4,7 @@ int WHITE = color(255);
 int BLACK = color(0);
 
 void setup() {
-  size(800, 800);
+  size(640, 640);
 
   drawDemoMask();
   maskArray = copyScreenPixels();
@@ -34,13 +34,7 @@ void maskPixels(int[] maskPixels) {
   for (int i = 0; i < pixels.length;++i) {
     int mPxl = maskPixels[i];
     if (mPxl != WHITE) {
-      //      if (mPxl ==  BLACK) {
       pixels[i] = mPxl;
-      //      } 
-      //      else {
-      //        int p = pixels[i];
-      //        pixels[i] = color(red(p) * mPxl / 255, green(p) * mPxl / 255, blue(p) * mPxl / 255);
-      //      }
     }
   }
   updatePixels();
@@ -50,8 +44,6 @@ int[] copyScreenPixels() {
   loadPixels();
   int[] pixelsCopy = new int[pixels.length];
   for (int i = 0; i < pixels.length;++i) {
-    //    int p = pixels[i];
-    //    pixelsCopy[i] = color((red(p) + green(p) + blue(p))/3);
     pixelsCopy[i] = pixels[i];
   }
   return pixelsCopy;

@@ -30,14 +30,14 @@ class EdgePath {
     pdf.endShape();
   }
 
-  void populatePath(boolean[][] onEdge, boolean[][] onAPath) {
+  void populatePath(int[] pxls, boolean[][] onEdge, boolean[][] onAPath) {
     EdgeNode nextNode = null;
     EdgeNode lastNode = null;
     stroke(pathColor);
     do {
-      nextNode = findNextNode (onEdge, onAPath);
+      nextNode = findNextNode (pxls, onEdge, onAPath);
       if (nextNode != null) {
-        pixels[nextNode.x +  nextNode.y * width] = pathColor;
+        pxls[nextNode.x +  nextNode.y * width] = pathColor;
         lastNode = nextNode;
       }
     }   
@@ -71,15 +71,14 @@ class EdgePath {
         }
         indexOfFirstNodeInShortcut = indexOfLastNodeInShortcut;
         indexOfLastNodeInShortcut = indexOfFirstNodeInShortcut + 2;
-      } 
-      else {
+      } else {
         ++indexOfLastNodeInShortcut;
       }
     }
     nodes.removeAll(nodesToRemoveFromPath);
   }
 
-  EdgeNode findNextNode( boolean[][] onEdge, boolean[][] onAPath) {
+  EdgeNode findNextNode(int[] pxls, boolean[][] onEdge, boolean[][] onAPath) {
     //returns null if there is no next node
     EdgeNode currentNode = nodes.get(nodes.size() - 1);
     int x = currentNode.x;
@@ -88,7 +87,7 @@ class EdgePath {
     //loop through neighbors, find nonwhite, unused pixel
     EdgeNode firstNode = nodes.get(0);
     for ( NeighborPixel n : neighbors) {
-      if (!n.isBackground(x, y)) {
+      if (!n.isBackground(pxls, x, y)) {
         int xNbr = x + n.dx;
         int yNbr = y + n.dy;
         if (onEdge[xNbr][yNbr] && !onAPath[xNbr][yNbr]) {
@@ -108,4 +107,3 @@ class EdgePath {
     return null;
   }
 }
-
