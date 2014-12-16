@@ -3,7 +3,7 @@ int WHITE = color(255);
 int BLACK = color(0);
 
 void setup() {
-  size(720, 120);
+  size(640, 140);
 
   drawDemoMask();
 }
@@ -12,7 +12,7 @@ void draw() {
   background(255, 255, 100);
   noStroke();
   fill(255, 0, 0);
-  float diameter = height/2;
+  float diameter = height * 0.8;
   ellipse(mouseX, mouseY, diameter, diameter);
   maskPixels();
 }
