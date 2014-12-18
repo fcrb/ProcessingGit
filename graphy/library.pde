@@ -115,6 +115,14 @@ void handleMousePress() {
   mouseYStartDrag = mouseY;
 }
 
+float xToScreenX(double x) {
+  return (float)((x - X_MIN) / (X_MAX - X_MIN) * width);
+}
+
+float yToScreenY(double y) {
+  return (float)((Y_MAX - y) / (Y_MAX - Y_MIN) * height);
+}
+
 abstract class Function {
   int colr = color(0);
   float strokeWt = 1.0;
@@ -138,9 +146,108 @@ abstract class Function {
   void strokeWeight(float sw) {
     strokeWt = sw;
   }
+
+  void drawFunctionOnInterval(double a, double b) {     
+    stroke(this.colr);
+    strokeWeight(2);//strokeWt);
+    noFill();
+    beginShape();
+    boolean shapeIsStarted = true;
+    double xDragOffset = 0;
+    if (mouseDragging) {
+      xDragOffset = (X_MAX - X_MIN) * (mouseX - mouseXStartDrag) / width;
+    }
+    double x = a + xDragOffset;
+    double dx = (X_MAX - X_MIN) / width * .1;
+    while (x < b + xDragOffset) {
+      double y = value(x);
+      if (!Double.isNaN(y)) {
+        if (!shapeIsStarted) {
+          beginShape();
+          shapeIsStarted = true;
+        }
+        //        println(""+xToScreenX(x)+","+yToScreenY(y));
+        vertex( xToScreenX(x), yToScreenY(y));
+      } else {
+        endShape();
+        shapeIsStarted = false;
+      }
+      x += dx;
+    }
+    if (shapeIsStarted) {
+      endShape();
+    }
+  }
+
+  void drawFunction() {     
+    drawFunctionOnInterval(X_MIN, X_MAX);
+  }
+
+  void drawLabel(int functionIndex, int numberOfFunctions) {     
+    float colorScalar = 0.8;
+    int fontColor = color(red(colr) * colorScalar, green(colr) * colorScalar, blue(colr)* colorScalar);
+    fill(fontColor);
+    textFont(italicFont);
+    textSize(FUNCTION_FONT_SIZE);
+
+    double labelFractionAcrossScreen;
+    switch(labelPositionMode) {
+    case 0:
+      labelFractionAcrossScreen =  (functionIndex * 1.0) / (numberOfFunctions + 1);
+      break;
+
+    default:
+      labelFractionAcrossScreen = 0.5;
+    }
+    double xLabel = X_MIN + (X_MAX-X_MIN) * labelFractionAcrossScreen;
+    double yLabel = value(xLabel);
+    text(label_, xToScreenX(xLabel) - textWidth(label_)/2, yToScreenY(yLabel) + FUNCTION_FONT_SIZE/2);
+  }
+
   //THIS SHOULD BE OVERRIDDEN
   double value(double x) {
-    return 0;
+    return x*x;
+  }
+}
+
+class FunctionPiece {
+  double a, b;
+  boolean leftClosed, rightClosed;
+  Function f;
+
+  FunctionPiece(Function f_, double a_, double b_, boolean includeLeft, boolean includeRight) {
+    f = f_; 
+    a = a_; 
+    b = b_;
+    leftClosed = includeLeft;
+    rightClosed = includeRight;
+  }
+
+  void draw() {
+    f.drawFunctionOnInterval(a, b);
+    float openDiameter = width/80.0;
+    fill(255);
+    stroke(width/320.0);
+    if (!leftClosed) {
+      ellipse(xToScreenX(a), yToScreenY(f.value(a)), openDiameter, openDiameter);
+    }
+    if (!rightClosed) {
+      ellipse(xToScreenX(b), yToScreenY(f.value(b)), openDiameter, openDiameter);
+    }
+  }
+}
+
+class PWFunction extends Function {
+  ArrayList<FunctionPiece> pieces = new ArrayList<FunctionPiece>();
+
+  void addPiece(FunctionPiece piece) {
+    pieces.add(piece);
+  }
+
+  void drawFunction() {     
+    for (FunctionPiece piece : pieces) {
+      piece.draw();
+    }
   }
 }
 
@@ -152,7 +259,7 @@ class NumericalDerivative extends Function {
 
   final double value(double x) {
     double h = (X_MAX - X_MIN) / width ;
-    return (f.value(x+ h) - f.value(x-h))/h * 0.5;
+    return (value(x+ h) - value(x-h))/h * 0.5;
   }
 }
 
@@ -202,66 +309,24 @@ class Graph {
 
   void drawFunctions() {
     double dx = (X_MAX - X_MIN) / width * .1;
+    for (Function f : functions) {      
+      f.drawFunction();
+    }
+    //draw function label
     int functionIndex = 0;
     for (Function f : functions) {
-      stroke(f.colr);
-      strokeWeight(f.strokeWt);
-      noFill();
-      beginShape();
-      boolean shapeIsStarted = true;
-      double xDragOffset = 0;
-      if (mouseDragging) {
-        xDragOffset = (X_MAX - X_MIN) * (mouseX - mouseXStartDrag) / width;
-      }
-      double x = X_MIN + xDragOffset;
-      while (x < X_MAX + xDragOffset) {
-        double y = f.value(x);
-        if (!Double.isNaN(y)) {
-          if (!shapeIsStarted) {
-            beginShape();
-            shapeIsStarted = true;
-          }
-          vertex( xToScreenX(x), yToScreenY(y));
-        } else {
-          endShape();
-          shapeIsStarted = false;
-        }
-        x += dx;
-      }
-      if (shapeIsStarted) {
-        endShape();
-      }
-    }
-
-    //draw function label
-    for (Function f : functions) {
-      float colorScalar = 0.8;
-      int fontColor = color(red(f.colr) * colorScalar, green(f.colr) * colorScalar, blue(f.colr)* colorScalar);
-      fill(fontColor);
-      textFont(italicFont);
-      textSize(FUNCTION_FONT_SIZE);
-
-      double labelFractionAcrossScreen;
-      switch(labelPositionMode) {
-      case 0:
-        labelFractionAcrossScreen =  (++functionIndex * 1.0) / (functions.size() + 1);
-        break;
-
-      default:
-        labelFractionAcrossScreen = 0.5;
-      }
-      double xLabel = X_MIN + (X_MAX-X_MIN) * labelFractionAcrossScreen;
-      double yLabel = f.value(xLabel);
-      text(f.label_, xToScreenX(xLabel) - textWidth(f.label_)/2, yToScreenY(yLabel) + FUNCTION_FONT_SIZE/2);
+      f.drawLabel(++functionIndex, functions.size());
     }
   }
 
   void drawPoints() {
-    noStroke();
+    //    pushMatrix();
+    //    noStroke();
     for (Point p : points) {
       fill(p.colr);
       ellipse(xToScreenX(p.x), yToScreenY(p.y ), 5, 5);
     }
+    //    popMatrix();
   }
 
   double gridInterval() {
@@ -286,41 +351,33 @@ class Graph {
   }
 
   void drawGridLines() {
-    stroke(240);
+    stroke(127);
     strokeWeight(0.5);
 
     //draw vertical lines
     double GRID_INTERVAL =  gridInterval();
-    double xLine = (1 + (int) (X_MIN / GRID_INTERVAL)) * GRID_INTERVAL;
+    double xLine = ((int) (X_MIN / GRID_INTERVAL)) * GRID_INTERVAL;
     int numLines = (int) ((X_MAX - X_MIN) / GRID_INTERVAL + 1);
-    for (int i = 0; i < numLines; ++i) {
+    for (int i = 0; i <= numLines; ++i) {
       float xScreen = xToScreenX(xLine);
       line(xScreen, -1000000, xScreen, 1000000);
       xLine += GRID_INTERVAL;
     }
     //draw horizontal lines
-    double yLine = (1 + (int) (Y_MIN / GRID_INTERVAL)) * GRID_INTERVAL;
+    double yLine =  ((int) (Y_MIN / GRID_INTERVAL)) * GRID_INTERVAL;
     numLines = (int) ((Y_MAX - Y_MIN) / GRID_INTERVAL + 1);
-    for (int i = 0; i < numLines; ++i) {
+    for (int i = 0; i <= numLines; ++i) {
       float yScreen = yToScreenY(yLine);
       line(-100000, yScreen, 100000, yScreen);
       yLine += GRID_INTERVAL;
     }
   }
 
-  float xToScreenX(double x) {
-    return (float)((x - X_MIN) / (X_MAX - X_MIN) * width);
-  }
-
-  float yToScreenY(double y) {
-    return (float)((Y_MAX - y) / (Y_MAX - Y_MIN) * height);
-  }
-
   void drawGridLabels() {
     textFont(baseFont);
     float textHeight = NUMBER_FONT_SIZE;
     textSize(textHeight);
-    fill(150);
+    fill(100);
 
     //draw x-axis labels
     double GRID_INTERVAL =  gridInterval();

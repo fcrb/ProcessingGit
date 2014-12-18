@@ -2,13 +2,13 @@ import processing.pdf.*;
 
 String FILE_NAME = "graphyOutput";
 
-int WIDTH_PIXELS = 960;
-int HEIGHT_PIXELS = 240;
+int WIDTH_PIXELS = 480;
+int HEIGHT_PIXELS = 200;
 int MAX_INTERVALS_ON_X_AXIS = 14;
 
-double X_MIN = -6.8;
-double X_MAX = 6.8;
-double Y_MIN = -0.5;
+double X_MIN = -4.5;
+double X_MAX = 4.5;
+double Y_MIN = -1.2;
 double Y_MAX = 0.9;
 
 int NUMBER_FONT_SIZE = 12;
@@ -18,12 +18,16 @@ boolean EQUALIZE_AXES = true;
 boolean SHOW_GRID = true;
 
 void createGraph() {
-  Function f = new Function() {
+  PWFunction pwf = new PWFunction();
+  FunctionPiece piece = new FunctionPiece(new Function() {
     public double value(double x) {
-      return exp((float) (-x*x/2))/sqrt(2 * PI);
+      return x*x;
     }
-  };
-  createFunctionAndFirstTwoDerivatives(f, "", "", "");
+  }
+  , -1, 0.5, true, false);
+  
+  pwf.addPiece(piece);
+  graph.addFunction(pwf );
 }
 
 void quarticAndDerivatives() {
@@ -50,7 +54,16 @@ void cauchyFunctionAndDerivatives() {
       return 1/(1+x*x);
     }
   };
-  createFunctionAndFirstTwoDerivatives(f, "C", "A", "B");
+  createFunctionAndFirstTwoDerivatives(f, "", "", "");
+}
+
+void normaDensityAndDerivatives() {
+  Function f = new Function() {
+    public double value(double x) {
+      return exp((float) (-x*x/2))/sqrt(2 * PI);
+    }
+  };
+  createFunctionAndFirstTwoDerivatives(f, "", "", "");
 }
 
 void piecewiseLineAndParabola() {
@@ -71,17 +84,17 @@ void piecewiseLineAndParabola() {
 
 void createFunctionAndFirstTwoDerivatives(Function f, String fLabel, String f1Label, String f2Label) {
   //Create and add Functions
-  f.strokeWeight(1);
+  //  f.strokeWeight(1);
   f.label(fLabel);
 
   Function g = new NumericalDerivative(f);
-  g.strokeWeight(3);
-  g.stroke(200, 150);
+  //  g.strokeWeight(3);
+  //  g.stroke(200, 150);
   g.label(f1Label);
 
   Function h = new NumericalDerivative(g);
-  h.strokeWeight(2);
-  h.stroke(100, 150);
+  //  h.strokeWeight(2);
+  //  h.stroke(100, 150);
   h.label(f2Label);
 
   graph.addFunction(f);
