@@ -41,8 +41,8 @@ void setup() {
   translate(edgeBuffer, edgeBuffer);//move away from upper corner 
 //    drawTop();
 //  drawBottom();
-// drawSideSupportWithUpperExtension();
-  drawCenterSupport();
+ drawSideSupportWithUpperExtension();
+//  drawCenterSupport();
 }
 
 void drawCenterSupport() {
@@ -89,6 +89,9 @@ void drawSideSupportWithUpperExtension() {
   vertex(tabInset, 0);
   vertex(0, 0);
   endShape();
+  ellipse(sideSupportWidth/2
+        , thickness + (sideSupportHeight - elevationFromBottom - 2 * thickness)/2
+        ,  boltDiameter, boltDiameter);
   popMatrix();
 }
 
