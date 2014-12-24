@@ -27,8 +27,8 @@ DrawSegment sineSegment = new DrawSegment() {
 DrawSegment normalSegment = new DrawSegment() {
   //2 sigmas
   void drawSegment() {
-    float numSigmas = 2;
-    int numberSegments = 24;
+    float numSigmas = 3;
+    int numberSegments = 50;
     beginShape();
     float z = -numSigmas;
     float zIncrement = 2 * numSigmas / numberSegments;
