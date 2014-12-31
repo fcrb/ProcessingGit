@@ -20,8 +20,8 @@ void setup() {
 //  DrawSegment segmentFunctor = new ZigZagSegment(angleInDegrees * PI / 180);
 //  String fileName = "parallelogramZigZag_"+angleInDegrees+"degrees";
 
-  DrawSegment segmentFunctor = normalSegment;
-  String fileName = "parallelogramNormal";
+  DrawSegment segmentFunctor = sineSegment;
+  String fileName = "parallelogramSine";
 
   size((int )(widthInInches * PPI), (int )(heightInInches * PPI));
   beginRecord(PDF, "pdf/"+fileName+".pdf"); 

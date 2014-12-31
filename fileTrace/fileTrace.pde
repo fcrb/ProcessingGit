@@ -1,12 +1,12 @@
 import processing.pdf.*;
 EdgeCalculator edgeCalculator;
-String inputFileName = "witchFoot1";
+String inputFileName = "maze";
 float[] widthsInInches =  new float[] {
   11.75
 };
 
 void setup() {
-  size(713, 338);//  size(32, 39);
+  size(2437, 2446);//  size(32, 39);
   initializeNeighborPixelArray();
   edgeCalculator = new EdgeCalculator(inputFileName);
 

@@ -13,16 +13,18 @@ DrawSegment arcSegment = new DrawSegment() {
 
 DrawSegment sineSegment = new DrawSegment() {
   void drawSegment() {
-    int numberSegments = 24;
+    int numberSegments = 36;
     beginShape();
     for (int i = 0; i < numberSegments; ++i) {
       float theta = i * PI / numberSegments ;
-      vertex( i * sideLengthInPixels / numberSegments, sin(theta) * PPI / PI / 2);
+      vertex( i * sideLengthInPixels / numberSegments, sin(theta) * PPI / PI );
     }
     vertex(sideLengthInPixels, 0);
     endShape();
   }
 };
+
+
 
 DrawSegment normalSegment = new DrawSegment() {
   //2 sigmas
@@ -46,6 +48,41 @@ DrawSegment normalSegment = new DrawSegment() {
   }
 };
 
+DrawSegment tSlotSegment = new  DrawSegment() {
+  void drawSegment() {
+    beginShape();
+    vertex(0, 0);
+    float slotSide = sideLengthInPixels /8;
+    vertex((sideLengthInPixels - slotSide)/2, 0);
+    vertex((sideLengthInPixels - slotSide)/2, slotSide);
+    vertex((sideLengthInPixels - slotSide)/2 - slotSide, slotSide);
+    vertex((sideLengthInPixels - slotSide)/2 - slotSide, 2 * slotSide);
+    vertex((sideLengthInPixels + slotSide)/2  + slotSide, 2 * slotSide);
+    vertex((sideLengthInPixels + slotSide)/2  + slotSide, slotSide);
+    vertex((sideLengthInPixels + slotSide)/2, slotSide);
+    vertex((sideLengthInPixels + slotSide)/2, 0);
+    vertex(sideLengthInPixels, 0);
+    endShape();
+  }
+};
+
+DrawSegment puzzlePieceSegment = new  DrawSegment() {
+  void drawSegment() {
+//    beginShape();
+//    vertex(0, 0);
+//    float radius1 = sideLengthInPixels / ;
+//    float diameter1 = radius1 * 2;
+//    float radius2 = radius1;
+//    float diameter2 = radius2 * 2;
+//    float xCtr = sideLengthInPixels/2 - radius1;
+//    vertex(xCtr, 0);
+//    arc(xCtr, -radius1, diameter1, diameter1, -PI/3, PI/2);
+//    float yCtr = - (radius1 + 
+//    arc(0, -radius1, diameter1, diameter1, -PI/3, PI/2);
+//    endShape();
+  }
+};
+
 class ZigZagSegment implements DrawSegment {
   float angle;
   ZigZagSegment(float angle_) {
@@ -55,7 +92,6 @@ class ZigZagSegment implements DrawSegment {
     beginShape();
     vertex(0, 0);
     vertex(sideLengthInPixels/2, sideLengthInPixels* tan(angle)/2);
-    //    vertex(sideLengthInPixels/2, 0);
     vertex(sideLengthInPixels, 0);
     endShape();
   }

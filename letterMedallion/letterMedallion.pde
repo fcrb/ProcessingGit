@@ -1,13 +1,13 @@
 import processing.pdf.*;
 PFont font;
 //font parameters
-String letter = "J";
+String letter = "b";
 boolean includeRing = true;
 
 float txtSizeScalar = 0.8;
 float fontVerticalAdjust = 0.22;
 float strokeWeightScalar = 0.05;
-float horizontalLetterShiftScalar = 0.75;// c is 1. 25
+float horizontalLetterShiftScalar = 1;// c is 1. 25
 
 //tree parameters
 //original prints
@@ -28,7 +28,7 @@ int xTrans, yTrans;
 int BASE_WIDTH = 800;
 
 void setup() {
-  int w = 2000;//BASE_WIDTH;
+  int w = 800;//BASE_WIDTH;
   size(w, (int) (w * heightScaleToAccommodateRing));
   initializeEdgeCalculator();
   font = createFont("Herculanum", 32);
@@ -100,11 +100,11 @@ void draw() {
   if (includeRing) {
     stroke(0);
     strokeWeight(strokeWt/2);
-    float ringDiameter = diameter / 20;
-    ellipse(0, - (diameter + ringDiameter/2)/2, ringDiameter, ringDiameter);
+    float ringDiameter = diameter / 10;
+    ellipse(0, - (diameter + ringDiameter - strokeWt)/2, ringDiameter, ringDiameter);
   }
 
-  drawManualLines();
+//  drawManualLines();
 }
 
 
