@@ -20,19 +20,17 @@ float boltDiameter = 0.146 * PPI;
 float tabInset = thickness;
 
 void setup() {
-  size(72 * 24, 72 * 18);
+  size(72 * 12, 72 * 12);
 
-  pushMatrix();
-  startRecording("box");
-  for (int i = 0; i < 2; ++i) {
-    drawFront();
-    translate(boxFrontWidth, 0);
-    drawSide();
-    translate(-boxFrontWidth, boxHeight);
-  }
-  popMatrix();
+  startRecording("box_front");
+  drawFront();
+  stopRecording();
 
-  pushMatrix();
+  startRecording("box_side");
+  drawSide();
+  stopRecording();
+
+  startRecording("box_bottom");
   drawBottomPanel();
   stopRecording();
 }
@@ -50,7 +48,6 @@ float[] sidePanelBottomJoint() {
 
 void drawBottomPanel() {
   //where it fits into front panel
-  translate(edgeBuffer, boxHeight * 2+edgeBuffer +thickness);
   pushMatrix();
   for (int i = 0; i < 2; ++i) {
     drawFingers(0, 0, thickness, frontPanelBottomJoint(), boxFrontWidth, 0);
