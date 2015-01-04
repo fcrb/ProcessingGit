@@ -6,12 +6,13 @@ float boxSideLength = 11.25 * PPI;
 float boxHeight = 2.375 * PPI;
 float edgeBuffer = 5;
 float frontVerticalTabHeight = 0.25 * PPI;
-float strokeWt = 1;
+float strokeWt = 0.072;
 
 //material specs
 float thickness = 0.125 * PPI;
-float nutWidth = 5.0/16 * PPI;
-float nutThickness = 0.125 * PPI;
+//... per http://bit.ly/1D6ckUy
+float nutWidth = 1.0 / 4 * PPI;
+float nutThickness = 3.0/32 * PPI;
 float boltLength = 0.48 * PPI;
 float boltDiameter = 0.146 * PPI;
 
@@ -19,60 +20,93 @@ float boltDiameter = 0.146 * PPI;
 float tabInset = thickness;
 
 void setup() {
-  size(72 * 12, 72 * 6);
+  size(72 * 24, 72 * 18);
 
   pushMatrix();
   startRecording("box");
-  drawFront();
-  
-  translate(boxFrontWidth, 0);
-  drawSide();
+  for (int i = 0; i < 2; ++i) {
+    drawFront();
+    translate(boxFrontWidth, 0);
+    drawSide();
+    translate(-boxFrontWidth, boxHeight);
+  }
+  popMatrix();
+
+  pushMatrix();
+  drawBottomPanel();
   stopRecording();
+}
+
+float[] frontPanelBottomJoint() {
+  int numHoles = round(boxFrontWidth / (thickness * 2))-3;
+  float xStart = (boxFrontWidth - thickness * (numHoles * 2 - 1))/2;
+  float fingerWidth = thickness;
+  return fingersEvenlySpaced(boxFrontWidth, xStart, fingerWidth, numHoles);
+}
+
+float[] sidePanelBottomJoint() {
+  return fingersEvenlySpaced(boxSideLength, boxSideLength/12, boxSideLength/12, 6);
+}
+
+void drawBottomPanel() {
+  //where it fits into front panel
+  translate(edgeBuffer, boxHeight * 2+edgeBuffer +thickness);
+  pushMatrix();
+  for (int i = 0; i < 2; ++i) {
+    drawFingers(0, 0, thickness, frontPanelBottomJoint(), boxFrontWidth, 0);
+    translate(boxFrontWidth - thickness * 2, 0);
+    drawFingers(0, 0, thickness, sidePanelBottomJoint(), boxSideLength, PI / 2);
+    translate(thickness * 2, boxSideLength);
+    rotate(PI );
+  }
+  popMatrix();
 }
 
 void drawSide() {
   //outline
   float[] verticalFingers = fingersEvenlySpaced(boxHeight, frontVerticalTabHeight/2, frontVerticalTabHeight, 4);
   for (int i = 0; i < 2; ++i) {
+    pushMatrix();
+    translate(0, boxHeight/2);
+    rotate(PI/2);
+    drawTSlot();
+    popMatrix();
     drawFingers(thickness, 0, -thickness, verticalFingers, boxHeight, PI/2);
     line(thickness, boxHeight, boxSideLength + thickness, boxHeight);
     translate(boxSideLength + thickness * 2, boxHeight);
     rotate(PI);
   }
 
+  //horizontal
   pushMatrix();
   translate(thickness, boxHeight - thickness * 2);
-  float[] horizontalFingers = fingersEvenlySpaced(boxSideLength, boxSideLength/12, boxSideLength/12, 6);
-  drawFingerSlots(horizontalFingers);
+  drawFingerSlots(sidePanelBottomJoint());
   popMatrix();
 }
 
-
 void drawFront() {
+  // bolt holes
+  ellipse(thickness * 1.5, boxHeight/2, boltDiameter, boltDiameter);
+  ellipse(boxFrontWidth - thickness * 1.5, boxHeight/2, boltDiameter, boltDiameter);
+
   //vertical sides
-  float x = tabInset;
-  for (int numVerticalEdgesDraw = 0; numVerticalEdgesDraw < 2; ++numVerticalEdgesDraw) {
-    float y = tabInset;
-    while (y + frontVerticalTabHeight < boxHeight / 2) {
-      rect(x, y, thickness, frontVerticalTabHeight);
-      y += 2 * frontVerticalTabHeight;
-    }
-    y = boxHeight - tabInset;
-    while (y - frontVerticalTabHeight >  boxHeight / 2) {
-      rect(x, y -frontVerticalTabHeight, thickness, frontVerticalTabHeight);
-      y -= 2 * frontVerticalTabHeight;
-    }
-    ellipse(x + thickness/2, boxHeight/2, boltDiameter, boltDiameter);
-    x = boxFrontWidth - thickness * 2;
-  }
+  float[] verticalSlots = fingersEvenlySpaced(boxHeight, frontVerticalTabHeight/2, frontVerticalTabHeight, 4);
+  pushMatrix();
+  translate(thickness * 2, 0);
+  rotate(PI/2);
+  drawFingerSlots(verticalSlots);
+  popMatrix();
+  pushMatrix();
+  translate(boxFrontWidth - thickness, 0);
+  rotate(PI/2);
+  drawFingerSlots(verticalSlots);
+  popMatrix();
 
   //holes along bottom
-  int numHoles = round(boxFrontWidth / (thickness * 2))-3;
-  float xStart = (boxFrontWidth - thickness * (numHoles * 2 - 1))/2;
-  for (int holeIndex = 0; holeIndex < numHoles; ++holeIndex) {
-    x = xStart + thickness * 2 * holeIndex;
-    rect(x, boxHeight - 2 * tabInset, thickness, thickness);
-  }
+  pushMatrix();
+  translate(0, boxHeight - thickness * 2);
+  drawFingerSlots(frontPanelBottomJoint());
+  popMatrix();
 
   //outline
   rect(0, 0, boxFrontWidth, boxHeight);//outline
@@ -129,8 +163,7 @@ void startRecording(String fileName) {
 }
 
 void stopRecording() {
-  endRecord(); 
-  popMatrix();
+  endRecord();
 }
 
 float[] fingersEvenlySpaced(float sideLength, float firstFingerStart, float fingerWidth, int numFingers) {

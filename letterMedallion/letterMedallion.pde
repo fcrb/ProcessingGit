@@ -21,14 +21,14 @@ int numTrunks = 9;
 
 //other
 boolean needsRedraw = true;
-float heightScaleToAccommodateRing = 1.05;
+float heightScaleToAccommodateRing = 1.08;
 boolean printingReviewOn = false;
 boolean lineStarted = false;
 int xTrans, yTrans;
 int BASE_WIDTH = 800;
 
 void setup() {
-  int w = 800;//BASE_WIDTH;
+  int w = 800;
   size(w, (int) (w * heightScaleToAccommodateRing));
   initializeEdgeCalculator();
   font = createFont("Herculanum", 32);
@@ -101,7 +101,7 @@ void draw() {
     stroke(0);
     strokeWeight(strokeWt/2);
     float ringDiameter = diameter / 10;
-    ellipse(0, - (diameter + ringDiameter - strokeWt)/2, ringDiameter, ringDiameter);
+    ellipse(0, - (diameter + ringDiameter - strokeWt /2)/2, ringDiameter, ringDiameter);
   }
 
 //  drawManualLines();

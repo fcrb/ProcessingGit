@@ -1,82 +1,29 @@
-int mazeRowCount = 10;
-ArrayList<Cell> cellsToBuildUpon;
-//ArrayList<Cell> completedCells;
-boolean[][] cellIsAvailable;
-Cell startCell, finishCell;
+int mazeRowCount = 30;  //<>//
+int mazesToPickFrom = 10; 
+float strokeWt = 0.5;
+boolean includeGrid = true;
+
 Cell[] neighbors;
-ArrayList<Link> links;
 
 void setup() {
-  size(600, 600);
-  cellsToBuildUpon = new ArrayList<Cell>();
-  links = new ArrayList<Link>();
+  size(800, 800);
   neighbors = new Cell[] { 
     new Cell(-1, 0), new Cell(1, 0), new Cell(0, -1), new Cell(0, 1)
     };
 
-    newRectangularGrid();
-
-  background(0); 
-  //  rectMode(CENTER);
-  float cellWidth = width / (mazeRowCount + 1);
-  scale(cellWidth, -cellWidth);
-  translate(1, - mazeRowCount);
-  strokeWeight(0.5);
-  stroke(255);
-  strokeCap(PROJECT);
-  drawMaze();
-
-  //mark start and end with green and red dot
-  noStroke();
-  fill(0, 255, 0);
-  float dotSize = 0.3;
-  ellipse(startCell.x, startCell.y, dotSize, dotSize);
-  fill(255, 0, 0);
-  ellipse(finishCell.x, finishCell.y, dotSize, dotSize);
-}
-
-void newRectangularGrid() {
-  cellIsAvailable = new boolean[mazeRowCount][mazeRowCount];
-  for (int i = 0; i < mazeRowCount; ++i) {
-    for (int j = 0; j < mazeRowCount; ++j) {
-      cellIsAvailable[i][j] = true;
+    //find a good maze
+    Maze bestMaze = null;
+  int longestSolutionLength = -1;
+  for (int i = 0; i < mazesToPickFrom; ++i) {
+    Maze maze = new Maze();
+    if (maze.solutionLength()>longestSolutionLength) {
+      bestMaze = maze;
+      longestSolutionLength = maze.solutionLength();
     }
   }
-  startCell = new Cell(0, 0);
-  finishCell = new Cell(mazeRowCount - 1, mazeRowCount - 1);
-}
-
-void drawMaze() {
-  //start at cell in upper left
-  buildOnCell(startCell);
-}
-
-void buildOnCell(Cell cell) {
-  Cell[] nbrs = scrambledNeighbors();
-  //  boolean foundAvailableCell = false;
-  for (Cell nbr : nbrs) {
-    Cell nextCell = new Cell(cell.x + nbr.x, cell.y + nbr.y);
-    if (nextCell.isAvailable()) {
-      nextCell.markUnavailable();
-      Link link = new Link(cell, nextCell);
-      links.add(link);
-      link.draw();
-      if (!nextCell.isFinishCell())
-        buildOnCell(nextCell);
-    }
-  }
-}
-
-Cell[] scrambledNeighbors() {
-  Cell[] nbrs = new Cell[neighbors.length];
-  arrayCopy(neighbors, nbrs);
-  for (int i = 0; i < nbrs.length; ++i) {
-    int rnd = i + (int) random(4-i);
-    Cell swap = nbrs[rnd];
-    nbrs[rnd] = nbrs[i];
-    nbrs[i] = swap;
-  }
-  return nbrs;
+  println(bestMaze.solutionLength());
+  bestMaze.draw();
+  if (includeGrid) bestMaze.drawGrid();
 }
 
 class Cell {
@@ -87,27 +34,19 @@ class Cell {
     y=y_;
   }
 
-  //  void draw() {
-  //    rect( (x + 0.5) * cellCenterToCenter, (y + 0.5) * cellCenterToCenter, cellWidth, cellWidth);
-  //  }
-
-  void markUnavailable() {
+  void markUnavailable(boolean[][] cellIsAvailable) {
     cellIsAvailable[x][y] = false;
   }
 
-  boolean isAvailable() {
+  boolean isAvailable(boolean[][] cellIsAvailable) {
     if (x < 0 || x >= cellIsAvailable[0].length || y < 0 || y >= cellIsAvailable.length) {
       return false;
     }
     return cellIsAvailable[x][y];
   }
 
-  boolean isFinishCell() {
-    return x == finishCell.x && y == finishCell.y;
-  }
-
-  boolean isStartCell() {
-    return x == startCell.x && y == startCell.y;
+  boolean isEqualTo(Cell c) {
+    return x == c.x && y == c.y;
   }
 }
 
@@ -121,6 +60,17 @@ class Link {
 
   void draw() {
     line(c0.x, c0.y, c1.x, c1.y);
-    //    rect( (x + 0.5) * cellCenterToCenter, (y + 0.5) * cellCenterToCenter, cellWidth, cellWidth);
+  }
+
+  Cell left() {
+    return new Cell(c1.x + (c1.y - c0.y), c1.y + (c1.x - c0.x));
+  }
+
+  Cell right() {
+    return new Cell(c1.x - (c1.y - c0.y), c1.y - (c1.x - c0.x));
+  }
+
+  Cell forward() {
+    return new Cell(c1.x + (c1.x - c0.x), c1.y + (c1.y - c0.y));
   }
 }
