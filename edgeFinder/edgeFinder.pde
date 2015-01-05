@@ -106,7 +106,7 @@ void createEdgeOnlyPDF(String filename, float pixelWidth) {
   //  endRecord();
 
   //Now you can scale down the size. 
-  PGraphics pdf = createGraphics((int) pixelWidth, (int) pixelWidth, PDF, filename);
+  PGraphics pdf = createGraphics((int) pixelWidth, (int) pixelWidth, PDF, "pdf/"+filename);
   pdf.beginDraw();
 
   float strokeWt = 0.005;
@@ -128,4 +128,3 @@ void initializeEdgeCalculator() {
   neighbors.add(new NeighborPixel(-1, 0));
   neighbors.add(new NeighborPixel(-1, -1));
 }
-

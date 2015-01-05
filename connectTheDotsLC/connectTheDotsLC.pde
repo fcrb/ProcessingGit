@@ -1,11 +1,11 @@
 import processing.pdf.*;
 
-float penFractionOfWidth = 0.02;
-int numPointsOuterRing = 2;
-int numPointsInnerRing = 15;
-float radiusInnerRing = 1;
+float penFractionOfWidth = 0.015;
+int numPointsOuterRing = 18;
+int numPointsInnerRing = 3;
+float radiusInnerRing = 0.22;
 boolean  redrawNeeded = true;
-float horizontalStretch = 0.5;
+float horizontalStretch = 1;
 
 //index.html settings:
 //float penFractionOfWidth = 0.02;
@@ -25,7 +25,7 @@ void bindJavascript(JavaScript js) {
 JavaScript javascript;
 
 void setup() {
-  int w = 4000;
+  int w = 2000;
   size(w, w);
   if (javascript == null) {  
     initializeEdgeCalculator();
