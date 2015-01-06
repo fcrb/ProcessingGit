@@ -9,7 +9,7 @@ float frontVerticalTabHeight = 0.25 * PPI;
 float strokeWt = 0.072;
 
 //material specs
-float thickness = 0.125 * PPI;
+float thickness = 3.0 / 32 * PPI;
 //... per http://bit.ly/1D6ckUy
 float nutWidth = 1.0 / 4 * PPI;
 float nutThickness = 3.0/32 * PPI;
@@ -52,6 +52,12 @@ void drawBottomPanel() {
   for (int i = 0; i < 2; ++i) {
     drawFingers(0, 0, thickness, frontPanelBottomJoint(), boxFrontWidth, 0);
     translate(boxFrontWidth - thickness * 2, 0);
+    pushMatrix();
+  translate(thickness, boxSideLength/2);
+  rotate(3 * PI/2);
+    drawTSlot();
+    popMatrix();
+
     drawFingers(0, 0, thickness, sidePanelBottomJoint(), boxSideLength, PI / 2);
     translate(thickness * 2, boxSideLength);
     rotate(PI );
@@ -76,6 +82,7 @@ void drawSide() {
 
   //horizontal
   pushMatrix();
+  ellipse(boxSideLength/2 + thickness, boxHeight - thickness * 1.5, boltDiameter, boltDiameter);
   translate(thickness, boxHeight - thickness * 2);
   drawFingerSlots(sidePanelBottomJoint());
   popMatrix();
