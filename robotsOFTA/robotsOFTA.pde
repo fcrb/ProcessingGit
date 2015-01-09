@@ -10,7 +10,8 @@ void setup() {
 void draw() {
   background(#FFFFC0);
   
-  robbie.drawRobot();
   robbie.easeTowards(mouseX,mouseY);
-//  ruth.drawRobot();
+  ruth.easeTowards(robbie.x,robbie.y);
+  robbie.drawRobot();
+  ruth.drawRobot();
 }

@@ -1,15 +1,16 @@
 class Robot {
   float wHead;//width of head
   float x, y;//coordinates of bottom of head
+  float easing;//how fast robot moves towards a new location
 
-  Robot(float headWidth) {
+  Robot(float headWidth, float easing_) {
     wHead = headWidth;
     x = width/2;
     y = height/2;
+    easing = easing_;
   }
 
   void easeTowards(float x_, float y_) {
-    float easing = 0.05;
 //    x = x * (1-easing) + x_ * easing;
 //    y = y * (1-easing) + y_ * easing;
     x = x + easing * (x_ - x);
