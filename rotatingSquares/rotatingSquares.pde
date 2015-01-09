@@ -1,5 +1,5 @@
-float theta = PI /6;
-int n = 6;
+float theta = PI /16;
+int n = 16;
 
 void setup() {
   size(640, 640);

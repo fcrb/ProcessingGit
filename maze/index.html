@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Maze</title>
+		<style type="text/css">
+			p {
+				color: black;
+				text-align: center; }
+			legend {
+				color: white;
+				text-align: left; }
+			.fieldset-auto-width {
+         		display: inline-block;
+				text-align: center; 
+				vertical-align:text-top;}
+		</style>
+	    <script type="text/javascript" src="processing.js"></script>
+		<script type="text/javascript">
+			var bound = false;
+			var pjs;
+	
+			function bindJavascript() {
+	        	pjs = Processing.getInstanceById('maze');
+	        	if(pjs!=null) {
+	          		pjs.bindJavascript(this);
+	          		bound = true; }
+	        	if(!bound) setTimeout(bindJavascript, 250);
+	      	}
+	
+	      	bindJavascript();
+	
+	
+			function showValues(numberOfRows) {
+	 			document.getElementById('numberOfRowsDisplay').value = numberOfRows;			}
+			
+			function setNumberOfRows() {
+	            var v = document.getElementById('numberOfRows').value;
+	 			pjs.setNumberOfRows(v);
+			}
+        </script>
+	</head>
+	<body style="background-color: #FFFFFF">
+		<p>Number of rows:
+					<input
+					type="range"  
+					id="numberOfRows"   
+					onchange="setNumberOfRows()"
+					value="10" 
+					min="3" max="40"
+					style="width: 100px"
+			</input><output type="number" id="numberOfRowsDisplay" value="">10</output>
+		</p>
+		<div style="text-align: center;">
+			<canvas id="maze" data-processing-sources="maze.pde"></canvas>
+		</div>
+	</body>
+</html>
