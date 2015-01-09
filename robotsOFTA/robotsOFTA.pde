@@ -3,8 +3,8 @@ Robot robbie, ruth;
 void setup() {
   size(480, 320);
   
-  robbie = new Robot(100);
-  ruth = new Robot(50);
+  robbie = new Robot(100, 0.1);
+  ruth = new Robot(50, 0.01);
 }
 
 void draw() {
