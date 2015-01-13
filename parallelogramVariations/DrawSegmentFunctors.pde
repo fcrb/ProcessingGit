@@ -3,6 +3,34 @@ interface DrawSegment {
   void drawSegment();
 }
 
+DrawSegment baileySegment = new DrawSegment() {
+  void drawSegment() {
+    float sixtyDegrees = - PI / 3;
+    float stepSize = sideLengthInPixels / 7;
+    noFill();
+    drawAndTranslateTo(stepSize, 0);    
+    rotate(-sixtyDegrees);
+    drawAndTranslateTo(stepSize, 0);    
+    rotate(sixtyDegrees);
+    drawAndTranslateTo(stepSize, 0);    
+    rotate(-sixtyDegrees);
+    drawAndTranslateTo(stepSize * 2, 0);    
+    rotate(sixtyDegrees * 2);
+    drawAndTranslateTo(stepSize * 2, 0);    
+    rotate(-sixtyDegrees);
+    drawAndTranslateTo(stepSize, 0);    
+    rotate(sixtyDegrees);
+    drawAndTranslateTo(stepSize, 0);    
+    rotate(-sixtyDegrees);
+    drawAndTranslateTo(stepSize, 0);    
+  }
+};
+
+void drawAndTranslateTo(float x, float y) {
+  line(0,0,x, y);
+  translate(x, y);
+}
+
 DrawSegment arcSegment = new DrawSegment() {
   void drawSegment() {
     float diameter = sideLengthInPixels * sqrt(3)/3 * 2;
@@ -68,18 +96,18 @@ DrawSegment tSlotSegment = new  DrawSegment() {
 
 DrawSegment puzzlePieceSegment = new  DrawSegment() {
   void drawSegment() {
-//    beginShape();
-//    vertex(0, 0);
-//    float radius1 = sideLengthInPixels / ;
-//    float diameter1 = radius1 * 2;
-//    float radius2 = radius1;
-//    float diameter2 = radius2 * 2;
-//    float xCtr = sideLengthInPixels/2 - radius1;
-//    vertex(xCtr, 0);
-//    arc(xCtr, -radius1, diameter1, diameter1, -PI/3, PI/2);
-//    float yCtr = - (radius1 + 
-//    arc(0, -radius1, diameter1, diameter1, -PI/3, PI/2);
-//    endShape();
+    //    beginShape();
+    //    vertex(0, 0);
+    //    float radius1 = sideLengthInPixels / ;
+    //    float diameter1 = radius1 * 2;
+    //    float radius2 = radius1;
+    //    float diameter2 = radius2 * 2;
+    //    float xCtr = sideLengthInPixels/2 - radius1;
+    //    vertex(xCtr, 0);
+    //    arc(xCtr, -radius1, diameter1, diameter1, -PI/3, PI/2);
+    //    float yCtr = - (radius1 + 
+    //    arc(0, -radius1, diameter1, diameter1, -PI/3, PI/2);
+    //    endShape();
   }
 };
 

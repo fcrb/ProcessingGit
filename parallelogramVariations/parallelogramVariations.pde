@@ -2,8 +2,8 @@ import processing.pdf.*;
 
 //constant values
 float widthInInches = 24;
-float heightInInches = 12;
-float sideLengthInInches = 1.0;
+float heightInInches = 18;
+float sideLengthInInches = 2.0;
 float PPI = 72;//scalar to convert inches to pixels
 
 //derived values
@@ -12,7 +12,7 @@ float rowSeparation = sideLengthInPixels /2 * sqrt(3);
 
 //globals
 float x = -sideLengthInPixels * 0.9;
-float y = -sideLengthInPixels * 0.52;
+float y = -sideLengthInPixels * 0.46;
 
 void setup() {
   // *********** Specify your DrawSegment here **********
@@ -20,8 +20,8 @@ void setup() {
 //  DrawSegment segmentFunctor = new ZigZagSegment(angleInDegrees * PI / 180);
 //  String fileName = "parallelogramZigZag_"+angleInDegrees+"degrees";
 
-  DrawSegment segmentFunctor = sineSegment;
-  String fileName = "parallelogramSine";
+  DrawSegment segmentFunctor = baileySegment;
+  String fileName = "parallelogramBailey_2in";
 
   size((int )(widthInInches * PPI), (int )(heightInInches * PPI));
   beginRecord(PDF, "pdf/"+fileName+".pdf"); 

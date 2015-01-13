@@ -1,11 +1,13 @@
 import processing.pdf.*;
 
-float penFractionOfWidth = 0.015;
-int numPointsOuterRing = 18;
-int numPointsInnerRing = 3;
-float radiusInnerRing = 0.22;
+float penFractionOfWidth = 0.025;
+int numPointsOuterRing = 2;
+int numPointsInnerRing = 12;
+float radiusInnerRing = 1;
 boolean  redrawNeeded = true;
-float horizontalStretch = 1;
+float horizontalStretch = 0.5;
+boolean includeRing = false;
+boolean generatePDF = true;
 
 //index.html settings:
 //float penFractionOfWidth = 0.02;
@@ -25,7 +27,7 @@ void bindJavascript(JavaScript js) {
 JavaScript javascript;
 
 void setup() {
-  int w = 2000;
+  int w = generatePDF ? 2000 : 800;
   size(w, w);
   if (javascript == null) {  
     initializeEdgeCalculator();
@@ -33,7 +35,11 @@ void setup() {
 }
 
 String fileName() {
-  return  "connectDots_stretch"+horizontalStretch+"_outer"+numPointsOuterRing+"_inner"+numPointsInnerRing+"_radius"+radiusInnerRing;
+  return  "connectDots_stretch"+horizontalStretch+"_pen"+penFractionOfWidth
+    +"_outer"+numPointsOuterRing+"_inner"
+    +numPointsInnerRing+"_radius"
+    +radiusInnerRing 
+    + (includeRing?"":"_noRing");
 }
 
 void setStrokeWeight(float s) {
@@ -78,7 +84,13 @@ void draw() {
 
   r1.connectToRing(r2);
 
-  if (javascript == null) {
+  if (includeRing) {
+    float ringDiameter = width * 0.06;
+    rotate(-PI/2);
+    ellipse(0, -height * 0.43, ringDiameter, ringDiameter);
+  }
+
+  if (generatePDF && javascript == null) {
     createEdgeOnlyPDF(fileName()+".pdf", 72*12);
     exit();
   }
