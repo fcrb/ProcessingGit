@@ -299,10 +299,8 @@ class Graph {
   }
 
   void draw() {
-    if (SHOW_GRID) {
-      drawGridLines();
-      drawGridLabels();
-    }
+    drawGridLines();
+    drawGridLabels();
     drawPoints();
     drawFunctions();
   }
@@ -356,19 +354,23 @@ class Graph {
 
     //draw vertical lines
     double GRID_INTERVAL =  gridInterval();
-    double xLine = ((int) (X_MIN / GRID_INTERVAL)) * GRID_INTERVAL;
+    int xGridTicks = (int) (X_MIN / GRID_INTERVAL);
+    double xLine = xGridTicks * GRID_INTERVAL;
     int numLines = (int) ((X_MAX - X_MIN) / GRID_INTERVAL + 1);
     for (int i = 0; i <= numLines; ++i) {
       float xScreen = xToScreenX(xLine);
-      line(xScreen, -1000000, xScreen, 1000000);
+      if ( SHOW_GRID ||(i + xGridTicks == 0))
+        line(xScreen, -1000000, xScreen, 1000000);
       xLine += GRID_INTERVAL;
     }
     //draw horizontal lines
-    double yLine =  ((int) (Y_MIN / GRID_INTERVAL)) * GRID_INTERVAL;
+    int yGridTicks = (int) (Y_MIN / GRID_INTERVAL);
+    double yLine =  yGridTicks * GRID_INTERVAL;
     numLines = (int) ((Y_MAX - Y_MIN) / GRID_INTERVAL + 1);
     for (int i = 0; i <= numLines; ++i) {
       float yScreen = yToScreenY(yLine);
-      line(-100000, yScreen, 100000, yScreen);
+      if (SHOW_GRID ||(i + yGridTicks == 0))
+        line(-100000, yScreen, 100000, yScreen);
       yLine += GRID_INTERVAL;
     }
   }

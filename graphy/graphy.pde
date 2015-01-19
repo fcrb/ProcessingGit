@@ -1,23 +1,65 @@
 import processing.pdf.*;
 
-String FILE_NAME = "graphyOutput";
+String FILE_NAME = "stepFunction";
 
-int WIDTH_PIXELS = 480;
-int HEIGHT_PIXELS = 200;
-int MAX_INTERVALS_ON_X_AXIS = 14;
+int WIDTH_PIXELS = 400;
+int HEIGHT_PIXELS = 400;
+int MAX_INTERVALS_ON_X_AXIS = 5;
 
-double X_MIN = -4.5;
-double X_MAX = 4.5;
-double Y_MIN = -1.2;
-double Y_MAX = 0.9;
+double X_MIN = -0.5;
+double X_MAX = 3.5;
+double Y_MIN = -1.5;
+double Y_MAX = 2.5;
 
-int NUMBER_FONT_SIZE = 12;
+int NUMBER_FONT_SIZE = 24;
 int FUNCTION_FONT_SIZE = 36;
 
 boolean EQUALIZE_AXES = true;
-boolean SHOW_GRID = true;
+boolean SHOW_GRID = false;
 
 void createGraph() {
+  PWFunction pwf = new PWFunction();
+  FunctionPiece piece = new FunctionPiece(new Function() {
+    public double value(double x) {
+      return 2;
+    }
+  }
+  , 0, 1, true, false);
+  pwf.addPiece(piece);
+
+  piece = new FunctionPiece(new Function() {
+    public double value(double x) {
+      return 1;
+    }
+  }
+  , 1, 2, false, false);
+  pwf.addPiece(piece);
+
+  piece = new FunctionPiece(new Function() {
+    public double value(double x) {
+      return -1;
+    }
+  }
+  , 2, 3, false, true);
+  pwf.addPiece(piece);
+
+  graph.addFunction(pwf );
+}
+
+void dampedSine() {
+  PWFunction pwf = new PWFunction();
+  FunctionPiece piece = new FunctionPiece(new Function() {
+    public double value(double x) {
+      return -sin((float)(PI * x)) /(x*x+1);
+    }
+  }
+  , 0, X_MAX, true, false);
+
+  pwf.addPiece(piece);
+  graph.addFunction(pwf );
+}
+
+void pieceWiseExample() {
   PWFunction pwf = new PWFunction();
   FunctionPiece piece = new FunctionPiece(new Function() {
     public double value(double x) {
@@ -25,7 +67,7 @@ void createGraph() {
     }
   }
   , -1, 0.5, true, false);
-  
+
   pwf.addPiece(piece);
   graph.addFunction(pwf );
 }
