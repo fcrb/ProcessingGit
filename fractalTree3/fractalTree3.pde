@@ -4,15 +4,16 @@ private float scaleDown = 0.9f;
 private int maxLevel = 11;
 
 public void setup() {
-  size(640, 550);
+  size(600, 480);
 }
 
 public void draw() {
-  background(255, 255, 200);
+  background(255, 255, 255);
   fill(0);
   textSize(18);
-  text("fps = " + (int) (frameCount * 1000.0f / millis()), 20, 20);
+  //  text("fps = " + (int) (frameCount * 1000.0f / millis()), 20, 20);
   drawTree(width * 0.5f, height * 0.95f, width * 0.5f, height * 0.83f, 0);
+  if (keyPressed && key == 's') saveFrame("bg.jpg" );
 }
 
 private void drawTree(float x1, float y1, float x2, float y2, int level) {
@@ -20,7 +21,8 @@ private void drawTree(float x1, float y1, float x2, float y2, int level) {
     return;
   }
   // draw the trunk of the tree
-  stroke(level * level * 255.0f / maxLevel / maxLevel, 0, 0);
+  float redLevel = level * level * 255.0f / maxLevel / maxLevel;
+  stroke(redLevel, redLevel/4, 0, 150);
   strokeWeight(maxLevel - level + 1);
   line(x1, y1, x2, y2);
 

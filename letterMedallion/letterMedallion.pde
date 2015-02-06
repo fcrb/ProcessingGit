@@ -2,22 +2,33 @@ import processing.pdf.*;
 PFont font;
 //font parameters
 String letter = "b";
-boolean includeRing = true;
+boolean includeRing = false;
 
-float txtSizeScalar = 0.8;
+//float txtSizeScalar = 0.8;
+//float fontVerticalAdjust = 0.22;
+//float strokeWeightScalar = 0.05;
+//float horizontalLetterShiftScalar = 1;// c is 1. 25
+float txtSizeScalar = 1;
 float fontVerticalAdjust = 0.22;
 float strokeWeightScalar = 0.05;
 float horizontalLetterShiftScalar = 1;// c is 1. 25
 
 //tree parameters
 //original prints
+//int maxLevel = 7;
+//float rotation = PI * 0.14;
+//float branchLengthMultiplier = 0.75;
+//float thicknessScalar = 0.02;
+//float trunkScale = 0.08; 
+//float treeDistFromCenter = 0.175; 
+//int numTrunks = 9;
 int maxLevel = 7;
-float rotation = PI * 0.14;
+float rotation = PI * 0.135;
 float branchLengthMultiplier = 0.75;
-float thicknessScalar = 0.02;
-float trunkScale = 0.08; 
-float treeDistFromCenter = 0.175; 
-int numTrunks = 9;
+float thicknessScalar = 0.015;
+float trunkScale = 0.14; 
+float treeDistFromCenter = 0.0; 
+int numTrunks = 15;
 
 //other
 boolean needsRedraw = true;
@@ -28,7 +39,7 @@ int xTrans, yTrans;
 int BASE_WIDTH = 800;
 
 void setup() {
-  int w = 800;
+  int w = 3000;
   size(w, (int) (w * heightScaleToAccommodateRing));
   initializeEdgeCalculator();
   font = createFont("Herculanum", 32);

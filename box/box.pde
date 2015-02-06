@@ -9,7 +9,7 @@ float frontVerticalTabHeight = 0.25 * PPI;
 float strokeWt = 0.072;
 
 //material specs
-float thickness = 3.0 / 32 * PPI;
+float thickness = 0.814 / 8 * PPI; //per calipers //3.0 / 32 * PPI;
 //... per http://bit.ly/1D6ckUy
 float nutWidth = 1.0 / 4 * PPI;
 float nutThickness = 3.0/32 * PPI;
