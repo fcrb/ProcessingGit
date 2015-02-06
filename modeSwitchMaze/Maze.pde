@@ -1,6 +1,7 @@
 class Maze { //<>// //<>//
   ArrayList<Vertex> vertices; 
   ArrayList<Segment> segments; 
+  //  Vertex startVertex;
   Vertex endVertex;
   ArrayList<Path> paths;
 
@@ -46,14 +47,6 @@ class Maze { //<>// //<>//
           stroke(0);
         }
         segment.draw();
-      }
-    }
-  }
-
-  void handleMouse() {
-    for (Segment seg: segments) {
-      if (seg.containsMousePointer()) {
-//        segToSwap = seg;
       }
     }
   }

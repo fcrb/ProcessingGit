@@ -11,18 +11,6 @@ class Segment {
     line(v1.screenX(), v1.screenY(), v2.screenX(), v2.screenY());
   }
   
-  boolean containsMousePointer() {
-    return dist(mouseX, mouseY, xMid(), yMid()) < 20;
-  }
-  
-  float xMid() {
-    return 0.5 * (v1.screenX() + v2.screenX());
-  }
-  
-  float yMid() {
-    return 0.5 * (v1.screenY() + v2.screenY());
-  }
-  
   boolean contains(Vertex v) {
     return v == v1 || v == v2;
   }
@@ -34,5 +22,4 @@ class Segment {
   int newMode(int oldMode) {
     return oldMode;
   }
-  
 }
