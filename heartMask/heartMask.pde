@@ -1,4 +1,4 @@
-/* The mask is animage where WHITE indicates pixels //<>//
+/* The mask is an image where WHITE indicates pixels //<>//
 that should become WHITE, BLACK where pixels should turn
 BLACK, and GREEN where pixels should be left alone.
 */

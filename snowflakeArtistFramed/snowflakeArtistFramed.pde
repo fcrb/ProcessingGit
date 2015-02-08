@@ -10,12 +10,12 @@ boolean drawingInProgress = false;
 boolean printingReviewOn = false;
 int imageCounter = 100;
 ArrayList<MousePath> mousePaths;
-int[] maskPixels;
+int[] maskPixels;  
 int GREEN = color(0, 255, 0);
 
 
 void setup() {
-  size(840, 840);
+  size(1500, 1500);
   initializeEdgeCalculator();
   background(255);
   stroke(0);
