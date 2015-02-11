@@ -1,16 +1,16 @@
-String fileName = "scriptCategories";
-String inputFileName = fileName+".png";
-String outputFileName = fileName + "Clean.png";
+String fileName = "ballWithDirection";
+String inputFileName = "pngIn/"+fileName+".png";
+String outputFileName = "pngOut/"+fileName + "Clean.png";
 
 int WHITE = color(255, 0);
 int BLACK = color(0);
 
 void setup() {
-  size(374, 190);
+  size(552, 584);
   PImage img = loadImage(inputFileName);
   image(img, 0, 0);
-//  convertColor(color(213, 214, 214), WHITE);
-  convertColor(color(224, 226, 226), WHITE);
+  convertColor(color(213, 214, 214), WHITE);
+//  convertColor(color(230, 230, 230), WHITE);
   save(outputFileName);
 }
 
@@ -18,7 +18,7 @@ void convertColor(int from, int to) {
   loadPixels();
   int i = 0;
   for (int pixel : pixels) {
-    if (colorDistance(from, pixel) < 20) {
+    if (colorDistance(from, pixel) < 50) {
       pixels[i] = to;
     }
     ++i;
