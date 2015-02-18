@@ -1,23 +1,37 @@
 import processing.pdf.*;
 
-String FILE_NAME = "stepFunction";
+String FILE_NAME = "sqrt2xplus1";
 
-int WIDTH_PIXELS = 400;
+int WIDTH_PIXELS = 600;
 int HEIGHT_PIXELS = 400;
-int MAX_INTERVALS_ON_X_AXIS = 5;
+int MAX_INTERVALS_ON_X_AXIS = 10;
 
 double X_MIN = -0.5;
-double X_MAX = 3.5;
-double Y_MIN = -1.5;
-double Y_MAX = 2.5;
+double X_MAX = 6.5;
+double Y_MIN = -0.5;
+double Y_MAX = 3.5;
 
-int NUMBER_FONT_SIZE = 24;
+int NUMBER_FONT_SIZE = 16;
 int FUNCTION_FONT_SIZE = 36;
 
 boolean EQUALIZE_AXES = true;
 boolean SHOW_GRID = false;
 
 void createGraph() {
+    Function f = new Function() {
+    public double value(double x) {
+      if (x < 0) {
+        return 0;
+      }
+      return sqrt((float) (2 * x + 1.0));
+    }
+  };
+  f.strokeWeight(1);
+
+  graph.addFunction(f);
+}
+
+void examplePiecewiseGraph() {
   PWFunction pwf = new PWFunction();
   FunctionPiece piece = new FunctionPiece(new Function() {
     public double value(double x) {

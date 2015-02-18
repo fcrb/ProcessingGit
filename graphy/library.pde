@@ -13,7 +13,7 @@ void setup() {
   Y_MIN_ORIGINAL = Y_MIN;
   Y_MAX_ORIGINAL = Y_MAX;
   normalizeMinsAndMaxes();
-  beginRecord(PDF, FILE_NAME + ".pdf");
+  beginRecord(PDF, "pdf/"+FILE_NAME + ".pdf");
   baseFont = createFont("cmunrm.otf", NUMBER_FONT_SIZE);//"CMUSerif-Roman", 12);
   italicFont = createFont("cmunti.otf", NUMBER_FONT_SIZE);//("CMUSerif-Italic", 12);
   textFont(baseFont);
