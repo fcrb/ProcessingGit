@@ -3,7 +3,7 @@ Busy Beaver implementation, made more flexible so that we can more easily
  add new symbols, states, and instructions.
  */
 int tapeIndex = 0;
-TuringState a, b, c, d;
+TuringState a, b, c, d, e;
 boolean MOVE_RIGHT = true;
 boolean MOVE_LEFT = false;
 TuringState HALT = new HaltState();
@@ -18,7 +18,7 @@ void setup() {
   //initialize the tape
   tape = ""+BLANK_SYMBOL;
 
-  initializeThreeStateBusyBeaver();
+  initializeFiveStateBusyBeaver();
 
   //Run!!
   a.handleState();
@@ -54,6 +54,29 @@ void initializeFourStateBusyBeaver() {
 
   d.setInstruction(new NoteOfInstruction(BLANK_SYMBOL, ONE, MOVE_RIGHT, d));
   d.setInstruction(new NoteOfInstruction(ONE, BLANK_SYMBOL, MOVE_RIGHT, a));
+}
+
+void initializeFiveStateBusyBeaver() {
+  a = new TuringState('A');
+  b = new TuringState('B');
+  c = new TuringState('C');
+  d = new TuringState('D');
+  e = new TuringState('E');
+  
+  a.setInstruction(new NoteOfInstruction(BLANK_SYMBOL, ONE, MOVE_RIGHT, b));
+  a.setInstruction(new NoteOfInstruction(ONE, ONE, MOVE_LEFT, c));
+
+  b.setInstruction(new NoteOfInstruction(BLANK_SYMBOL, ONE, MOVE_RIGHT, c));
+  b.setInstruction(new NoteOfInstruction(ONE, ONE, MOVE_RIGHT, b));
+
+  c.setInstruction(new NoteOfInstruction(BLANK_SYMBOL, ONE, MOVE_RIGHT, d));
+  c.setInstruction(new NoteOfInstruction(ONE, BLANK_SYMBOL, MOVE_LEFT, e));
+
+  d.setInstruction(new NoteOfInstruction(BLANK_SYMBOL, ONE, MOVE_LEFT, a));
+  d.setInstruction(new NoteOfInstruction(ONE, ONE, MOVE_LEFT, d));
+
+  e.setInstruction(new NoteOfInstruction(BLANK_SYMBOL, ONE, MOVE_RIGHT, HALT));
+  e.setInstruction(new NoteOfInstruction(ONE, BLANK_SYMBOL, MOVE_LEFT, a));
 }
 
 class HaltState extends TuringState {

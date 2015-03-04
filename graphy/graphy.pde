@@ -1,6 +1,6 @@
 import processing.pdf.*;
 
-String FILE_NAME = "sqrt2xplus1";
+String FILE_NAME = "pieceWise_HHG_p229";
 
 int WIDTH_PIXELS = 600;
 int HEIGHT_PIXELS = 400;
@@ -11,24 +11,50 @@ double X_MAX = 6.5;
 double Y_MIN = -0.5;
 double Y_MAX = 3.5;
 
+float FUNCTION_STROKE_WEIGHT = 2;
+
 int NUMBER_FONT_SIZE = 16;
 int FUNCTION_FONT_SIZE = 36;
 
 boolean EQUALIZE_AXES = true;
-boolean SHOW_GRID = false;
+boolean SHOW_GRID = true;
 
 void createGraph() {
-    Function f = new Function() {
+  PWFunction pwf = new PWFunction();
+  FunctionPiece piece = new FunctionPiece(new Function() {
     public double value(double x) {
-      if (x < 0) {
-        return 0;
-      }
-      return sqrt((float) (2 * x + 1.0));
+      return x;
     }
-  };
-  f.strokeWeight(1);
+  }
+  , 1, 2, true, true);
+  pwf.addPiece(piece);
 
-  graph.addFunction(f);
+  piece = new FunctionPiece(new Function() {
+    public double value(double x) {
+      return 4-x;
+    }
+  }
+  , 2, 3, true, true);
+  pwf.addPiece(piece);
+
+  piece = new FunctionPiece(new Function() {
+    public double value(double x) {
+      return x - 2;
+    }
+  }
+  , 3, 4, true, true);
+  pwf.addPiece(piece);
+
+
+  piece = new FunctionPiece(new Function() {
+    public double value(double x) {
+      return 2;
+    }
+  }
+  , 4, 6, true, true);
+  pwf.addPiece(piece);
+
+  graph.addFunction(pwf );
 }
 
 void examplePiecewiseGraph() {
@@ -131,7 +157,6 @@ void piecewiseLineAndParabola() {
       return x*x;
     }
   };
-  f.strokeWeight(1);
 
   graph.addFunction(f);
 }
@@ -140,11 +165,9 @@ void piecewiseLineAndParabola() {
 
 void createFunctionAndFirstTwoDerivatives(Function f, String fLabel, String f1Label, String f2Label) {
   //Create and add Functions
-  //  f.strokeWeight(1);
   f.label(fLabel);
 
   Function g = new NumericalDerivative(f);
-  //  g.strokeWeight(3);
   //  g.stroke(200, 150);
   g.label(f1Label);
 

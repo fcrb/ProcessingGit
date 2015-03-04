@@ -125,7 +125,7 @@ float yToScreenY(double y) {
 
 abstract class Function {
   int colr = color(0);
-  float strokeWt = 1.0;
+  float strokeWt = 1;
   String label_="";
 
   void label(String lbl) {
@@ -143,14 +143,15 @@ abstract class Function {
   void stroke(int grayScale, int a) {
     stroke(grayScale, grayScale, grayScale, a);
   }
-  void strokeWeight(float sw) {
-    strokeWt = sw;
-  }
+//  void strokeWeight(float sw) {
+//    strokeWt = sw;
+//  }
 
-  void drawFunctionOnInterval(double a, double b) {     
-    stroke(this.colr);
-    strokeWeight(2);//strokeWt);
-    noFill();
+  void drawFunctionOnInterval(double a, double b) {    
+   println("Hey"); 
+    stroke(color(255,0,0));//this.colr);
+    strokeWeight(FUNCTION_STROKE_WEIGHT);
+//    noFill();
     beginShape();
     boolean shapeIsStarted = true;
     double xDragOffset = 0;
@@ -227,7 +228,7 @@ class FunctionPiece {
     f.drawFunctionOnInterval(a, b);
     float openDiameter = width/80.0;
     fill(255);
-    stroke(width/320.0);
+//    stroke(width/320.0);
     if (!leftClosed) {
       ellipse(xToScreenX(a), yToScreenY(f.value(a)), openDiameter, openDiameter);
     }
@@ -299,13 +300,14 @@ class Graph {
   }
 
   void draw() {
+    drawFunctions();
     drawGridLines();
     drawGridLabels();
     drawPoints();
-    drawFunctions();
   }
 
   void drawFunctions() {
+    
     double dx = (X_MAX - X_MIN) / width * .1;
     for (Function f : functions) {      
       f.drawFunction();

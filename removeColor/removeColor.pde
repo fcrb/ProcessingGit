@@ -1,16 +1,17 @@
-String fileName = "ballWithDirection";
+String fileName = "foreverUpArrowMove10";
 String inputFileName = "pngIn/"+fileName+".png";
-String outputFileName = "pngOut/"+fileName + "Clean.png";
+String outputFileName = "pngOut/"+fileName + ".png";
 
 int WHITE = color(255, 0);
 int BLACK = color(0);
 
 void setup() {
-  size(552, 584);
+  size(988, 616);
   PImage img = loadImage(inputFileName);
   image(img, 0, 0);
-  convertColor(color(213, 214, 214), WHITE);
-//  convertColor(color(230, 230, 230), WHITE);
+//  convertColor(color(246, 246, 246), WHITE);
+//  convertColor(color(230, 230, 232), WHITE);
+  convertColor(color(218, 218, 218), WHITE);
   save(outputFileName);
 }
 
@@ -18,7 +19,7 @@ void convertColor(int from, int to) {
   loadPixels();
   int i = 0;
   for (int pixel : pixels) {
-    if (colorDistance(from, pixel) < 50) {
+    if (colorDistance(from, pixel) < 15) {
       pixels[i] = to;
     }
     ++i;
