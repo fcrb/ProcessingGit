@@ -10,10 +10,13 @@ class Hermit {
 
   void drawIt() {
     fill(c);
-    noStroke();
     if (drag) {
       x = mouseX;
       y = mouseY;
+      strokeWeight(diameter/8);
+      stroke(255, 200, 200);
+    } else {
+      noStroke();
     }
     ellipse(x, y, diameter, diameter);
   }
@@ -22,4 +25,3 @@ class Hermit {
     drag = false;
   }
 }
-
