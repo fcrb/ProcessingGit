@@ -15,7 +15,7 @@ void setup()
 }
 
 float f(float x) {
-  return sin(0.006 * x) * 200;
+  return sqrt(x / width) * width / 4;
 }
 
 float f2(float x) {

@@ -2,7 +2,7 @@ import processing.pdf.*;
 float sideLengthInCm = 1;
 float verticalSpace = sideLengthInCm / 2.54 * 72;
 void setup() {
-  size(576, 756, PDF, "graphPaperSquare_1cm.pdf");
+  size(72 * 6, 72 * 8, PDF, "graphPaperSquare_1cm.pdf");
   background(255);
 
   stroke(192);

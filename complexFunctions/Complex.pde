@@ -58,7 +58,7 @@ class Complex {
     }
     float maxColor = 255.9999;
     int r = (int) map(angleWrapped(), - PI/2, PI / 2, 0, maxColor);
-    int g = (int) map(sinh().sinh().sinh().angleWrapped(), - PI/2, PI / 2, 0, maxColor);
+    int g = (int) map(sinh().sinh().angleWrapped(), - PI/2, PI / 2, 0, maxColor);
     int b = (int) map(ONE.divideBy(this).angleWrapped(), - PI/2, PI / 2, 0, maxColor);
     return color(r, g, b);
   }
