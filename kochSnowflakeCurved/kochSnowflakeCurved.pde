@@ -10,18 +10,19 @@ void setup() {
   buildRotations();
   float sizeScalar = 0.8;
   float sideLength = width * sizeScalar;
-  PGraphics pdf = createGraphics(width, height, PDF, "kochSnowflake.pdf");
+  PGraphics pdf = createGraphics(width, height, PDF, "kochSnowflakeCurved.pdf");
   pdf.beginDraw();
   pdf.beginShape();
 
-  float x = width * (1 - sizeScalar)/2;
-  float y = height * (0.5 + sizeScalar * 0.285);
+  float x = width * 0.35 ;
+  float y = height * 0.5;
   pdf.vertex(x, y);
   int totalRotation = 0;
   float segmentLength = sideLength * pow(1.0/3, level);
   int segmentCtr = 0;
+//  for(int k = 0; k < 3; ++k) {
   for (int rotation : rotations) {
-    float angle = totalRotation * PI / 3 + 2 * PI / rotations.length * segmentCtr++;
+    float angle = totalRotation * PI / 3 -  2 * PI /rotations.length * segmentCtr++;
     x += cos(angle) * segmentLength;
     y += sin(angle) * segmentLength;
     totalRotation += rotation;
@@ -35,7 +36,7 @@ void setup() {
 
 void buildRotations() {
   rotations = new int[] { 
-   -2//, -2, -2
+   -2//, -2//, -2
   };
   for (int lvl = 0; lvl < level; ++lvl) {
     int[] newRotations = new int[rotations.length * 4];
