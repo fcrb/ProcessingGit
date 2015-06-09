@@ -4,8 +4,9 @@ class Track {
     stroke(TRACK_COLOR);
     strokeWeight(width * 0.05);
     noFill();
-    ellipse(0, 0, width * 0.2, height * 0.8);
-    ellipse(0, 0, width * 0.4, height * 0.6);
-    ellipse(0, 0, width * 0.6, height * 0.4);
+    float loopWidth = width * 0.35;
+    ellipse(-loopWidth *0.5, 0, loopWidth, height * 0.8);
+    ellipse(loopWidth * 0.5, 0, loopWidth, height * 0.8);
+    ellipse(0, 0, loopWidth, height * 0.8);
   }
 }

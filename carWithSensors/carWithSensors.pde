@@ -7,7 +7,7 @@ Car car;
 Track track;
 
 void setup() {
-  size(640, 480);
+  size(640, 400);
   track = new Track();
   car = new Car();
 }
@@ -19,6 +19,4 @@ void draw() {
 
   track.draw();
   car.draw();
-  car.accelerate();
 }
-
