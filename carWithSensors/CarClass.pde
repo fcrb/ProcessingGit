@@ -1,4 +1,4 @@
-float MAX_PIXELS_PER_SECOND = 3;
+float MAX_PIXELS_PER_SECOND = 4;
 float ACCELERATION_PER_FRAME = 0.04;
 float BRAKE_PER_FRAME = 0.04;
 float SERVO_SENSITIVITY = 8;
@@ -27,18 +27,20 @@ class Car {
   }
 
   void draw() {
-    pushMatrix();
-    noStroke();
-    fill(255, 0, 0);
-    translate(x, y);
-    rectMode(CENTER);
-    rotate(directionRadians);
-    rect(0, 0, carLength, carWidth);
-
+ 
+    //get sensor values before doing any drawing
     float dx=carLength * 0.5;
     float dy=carWidth * 0.5;
     boolean offLeft = offTrack(dx, dy);
     boolean offRight = offTrack(dx, -dy);
+    
+    //draw car
+    noStroke();
+    fill(255, 0, 0);
+   translate(x, y);
+    rectMode(CENTER);
+    rotate(directionRadians);
+    rect(0, 0, carLength, carWidth);
     float sensorDiameter = 6;
     fill(255, 255, 0);
     if (offLeft || offRight) {
@@ -58,7 +60,6 @@ class Car {
     }
     x += pixelsPerFrame * cos(directionRadians);
     y += pixelsPerFrame * sin(directionRadians);
-    popMatrix();
   }
 
   boolean offTrack(float dx, float dy) {
@@ -66,8 +67,11 @@ class Car {
     float sinAngle = sin(directionRadians);
     float dxRotated = dx * cosAngle - dy * sinAngle;
     float dyRotated = dx * sinAngle + dy * cosAngle;
-    int trackPixel = get(round( width / 2 - x - dxRotated)
-      , round(height/2 + y + dyRotated));
+    int xPix = round( width / 2 + x + dxRotated);
+    int yPix = round(height/2 - y - dyRotated);
+    int trackPixel = get(xPix, yPix);
+    println("track", xPix, yPix , get(xPix,  yPix));
+//    println("mouse", mouseX, mouseY, get(mouseX, mouseY));
     return trackPixel != TRACK_COLOR;
   }
 
