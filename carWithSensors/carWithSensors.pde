@@ -14,9 +14,9 @@ void setup() {
 
 void draw() {
   background(0, 127, 0);
+  track.draw();
   translate(width/2, height/2);
   scale(1, -1);
 
-  track.draw();
   car.draw();
 }
