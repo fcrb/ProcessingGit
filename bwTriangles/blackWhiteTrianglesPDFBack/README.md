@@ -1,1 +1,0 @@
-This is inspired by Izzi, which uses square cards. 

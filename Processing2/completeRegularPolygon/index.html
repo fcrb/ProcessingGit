@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Complete Regular Polygon</title>
+		<style type="text/css">
+			p {
+				color: white;
+				text-align: center; }
+			legend {
+				color: white;
+				text-align: left; }
+			.fieldset-auto-width {
+         		display: inline-block;
+				text-align: center; }
+		</style>
+	    <script type="text/javascript" src="processing.js"></script>
+		<script type="text/javascript">
+			var bound = false;
+			var pjs;
+	
+			function bindJavascript() {
+	        	pjs = Processing.getInstanceById('completeRegularPolygon');
+	        	if(pjs!=null) {
+	          		pjs.bindJavascript(this);
+	          		bound = true; }
+	        	if(!bound) setTimeout(bindJavascript, 250);
+	      	}
+	
+	      	bindJavascript();
+			
+	        function setNumberVertices() {
+	            var v = document.getElementById('numVertices').value;
+	            pjs.setNumberVertices(v);
+	 			document.getElementById('numVerticesValue').value = v;
+			}
+	        function toggleRotation() {
+	            pjs.toggleRotation();
+			}
+        </script>
+	</head>
+	<body style="background-color: #252525">
+		<div style="text-align: center;">
+			<p><canvas id="completeRegularPolygon" data-processing-sources="completeRegularPolygon.pde"></canvas></p>
+			<fieldset class="fieldset-auto-width">
+				<p>Number of Vertices
+					<input 
+					type="range" 
+					id="numVertices" 
+					onchange="setNumberVertices()"
+					min="3"
+					max="42"
+					value="3">
+					</input>
+						<output id="numVerticesValue">3</output>
+				</p>
+				<p>Rotate
+					<input 
+					type="checkbox" 
+					id="rotation" 
+					onchange="toggleRotation()">
+					</input>
+				</p>
+			</fieldset>
+		</div>
+	</body>
+</html>

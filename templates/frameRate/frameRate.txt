@@ -1,9 +1,0 @@
-void setup() {
-   size(320,240);
-   frameRate(30);
-   smooth();
-}
-
-void draw() {
-    float frameCountMultiplier = 0.05;
-}

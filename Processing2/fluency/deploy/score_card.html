@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Fluency Score Card</title>
+  		<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+		<script>
+		$.getJSON( "http://mrbenson.org/login/get_scores.php", function( data ) {
+		  var items = [];
+		  $.each( data, function( key, val ) {
+		    items.push( "<li id='" + key + "'>" + val + "</li>" );
+		  });
+		 
+		  $( "<ul/>", {
+		    "class": "my-new-list",
+		    html: items.join( "" )
+		  }).appendTo( "body" );
+		});
+		</script>
+	</head>
+	<body>
+ 
+	</body>
+</html>
