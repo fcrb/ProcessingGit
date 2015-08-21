@@ -1,4 +1,4 @@
-class Maze { //<>// //<>//
+class Maze { //<>//
   ArrayList<Vertex> vertices; 
   ArrayList<Segment> segments; 
   //  Vertex startVertex;
