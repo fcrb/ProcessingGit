@@ -23,7 +23,7 @@ void draw() {
     izzyCopy = (int) (izzyCopy / 2);
   }
   int edgeWith = 180;
-  int outerTriSideLength = width + edgeWith*2/sqrt(3);
+  float outerTriSideLength = width + edgeWith*2/sqrt(3);
   strokeWeight(edgeWith);
   stroke(100);
   noFill();
@@ -52,4 +52,3 @@ void draw() {
 
   ++izzyNumber;
 } 
-
