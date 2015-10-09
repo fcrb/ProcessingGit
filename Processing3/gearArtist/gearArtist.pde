@@ -1,42 +1,42 @@
-/* Try these:
-radius(): height * 0.35 * (1 + 0.3 * cos(theta * n1));
 
-radius(): height * 0.35 * (1 + 0.1 * (cos(theta * n1) + cos(theta * n1 * 2)));
-6/4
+/* TODO:
+ 
+ */
 
-radius(): height * 0.1 * (1 + 0.4 * (cos(theta * n1) + cos(theta * n1 * 2)));
-
-return height * 0.2 * (1 + 0.3 * (cos(theta * n1) + cos(theta * n1 * 2)));
-2/4
-*/
-
-int n1 = 2;
-int n2 = 2;
-float axleSeparation = 400;
+int n1 = 3;
+int n2 = 5;
+float gearSpeed = 0.03;
+float axleSeparation;
 int numIterationsPerGear = 100;
 
 void setup() {
   size(960, 720);
-  
+
   calibrateAxleSeparation();
 }
 
-void calibrateAxleSeparation() {
-  float gearOneAngle = 2 * PI;
-  while(gearTwoRotation(gearOneAngle) * n2 < gearOneAngle * n1){
-    axleSeparation *= 0.9999;
-  }
-  while(gearTwoRotation(gearOneAngle) * n2 > gearOneAngle * n1){
-    axleSeparation *= 1.0001;
-  }
-  println(axleSeparation);
-}
 
 float radius(float theta) {
   //return height * 0.1 * (1 + 0.3 * (cos(theta * n1) + cos(theta * n1 * 2)));
   //return height * 0.2 * (1 + 0.1 * (cos(theta * n1) + 2 * cos(theta * n1 * 2)));
-  //return height * 0.2 * (1 + 0.6 * cos(theta * n1) + 0.01 * cos(theta * n1 * 60 ));
-  return height * 0.2 * (1 + 0.6 * cos(theta * n1) );
+  return height * 0.2 * (1 + 0.07 * (cos(theta * n1) +  sin(theta * n1 * 2 )+   cos(theta * n1 * 3 )+   sin(theta * n1 * 5 )));
+  //return height * 0.1 * (1 + 0.8 * cos(theta * n1) ); 
+  //return height * 0.1 * (1 + 0.7 * sin(theta * n1) );
+}
+
+void calibrateAxleSeparation() {
+  float gearOneAngle = 2 * PI;
+  float maxSeparation = 500;
+  float minSeparation = 0;
+  while (maxSeparation - minSeparation > 0.0001) {
+    axleSeparation = (maxSeparation + minSeparation) * 0.5;
+    if (gearTwoRotation(gearOneAngle) * n2 < gearOneAngle * n1) {
+      maxSeparation = axleSeparation;
+    } else {
+      minSeparation = axleSeparation;
+    }
+  }
+  println(axleSeparation);
 }
 
 void draw() {
@@ -51,8 +51,8 @@ void draw() {
 }
 
 float gearOneRotation() {
-  float angle = frameCount * 0.01;
-  angle = angle - 2 * PI * floor(angle / (2 * PI));
+  float angle = frameCount * gearSpeed;
+  //angle = angle - 2 * PI * floor(angle / (2 * PI));
   return angle;
 }
 
@@ -71,9 +71,10 @@ float gearTwoRotation(float gearOneAngle) {
 }
 
 void drawFirstGear() {
-  drawAxle();
   pushMatrix();
-  rotate(gearOneRotation());
+  rotate(-gearOneRotation());
+  line(0,0,radius(0),0);
+  drawAxle();  
   float dTheta = 2 * PI / n1 / numIterationsPerGear;
   float x = radius(0);
   float y = 0;
@@ -95,12 +96,13 @@ void drawAxle() {
 }
 
 void drawSecondGear() {
-  drawAxle();
   pushMatrix();
-  rotate(-gearTwoRotation(gearOneRotation()));
+  rotate(gearTwoRotation(gearOneRotation()));
+  float x = radius(0) - axleSeparation;
+  line(0,0,x,0);
+  drawAxle();
   float numStepsForSecondGear = numIterationsPerGear * 10;
   float dTheta = 2 * PI / n1 / numStepsForSecondGear;
-  float x = radius(0) - axleSeparation;
   float y = 0;
   float theta2 = 0;
   for (int i = 0; i < numStepsForSecondGear * n2; ++i) {
