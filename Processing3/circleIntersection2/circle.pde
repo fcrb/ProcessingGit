@@ -1,5 +1,6 @@
 class Circle {
   float x, y, r;
+  int colour = color(0);
 
   Circle(float x_, float y_, float r_) {
     x = x_;
@@ -7,10 +8,22 @@ class Circle {
     r = r_;
   }
 
+  Circle(float x_, float y_, float r_, int clr) {
+    this(x_, y_, r_);
+    colour = clr;
+  }
+
   void draw() {
     noFill();
     ellipse(x, y, r*2, r*2);
   }
+
+  void drawWithCenter() {
+    stroke(colour);
+    fill(colour);
+    draw();
+    ellipse(x, y, 15, 15);
+   }
 
   boolean containsCursor() {
     return dist(mouseX - width/2, height/2 - mouseY, x, y) < r;

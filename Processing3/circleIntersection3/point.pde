@@ -8,6 +8,7 @@ class Point {
   
   void draw() {
     noFill();
+    stroke(0);
     ellipse(x, y, 10, 10);
   }
 }
