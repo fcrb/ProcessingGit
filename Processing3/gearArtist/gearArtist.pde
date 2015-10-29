@@ -1,13 +1,16 @@
 
 /* TODO:
- 
+ Fix bug with amplitudeMultipler below.
  */
 
-int n1 = 3;
-int n2 = 5;
-float gearSpeed = 0.03;
+int n1 = 1;
+int n2 = 1;
+float gearSpeed = 0.003;
 float axleSeparation;
 int numIterationsPerGear = 100;
+
+float amplitudeMultipler = 0.236;//try 0.236, 0.237, then 0.238 with
+//  return height * 0.2 * (1 + amplitudeMultipler * (cos(theta * n1) +  sin(theta * n1 * 2 )+   cos(theta * n1 * 3 )+   sin(theta * n1 * 5 )));
 
 void setup() {
   size(960, 720);
@@ -19,14 +22,14 @@ void setup() {
 float radius(float theta) {
   //return height * 0.1 * (1 + 0.3 * (cos(theta * n1) + cos(theta * n1 * 2)));
   //return height * 0.2 * (1 + 0.1 * (cos(theta * n1) + 2 * cos(theta * n1 * 2)));
-  return height * 0.2 * (1 + 0.07 * (cos(theta * n1) +  sin(theta * n1 * 2 )+   cos(theta * n1 * 3 )+   sin(theta * n1 * 5 )));
+  return height * 0.2 * (1 + amplitudeMultipler * (cos(theta * n1) +  sin(theta * n1 * 2 )+   cos(theta * n1 * 3 )+   sin(theta * n1 * 5 )));
   //return height * 0.1 * (1 + 0.8 * cos(theta * n1) ); 
   //return height * 0.1 * (1 + 0.7 * sin(theta * n1) );
 }
 
 void calibrateAxleSeparation() {
   float gearOneAngle = 2 * PI;
-  float maxSeparation = 500;
+  float maxSeparation = 2000;
   float minSeparation = 0;
   while (maxSeparation - minSeparation > 0.0001) {
     axleSeparation = (maxSeparation + minSeparation) * 0.5;

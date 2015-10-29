@@ -7,6 +7,8 @@ class CircleIntersectionList {
   CircleIntersectionList(Circle c, ArrayList<Circle> circles_) {
     circle = c;
     circles = circles_;
+
+    //get intersections with other circles, 
     intersections = new  ArrayList<Intersection>();
     for (Circle cOther : circles) {
       if (cOther != circle) {
@@ -18,7 +20,6 @@ class CircleIntersectionList {
     int index = 0;
     for (Intersection intersection : intersections) {
       sortedAngles[index++] = intersection.angle();
-      print(""+intersection.angle()+"  ");
     }
     sortedAngles = sort(sortedAngles);
     ArrayList<Intersection> sortedIntersections = new ArrayList<Intersection>();
@@ -31,20 +32,28 @@ class CircleIntersectionList {
       }
     }
     intersections = sortedIntersections;
-    //for (Intersection intersection : intersections) {
-    //  print(intersection.point);
-    //}
+  }
 
-    println();
+  boolean firstIntersectionOnTop() {
+    if (firstIntersectionIsOnTop == -1) {
+    }
+    return firstIntersectionIsOnTop == 1;
   }
 
   void drawRing() {
+    strokeWeight(1); 
+    int arcIndex = firstIntersectionOnTop() ? 0 : 1;
+    for (; arcIndex < ) {
+      Intersection intersection = intersections.get(arcIndex++);
+      Circle circle = intersection.circle;
+      float diam = circle.diameter();
+      arc(circle.x, circle.y, diam, diam, arcs[arcIndex], arcs[arcIndex + 1]);
+    }
   }
 
   void drawAlternatingArcsBetweenIntersections() {
     noFill();
     strokeWeight(5); 
-    //for (Circle c : circles) {
     float[] arcs = intersectionArcs();
     float diam = circle.diameter();
     for (int arcIndex = 0; arcIndex < arcs.length; arcIndex += 2) {
@@ -61,11 +70,11 @@ class CircleIntersectionList {
     return angles;
   }
 
-  ArrayList<Point> intersectionPoints() {
-    ArrayList<Point> points = new ArrayList<Point>();
-    for (Intersection intersection : intersections) {
-      points.add(intersection.point);
-    }
-    return points;
-  }
+  //ArrayList<Point> intersectionPoints() {
+  //  ArrayList<Point> points = new ArrayList<Point>();
+  //  for (Intersection intersection : intersections) {
+  //    points.add(intersection.point);
+  //  }
+  //  return points;
+  //}
 }

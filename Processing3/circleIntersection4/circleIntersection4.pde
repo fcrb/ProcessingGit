@@ -12,7 +12,7 @@ void setup() {
   float alpha = 255;
   circleSet.addCircle(new Circle(40, -20, 80, color(255, 0, 0, alpha)));
   circleSet.addCircle(new Circle(0, 0, 120, color(0, 255, 0, alpha)));
-  //circleSet.addCircle(new Circle(0, 30, 60, color(0, 0, 255, alpha)));
+  circleSet.addCircle(new Circle(0, 30, 60, color(0, 0, 255, alpha)));
 }
 
 void draw() {

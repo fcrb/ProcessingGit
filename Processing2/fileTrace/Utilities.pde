@@ -2,7 +2,7 @@ ArrayList<NeighborPixel> neighbors;
 int WHITE = color(255);
 int BLACK = color(0);
 float PIXELS_PER_INCH = 72;
-float maxError = 1;
+float maxError = 1.0e-9;
 int sheetPadding = 5;
 
 class NeighborPixel {
@@ -14,11 +14,17 @@ class NeighborPixel {
   }
 
   int pixel(int[] pxls, int x, int y) {
+    //if(offset >= pxls.length) {
+    //  println("pxlsLength="+pxls.length + " offset=" + offset + " x=" + x + " y="+y);
+    //  return color(255);
+    //}
     //If on edge, assume area outside of picture is background color
     if (isOutOfPicture(x, y)) {
       return WHITE;
     }
-    return pxls[(y + dy) * width + x + dx];
+    int offset = (y + dy) * width + x + dx;
+    //println("pxlsLength="+pxls.length + " offset=" + offset + " x=" + x + " y="+y);
+    return pxls[offset];
   }
 
   boolean isBackground(int[] pxls, int x, int y) {
@@ -31,13 +37,13 @@ class NeighborPixel {
 }
 
 void outline() {
-  //  loadPixels();
-  //  EdgeCalculator ec = new EdgeCalculator();
-  //  ec.blackenAnyNonWhite();
-  //  for (int i = 0; i < 10; ++i ) {
-  //    ec.removeNonEdgePixels();
-  //    ec.removeExtraNeighbors();
-  //  }
+   //loadPixels();
+   //EdgeCalculator ec = new EdgeCalculator();
+   //ec.blackenAnyNonWhite();
+   //for (int i = 0; i < 10; ++i ) {
+   //  ec.removeNonEdgePixels();
+   //  ec.removeExtraNeighbors();
+   //}
   
   edgeCalculator.buildVectors();
   edgeCalculator.reduceVectors(maxError);

@@ -1,12 +1,16 @@
 import processing.pdf.*;
+
+int MIN_NODES_PER_PATH = 1;
 EdgeCalculator edgeCalculator;
-String inputFileName = "maze";
+//String inputFileName = "circleTest";
+String inputFileName = "killianText";
 float[] widthsInInches =  new float[] {
   11.75
 };
 
 void setup() {
-  size(2437, 2446);//  size(32, 39);
+  //size(102, 45);//"circleTest";
+  size(3458, 1091);//"killianText";
   initializeNeighborPixelArray();
   edgeCalculator = new EdgeCalculator(inputFileName);
 
@@ -21,14 +25,14 @@ void setup() {
 void draw() {
   image(edgeCalculator.img, 0, 0);
   loadPixels();
-  int zoomRadius = 5;
+  int zoomScale = 10;
+  int zoomRadius = zoomScale / 2 + 1;
 
+  //if near edge or off screen, don't zoom, just quit drawing
   if (mouseX < zoomRadius || mouseX > width - zoomRadius) return;
   if (mouseY < zoomRadius || mouseY > height - zoomRadius) return;
 
-  int zoomScale = 10;
-
-  //  translate(mouseX, mouseY);
+  //draw zoom window
   rectMode(CENTER);
   stroke(220, 100);
   for (int dx = -zoomRadius; dx <= zoomRadius; ++dx) {

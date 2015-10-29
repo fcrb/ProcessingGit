@@ -8,11 +8,10 @@ class EdgeCalculator {
     blackenAnyNonWhite();
     fillHoles();
     removeSpurious(5);
-    for (int i = 0; i < 5; ++i) {
-      findEdgePixels();
-      addPixelLayer();
-    }
     findEdgePixels();
+    removeNonEdgePixels();
+    buildVectors();
+    paths = null;
     buildVectors();
   }
 
@@ -21,7 +20,7 @@ class EdgeCalculator {
     int i = 0;
     for (int pixel : img.pixels) {
       float gray = (red(pixel) + green(pixel) + blue(pixel)) / 3;
-      img.pixels[i++] = gray > 260 ? WHITE : BLACK;
+      img.pixels[i++] = gray > 127 ? WHITE : BLACK;
     }
     img.updatePixels();
   }
@@ -108,17 +107,30 @@ class EdgeCalculator {
     for (int i = 1; i < width-1; ++i) {
       for (int j = 1; j < height-1; ++j) {
         if (onEdge[i][j] && ! onAPath[i][j]) {
-          //create a path. Add this as first node
-          onAPath[i][j] = true;
-          EdgePath path = new EdgePath(i, j);
-          path.populatePath(pxls(), onEdge, onAPath);
-          if (path.nodes.size() > 1) {
-            paths.add(path);
-            numberOfNodes += path.nodes.size();
+          //HMMM! maybe it is on an edge, not yet on a path,
+          //but it is adjacent to an already completed path,
+          //in which case we should remove from edge
+          for (NeighborPixel nbr : neighbors) {
+            if (onAPath[i + nbr.dx][j + nbr.dy]) {
+              onEdge[i][j] = false;
+              int pixelIndex = i + j * width;
+              img.pixels[pixelIndex] = WHITE;
+            }
+          }
+          if (onEdge[i][j]) {
+            //create a path. Add this as first node
+            onAPath[i][j] = true;
+            EdgePath path = new EdgePath(i, j);
+            path.populatePath(pxls(), onEdge, onAPath);
+            if (path.nodes.size() > MIN_NODES_PER_PATH) {
+              paths.add(path);
+              numberOfNodes += path.nodes.size();
+            }
           }
         }
       }
     }
+    img.updatePixels();
     println("buildVectors() created " + paths.size() + " paths, using " + numberOfNodes + " nodes.");
   }
 
@@ -152,6 +164,7 @@ class EdgeCalculator {
         }
       }
     }
+    img.updatePixels();
   }
 
   void removeExtraNeighbors() {
@@ -166,6 +179,7 @@ class EdgeCalculator {
         }
       }
     }
+    img.updatePixels();
   }
 
   boolean neighborsAreConnected(int x, int y) {
@@ -241,6 +255,6 @@ class EdgeCalculator {
   boolean isBackground(int clr) {
     //for now, if it isn't white, its a candidate for being on the edge
     //So this should work whether aliased or not
-    return clr == WHITE;
+    return clr != BLACK;
   }
 }
