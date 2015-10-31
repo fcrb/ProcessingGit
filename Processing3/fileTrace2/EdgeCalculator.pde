@@ -5,13 +5,11 @@ class EdgeCalculator {
   //boolean[][] onEdge;
 
   EdgeCalculator(String inputFileName) {
-    img = loadImage("input/"+inputFileName+".jpg");
+    img = loadImage("input/"+inputFileName );
 
     filterToBlackAndWhiteOnly();
 
-    removeInteriorPixels();
-    removeExtraEdgePixels();
-    removeExtraEdgePixels();
+    removeAllButEdgePixels();
 
     buildVectors();
   }
@@ -80,32 +78,55 @@ class EdgeCalculator {
     println(", trimmed to " + numberOfNodes + " nodes.");
   }
 
-  void removeInteriorPixels() {
+  //void removeInteriorPixels() {
+  //  int[] pixelCopy = new int[img.pixels.length];
+  //  arrayCopy(img.pixels, pixelCopy);
+  //  for (int i = 1; i < width-1; ++i) {
+  //    for (int j = 1; j < height-1; ++j) {
+  //      if (numBackgroundNeighbors(i, j) == 0) 
+  //        pixelCopy[j * width +i] = WHITE;
+  //    }
+  //  }
+  //  arrayCopy(pixelCopy, img.pixels);
+  //  img.updatePixels();
+  //}
+
+  void removeAllButEdgePixels() {
     int[] pixelCopy = new int[img.pixels.length];
     arrayCopy(img.pixels, pixelCopy);
-    for (int i = 1; i < width-1; ++i) {
-      for (int j = 1; j < height-1; ++j) {
-        if (numBackgroundNeighbors(i, j) == 0) 
-          pixelCopy[j * width +i] = WHITE;
-      }
-    }
-    arrayCopy(pixelCopy, img.pixels);
-    img.updatePixels();
-  }
 
-  void removeExtraEdgePixels() {
     for (int i = 1; i < width-1; ++i) {
       for (int j = 1; j < height-1; ++j) {
-        //If BLACK, then change to WHITE if this pixel
-        //has adjacent BLACK pixels that are
-        //diagonal from each other.
+        //If BLACK, then determine whether we should remove it
         if ( img.pixels[j * width +i]==BLACK) {
-          if (img.pixels[(j-1) * width +i]==BLACK ||img.pixels[(j+1) * width +i]==BLACK)
-            if (img.pixels[j * width +i - 1]==BLACK ||img.pixels[j * width +i + 1]==BLACK)
-              img.pixels[j * width +i] = WHITE;
+          //if it only has one white neighbor, and it is adjacent (not diagonal),
+          //then it is part of border, and should remain
+          boolean becomeWhite = true;
+          if (numberOfWhiteNeighbors(i, j) < 2) {
+            for (NeighborPixel nbr : adjacentNeighbors) {
+              if (nbr.isWhite(img.pixels, i, j)) {
+                becomeWhite = false;
+              }
+            }
+          } else {
+            //unless a pixel has at least two contiguous white neighbors, it should become white
+            boolean previousNeighborIsWhite = neighbors.get(7).isWhite(img.pixels, i, j);
+            for (NeighborPixel nbr : neighbors) {
+              boolean nbrIsWhite = nbr.isWhite(img.pixels, i, j);
+              if (previousNeighborIsWhite && nbrIsWhite)
+              {
+                becomeWhite = false;
+              }
+              previousNeighborIsWhite = nbrIsWhite;
+            }
+          }
+          if (becomeWhite) {
+            pixelCopy[j * width +i] = WHITE;
+          }
         }
       }
     }
+    arrayCopy(pixelCopy, img.pixels);
     img.updatePixels();
   }
 
@@ -114,19 +135,19 @@ class EdgeCalculator {
     return img.pixels[pixelOffset] == BLACK;
   }
 
-  int numBackgroundNeighbors(int x, int y) {
+  int numberOfWhiteNeighbors(int x, int y) {
     //find the pixel value of (up to) 8 neighboring img.pixels
     //start at 12 o'clock, go clockwise
     int numNeighbors = 0;
     for (NeighborPixel n : neighbors) {
-      if (isBackgroundColor(n.pixel(img.pixels, x, y))) {
+      if (n.pixel(img.pixels, x, y) == WHITE) {
         numNeighbors++;
       }
     }
     return numNeighbors;
   }
 
-  boolean isBackgroundColor(int clr) {
-    return clr == WHITE;
-  }
+  //boolean isWhiteColor(int clr) {
+  //  return clr == WHITE;
+  //}
 }

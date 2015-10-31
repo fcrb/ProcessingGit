@@ -13,13 +13,16 @@ class EdgeNode {
 }
 
 class EdgePath {
+  int[] pxls;
   ArrayList<EdgeNode> nodes = new  ArrayList<EdgeNode>();
   int pathColor;
 
-  EdgePath(int x, int y) {
+  EdgePath(int[] viewPixels, int x, int y) {
     nodes.add(new EdgeNode(x, y));
     colorCounter = (colorCounter+1)%3;
     pathColor = pathColors[colorCounter];
+    pxls = viewPixels;
+    pxls[x +  y * width] = pathColor;
   }
 
   void draw(float scale, PGraphics pdf) {
@@ -30,10 +33,10 @@ class EdgePath {
     pdf.endShape();
   }
 
-  void populatePath(int[] pxls, boolean[][] onAPath) {
+  void populatePath(boolean[][] onAPath) {
     EdgeNode nextNode = null;
-    stroke(pathColor);
-    while ( (nextNode = findNextNode (pxls, onAPath)) != null) {
+    //stroke(pathColor);
+    while ( (nextNode = findNextNode (onAPath)) != null) {
       pxls[nextNode.x +  nextNode.y * width] = pathColor;
     }
   }
@@ -69,7 +72,7 @@ class EdgePath {
     nodes.removeAll(nodesToRemoveFromPath);
   }
 
-  EdgeNode findNextNode(int[] pxls, boolean[][] onAPath) {
+  EdgeNode findNextNode(boolean[][] onAPath) {
     //returns null if there is no next node
     EdgeNode currentNode = nodes.get(nodes.size() - 1);
     int x = currentNode.x;
@@ -78,7 +81,7 @@ class EdgePath {
     //loop through neighbors, find nonwhite, unused pixel
     EdgeNode firstNode = nodes.get(0);
     for ( NeighborPixel n : neighbors) {
-      if (!n.isWhite(pxls, x, y)) {
+      if (n.isBlack(pxls, x, y)) {
         int xNbr = x + n.dx;
         int yNbr = y + n.dy;
         if ( !onAPath[xNbr][yNbr]) {

@@ -48,6 +48,10 @@ class NeighborPixel {
     return pixel(pxls, x, y) == WHITE;
   }
 
+  boolean isBlack(int[] pxls, int x, int y) {
+    return pixel(pxls, x, y) == BLACK;
+  }
+
   boolean isOutOfPicture(int x, int y) {
     return x + dx < 1 || x + dx >= width ||y + dy < 1 || y + dy >= height;
   }

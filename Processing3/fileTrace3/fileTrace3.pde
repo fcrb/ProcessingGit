@@ -7,17 +7,17 @@ ArrayList<NeighborPixel> adjacentNeighbors;
 int WHITE = color(255);
 int BLACK = color(0);
 float PIXELS_PER_INCH = 72;
-int MIN_NODES_PER_PATH = 1;
+int MIN_NODES_PER_PATH = 60;
 EdgeCalculator edgeCalculator;
 
-String INPUT_FILE_NAME = "giveThanks";
-String FILE_EXTENSION = "jpg";
+String INPUT_FILE_NAME = "tony";
+String FILE_EXTENSION = "png";
 float[] widthsInInches =  new float[] {
-  12 // 23.04167 from OmniGraffle
+  6 // 23.04167 from OmniGraffle
 };
 
 void setup() {
-  size(3039, 3186);
+  size(2936,2042);
   initializeNeighborPixelArray();
   edgeCalculator = new EdgeCalculator(INPUT_FILE_NAME + '.' + FILE_EXTENSION);
 
