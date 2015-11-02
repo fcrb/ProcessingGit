@@ -1,21 +1,21 @@
 import processing.pdf.*;
 
-String inputFileName = "pullWeedInput.jpg";
-String outputFileName = "pullWeedOutput.jpg";
-boolean invertBlackAndWhite = false;
+String inputFileName = "gc.jpg";
+String outputFileName = "gcOut.jpg";
+boolean invertBlackAndWhite = true;
+int THRESHOLD = 29;//typical value is 127
 
 PGraphicsPDF pdf;
 
-int WHITE = color(255, 0);
+int WHITE = color(255);
 int BLACK = color(0);
 
 void setup() {
-  size(600, 210);
+  size(1024, 682);
   PImage img = loadImage(inputFileName);
   if (img != null) {
     image(img, 0, 0);
-    int threshold = 50;//typical value is 127
-    convertToBlackWhite(threshold);
+    convertToBlackWhite(THRESHOLD);
     //swapBlackWhite();
     //  addLabels("2013 IAA BMW i3 Honeycomb structure by youkeys - Flickr: DSC01710_DxO.","Licensed under Creative Commons Attribution 2.0 via Wikimedia Commons");
     save(outputFileName);
@@ -43,8 +43,7 @@ void convertToBlackWhite(int threshold ) {
   int i = 0;
   for (int pixel : pixels) {
     float bright = (red(pixel) + green(pixel) + blue(pixel)) / 3;
-    int strokeColor = invertBlackAndWhite ? (bright < threshold ? WHITE : BLACK)
-      : (bright > threshold ? WHITE : BLACK);
+    int strokeColor =  (bright < threshold) ? WHITE : BLACK;
     pixels[i++] = strokeColor;
   }
   updatePixels();

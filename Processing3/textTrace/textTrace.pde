@@ -4,32 +4,28 @@ import processing.pdf.*;
 ArrayList<NeighborPixel> neighbors;
 ArrayList<NeighborPixel> adjacentNeighbors;
 
+String INPUT_TEXT = "pete";
+String FONT = "SignPainter";
+
+int MIN_NODES_PER_PATH = 5;
+float MAX_ERROR =  0.3;
+int WIDTH_IN_INCHES =  6;
+
 int WHITE = color(255);
 int BLACK = color(0);
 float PIXELS_PER_INCH = 72;
-int MIN_NODES_PER_PATH = 60;
+
 EdgeCalculator edgeCalculator;
 
-String INPUT_FILE_NAME = "freyaArial";
-String FILE_EXTENSION = "png";
-float[] widthsInInches =  new float[] {
-  6 // 23.04167 from OmniGraffle
-};
 
 void setup() {
-  size(2208,1441);
+  size(4000, 4000);
   initializeNeighborPixelArray();
-  edgeCalculator = new EdgeCalculator(INPUT_FILE_NAME + '.' + FILE_EXTENSION);
-
-  for (float w : widthsInInches) {
-    int wholePart = (int) w;
-    String wString = ""+wholePart + '_' + nf( round(100 * (w - wholePart)), 2);
-    edgeCalculator.createEdgeOnlyPDF(INPUT_FILE_NAME+'/'+INPUT_FILE_NAME+'_'+wString+"in.pdf", 72 * w );
-  }
+  edgeCalculator = new EdgeCalculator(INPUT_TEXT);
 }
 
 void draw() {
-  image(edgeCalculator.img, 0, 0);
+  image(edgeCalculator.pg, 0, 0);
   loadPixels();
   int zoomScale = 10;
   int zoomRadius = zoomScale / 2 + 1;
