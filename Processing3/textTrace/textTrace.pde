@@ -5,10 +5,10 @@ ArrayList<NeighborPixel> neighbors;
 ArrayList<NeighborPixel> adjacentNeighbors;
 
 String INPUT_TEXT = "pete";
-String FONT = "SignPainter";
+String FONT = "LucidaHandwriting-Italic";//"SignPainter";
 
 int MIN_NODES_PER_PATH = 5;
-float MAX_ERROR =  0.3;
+float MAX_ERROR =  0.5;
 int WIDTH_IN_INCHES =  6;
 
 int WHITE = color(255);
@@ -19,7 +19,7 @@ EdgeCalculator edgeCalculator;
 
 
 void setup() {
-  size(4000, 4000);
+  size(3000, 2000);
   initializeNeighborPixelArray();
   edgeCalculator = new EdgeCalculator(INPUT_TEXT);
 }

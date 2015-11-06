@@ -8,24 +8,17 @@ int WHITE = color(255);
 int BLACK = color(0);
 float PIXELS_PER_INCH = 72;
 int MIN_NODES_PER_PATH = 60;
+int WIDTH_IN_INCHES =  6;
+
 EdgeCalculator edgeCalculator;
 
-String INPUT_FILE_NAME = "freyaArial";
+String INPUT_FILE_NAME = "heidi_phosphate";
 String FILE_EXTENSION = "png";
-float[] widthsInInches =  new float[] {
-  6 // 23.04167 from OmniGraffle
-};
 
 void setup() {
-  size(2208,1441);
+  size(2129,816);
   initializeNeighborPixelArray();
   edgeCalculator = new EdgeCalculator(INPUT_FILE_NAME + '.' + FILE_EXTENSION);
-
-  for (float w : widthsInInches) {
-    int wholePart = (int) w;
-    String wString = ""+wholePart + '_' + nf( round(100 * (w - wholePart)), 2);
-    edgeCalculator.createEdgeOnlyPDF(INPUT_FILE_NAME+'/'+INPUT_FILE_NAME+'_'+wString+"in.pdf", 72 * w );
-  }
 }
 
 void draw() {

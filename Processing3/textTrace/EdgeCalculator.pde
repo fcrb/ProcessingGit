@@ -11,7 +11,7 @@ class EdgeCalculator {  //<>//
     trimSpurs();
     removeAllButEdgePixels();
     buildVectors();
-    createEdgeOnlyPDF(INPUT_TEXT+".pdf", 72 * WIDTH_IN_INCHES );
+    createEdgeOnlyPDF(INPUT_TEXT+'_'+FONT+".pdf", 72 * WIDTH_IN_INCHES );
   }
 
   void drawText() {

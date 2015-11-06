@@ -1,7 +1,7 @@
 Maze maze;
 float segmentLength;
 int maxLength = -1;
-boolean generateMaze = false;
+boolean generateMaze = true;
 
 void setup() {
   size(640, 480);

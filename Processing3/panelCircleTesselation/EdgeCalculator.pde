@@ -1,68 +1,59 @@
-class EdgeCalculator { 
-  float MAX_ERROR =  1;
-  PImage img;
-  ArrayList<EdgePath> paths;
+//GLOBALS
+ArrayList<NeighborPixel> neighbors;
+ArrayList<NeighborPixel> adjacentNeighbors;
+int MIN_NODES_PER_PATH = 1;
+float MAX_ERROR =  1;
+int WIDTH_IN_INCHES =  6;
 
-  EdgeCalculator(String inputFileName) {
-    img = loadImage("input/"+inputFileName );
+int WHITE = color(255);
+int BLACK = color(0);
+float PIXELS_PER_INCH = 72;
+
+class EdgeCalculator {  //<>//
+  PGraphics pg;
+  ArrayList<EdgePath> paths;
+  String inputText;
+
+  EdgeCalculator() {
+    pg = createGraphics(width, height);
+    pg.beginDraw();
+    loadPixels();
+    pg.loadPixels();
+    arrayCopy(pixels, pg.pixels);
+    pg.updatePixels();
+    pg.endDraw();
 
     filterToBlackAndWhiteOnly();
-    trimSpurs();
+    //trimSpurs();
     removeAllButEdgePixels();
     buildVectors();
-    createEdgeOnlyPDF(INPUT_FILE_NAME+"_traced.pdf", 72 * WIDTH_IN_INCHES );
   }
 
+  void sendToDisplay() {
+    pg.updatePixels();
+    image(pg, 0, 0);
+  }
+  
+  
   void filterToBlackAndWhiteOnly() {
-    img.loadPixels();
+    pg.loadPixels();
     int i = 0;
-    for (int pixel : img.pixels) {
+    for (int pixel : pg.pixels) {
       float gray = (red(pixel) + green(pixel) + blue(pixel)) / 3;
-      img.pixels[i++] = gray > 0 ? WHITE : BLACK;
+      pg.pixels[i++] = gray > 0 ? WHITE : BLACK;
     }
-    img.updatePixels();
+    pg.updatePixels();
   }
 
-  void trimSpurs() {
-    //There can be pixel paths that come out from the edge, but when only one pixel wide,
-    //we want to ignore them. 
-    //This method is optional, and if you want the spurs to be in the cut, 
-    //you of course don't want to call trimSpurs
-    int pixelsChanged = 0;
-    do {
-      pixelsChanged = 0;
-      for (int x = 1; x < width-1; ++x) {
-        for (int y = 1; y < height-1; ++y) {
-          if (isBlack(x, y) && numberOfWhiteNeighbors(x, y) > 6) {
-            int pixelOffset = y * width + x;
-            img.pixels[pixelOffset] = WHITE;
-            ++pixelsChanged;
-            int xNbr = x;
-            int yNbr = y;
-            NeighborPixel blackNeighbor = null;
-            while (null != (blackNeighbor = soleBlackNeighbor(xNbr, yNbr))) {
-              xNbr += blackNeighbor.dx;
-              yNbr += blackNeighbor.dy;
-              pixelOffset = yNbr * width + xNbr;
-              img.pixels[pixelOffset] = WHITE;
-              ++pixelsChanged;
-            }
-          }
-        }
-      }
-    } while ( pixelsChanged > 0);
-  }
 
-  void createEdgeOnlyPDF(String filename, float pixelWidth) {
-    int drawingWidth = 1 +(int) pixelWidth;
-    int drawingHeight = 1 + (int) (height * pixelWidth / width);
+  void createEdgeOnlyPDF(String filename, float pixelWidth_) {
+    int drawingWidth = 1 +(int) pixelWidth_;
+    int drawingHeight = 1 + (int) (pg.height * pixelWidth_ / pg.width);
 
-    float scale = pixelWidth / width;
+    float scale = pixelWidth_ / pg.width;
 
     PGraphics pdf = createGraphics(drawingWidth, drawingHeight, PDF, "pdf/"+filename);
     pdf.beginDraw();
-    pdf.background(255);
-    noFill();
     pdf.strokeWeight(0.072);
     for (EdgePath path : paths) {
       path.drawOnPDF(scale, pdf);
@@ -76,14 +67,12 @@ class EdgeCalculator {
       return;
     }
     paths = new ArrayList<EdgePath>();
-    boolean[][] onAPath = new boolean[width][height];
+    boolean[][] onAPath = new boolean[pg.width][pg.height];
     int numberOfNodes = 0;
-    for (int i = 1; i < width-1; ++i) {
-      for (int j = 1; j < height-1; ++j) {
-        if (isBlack(i, j) && ! onAPath[i][j]) {
-          onAPath[i][j] = true;
-          EdgePath path = new EdgePath(img.pixels, i, j);
-          path.populatePath(onAPath);
+    for (int i = 1; i < pg.width-1; ++i) {
+      for (int j = 1; j < pg.height-1; ++j) {
+        if (isBlack(i, j) && !onAPath[i][j]) {
+          EdgePath path = new EdgePath(pg, i, j, onAPath);
           if (path.nodes.size() > MIN_NODES_PER_PATH) {
             paths.add(path);
             numberOfNodes += path.nodes.size();
@@ -106,11 +95,11 @@ class EdgeCalculator {
     int pixelsChanged;
     do {
       pixelsChanged = 0;
-      int[] pixelCopy = new int[img.pixels.length];
-      arrayCopy(img.pixels, pixelCopy);
+      int[] pixelCopy = new int[pg.pixels.length];
+      arrayCopy(pg.pixels, pixelCopy);
 
-      for (int i = 1; i < width-1; ++i) {
-        for (int j = 1; j < height-1; ++j) {
+      for (int i = 1; i < pg.width-1; ++i) {
+        for (int j = 1; j < pg.height-1; ++j) {
           //If BLACK, then determine whether we should remove it
           if ( isBlack(i, j)) {
             //if it only has one white neighbor, and it is adjacent (not diagonal),
@@ -120,7 +109,7 @@ class EdgeCalculator {
             if (numOfWhiteNeighbors > 0) {
               if (numOfWhiteNeighbors == 1) {
                 for (NeighborPixel nbr : adjacentNeighbors) {
-                  if (nbr.isWhite(img.pixels, i, j)) {
+                  if (nbr.isWhite(pg, i, j)) {
                     becomeWhite = false;
                     break;
                   }
@@ -134,15 +123,15 @@ class EdgeCalculator {
                 //This means the pixel should be white if there is a black pixel up or down, 
                 //and a black pixel right or left.
                 boolean isRedundantEdgePixel = (numOfWhiteNeighbors == 6) && 
-                  ((adjacentNeighbors.get(0).isBlack(img.pixels, i, j) 
-                  || adjacentNeighbors.get(2).isBlack(img.pixels, i, j)) ) &&
-                  ((adjacentNeighbors.get(1).isBlack(img.pixels, i, j) 
-                  || adjacentNeighbors.get(3).isBlack(img.pixels, i, j)) );
+                  ((adjacentNeighbors.get(0).isBlack(pg, i, j)
+                  || adjacentNeighbors.get(2).isBlack(pg, i, j)) ) &&
+                  ((adjacentNeighbors.get(1).isBlack(pg, i, j) 
+                  || adjacentNeighbors.get(3).isBlack(pg, i, j)) );
                 if (!isRedundantEdgePixel) {
                   //unless a pixel has at least two contiguous white neighbors, it should become white
-                  boolean previousNeighborIsWhite = neighbors.get(7).isWhite(img.pixels, i, j);
+                  boolean previousNeighborIsWhite = neighbors.get(7).isWhite(pg, i, j);
                   for (NeighborPixel nbr : neighbors) {
-                    boolean nbrIsWhite = nbr.isWhite(img.pixels, i, j);
+                    boolean nbrIsWhite = nbr.isWhite(pg, i, j);
                     if (previousNeighborIsWhite && nbrIsWhite)
                     {
                       becomeWhite = false;
@@ -153,32 +142,32 @@ class EdgeCalculator {
               }
             }
             if (becomeWhite) {
-              pixelCopy[j * width +i] = WHITE;
+              pixelCopy[j * pg.width +i] = WHITE;
               ++pixelsChanged;
             }
           }
         }
       }
-      arrayCopy(pixelCopy, img.pixels);
-      img.updatePixels();
+      arrayCopy(pixelCopy, pg.pixels);
+      pg.updatePixels();
     } while (pixelsChanged > 0);
   }
 
   boolean isBlack(int x, int y) {
-    int pixelOffset = y * width + x;
-    if (pixelOffset >= img.pixels.length) {
-      println("ArrayIndexException in EdgeCalculator.isBlack(). Do you have the correct size() params?");
+    int pixelOffset = y * pg.width + x;
+    if (pixelOffset >= pg.pixels.length) {
+      println("ArrayIndexException in EdgeCalculator.isBlack("+x+','+y+"). Do you have the correct size() params?");
       System.exit(-1);
     }
-    return img.pixels[pixelOffset] == BLACK;
+    return pg.pixels[pixelOffset] == BLACK;
   }
 
   int numberOfWhiteNeighbors(int x, int y) {
-    //find the pixel value of (up to) 8 neighboring img.pixels
+    //find the pixel value of (up to) 8 neighboring pg.pixels
     //start at 12 o'clock, go clockwise
     int numNeighbors = 0;
     for (NeighborPixel n : neighbors) {
-      if (n.pixel(img.pixels, x, y) == WHITE) {
+      if (n.pixel(pg, x, y) == WHITE) {
         numNeighbors++;
       }
     }
@@ -188,7 +177,7 @@ class EdgeCalculator {
   NeighborPixel soleBlackNeighbor(int x, int y) {
     if (numberOfWhiteNeighbors(x, y) == 7) {
       for (NeighborPixel n : neighbors) {
-        if (n.pixel(img.pixels, x, y) == BLACK) {
+        if (n.pixel(pg, x, y) == BLACK) {
           return n;
         }
       }
