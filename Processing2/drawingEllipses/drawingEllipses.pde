@@ -6,8 +6,8 @@ int gridSize = (int)(800 / stringLength);
 float focusDistanceFromCenter = distanceBetweenFoci * 0.5;
 float angle0 = -PI/2;
 float angle1 = -PI/2;
-float xNib;
-float yNib;
+float xNib, yNib;
+float xNibPrevious, yNibPrevious;
 ArrayList<Point> nibs = new ArrayList<Point>();
 int maxNibs = 1000;
 
@@ -49,8 +49,12 @@ void draw() {
     , gridSize * minorAxisLength());
 
   //draw path so far, and nib
-  xNib = mouseX - width / 2;
-  yNib  = mouseY - height / 2;
+  float easing = 0.1;
+  
+  xNib = xNibPrevious * (1-easing) + easing * (mouseX - width / 2);
+  yNib  = yNibPrevious * (1-easing) + easing * (mouseY - height / 2);
+  xNibPrevious = xNib;
+  yNibPrevious = yNib;
   for (int i = 0; i < 20; ++i) {
     moveNibToEllipse();
   }

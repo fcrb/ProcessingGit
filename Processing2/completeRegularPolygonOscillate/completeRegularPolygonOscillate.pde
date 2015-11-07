@@ -1,4 +1,4 @@
-int numVertices = 31;
+int numVertices = 11;
 float radius;
 boolean rotate = true;
 int millisLastNoted = 0;

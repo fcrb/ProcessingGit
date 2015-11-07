@@ -12,9 +12,3 @@ void mousePressed() {
 void mouseReleased() {
   hermit.releaseDrag();
 }  
-
-void setup() {
-  size(320, 240);
-  hermit = new Hermit();
-}
-

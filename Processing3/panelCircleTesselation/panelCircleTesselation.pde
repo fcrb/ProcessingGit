@@ -1,6 +1,6 @@
 import processing.pdf.*;
 float xGridSpace;
-int NUMBER_CIRCLES_ACROSS = 6;
+int NUMBER_CIRCLES_ACROSS = 8;
 
 void setup() {
   size(3000, 4800);

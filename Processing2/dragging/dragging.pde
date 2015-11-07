@@ -1,3 +1,9 @@
+
+void setup() {
+  size(320, 240);
+  hermit = new Hermit();
+}
+
 class Hermit {
   float x = width/2, y = height/2;
   float diameter = width/10;
