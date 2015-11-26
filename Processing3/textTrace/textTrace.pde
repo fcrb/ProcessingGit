@@ -4,8 +4,14 @@ import processing.pdf.*;
 ArrayList<NeighborPixel> neighbors;
 ArrayList<NeighborPixel> adjacentNeighbors;
 
-String INPUT_TEXT = "pete";
-String FONT = "LucidaHandwriting-Italic";//"SignPainter";
+String INPUT_TEXT = "kim";
+String FONT = "Lucida Handwriting";
+//"Brush Script MT";
+//"Lucida Handwriting";
+//"SignPainter";
+//"Mistral";
+//"Snell Roundhand";
+//"Zapfino";
 
 int MIN_NODES_PER_PATH = 5;
 float MAX_ERROR =  0.5;
@@ -19,7 +25,7 @@ EdgeCalculator edgeCalculator;
 
 
 void setup() {
-  size(3000, 2000);
+  size(6000, 4000);
   initializeNeighborPixelArray();
   edgeCalculator = new EdgeCalculator(INPUT_TEXT);
 }

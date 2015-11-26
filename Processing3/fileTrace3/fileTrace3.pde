@@ -12,11 +12,11 @@ int WIDTH_IN_INCHES =  6;
 
 EdgeCalculator edgeCalculator;
 
-String INPUT_FILE_NAME = "heidi_phosphate";
-String FILE_EXTENSION = "png";
+String INPUT_FILE_NAME = "heidi_Zapfino";
+String FILE_EXTENSION = "jpg";
 
 void setup() {
-  size(2129,816);
+  size(4330,2770);
   initializeNeighborPixelArray();
   edgeCalculator = new EdgeCalculator(INPUT_FILE_NAME + '.' + FILE_EXTENSION);
 }

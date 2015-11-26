@@ -18,7 +18,7 @@ class EdgeCalculator {
     int i = 0;
     for (int pixel : img.pixels) {
       float gray = (red(pixel) + green(pixel) + blue(pixel)) / 3;
-      img.pixels[i++] = gray > 0 ? WHITE : BLACK;
+      img.pixels[i++] = gray > 127 ? WHITE : BLACK;
     }
     img.updatePixels();
   }

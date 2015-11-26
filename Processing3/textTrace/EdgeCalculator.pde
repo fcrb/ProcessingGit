@@ -28,8 +28,8 @@ class EdgeCalculator {  //<>//
     //poing on the baseline (such as "f" or "h" when using SignPainter font)
     //Processing places text on the page so that the text will be cropped if 
     //positioned at x near 0...
-    float firstCharFudge = 0.2;
-    float lastCharFudge = 0.1;
+    float firstCharFudge = 0.3;
+    float lastCharFudge = 0.15;
     txtSize *= width / txtWidth * (1 - firstCharFudge - lastCharFudge);
     myFont = createFont(FONT, txtSize);
     pg.textFont(myFont);
