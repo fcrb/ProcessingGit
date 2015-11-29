@@ -3,13 +3,13 @@
 var gravConstant, timeStep;
 var universe = new Universe();
 var strokeWeightFunction;
-var linesPerFrame = 20;
+var linesPerFrame = 50;
 var fade = true;
 var paused = false;
 
 function setup() {
   createCanvas(800, 800);
-  // polygonVerticesSetup(12, 0.4, PI /4, 2);
+  // polygonVerticesSetup(3, 0.4, PI /2, 1);
   // polygonVerticesSetup(4, 0.2, PI /2, -1.1);
   // threeBodyChaosSetup();
   threeBodyStableSetup();
