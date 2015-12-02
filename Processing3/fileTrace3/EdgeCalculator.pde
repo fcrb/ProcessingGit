@@ -3,14 +3,37 @@ class EdgeCalculator {
   PImage img;
   ArrayList<EdgePath> paths;
 
-  EdgeCalculator(String inputFileName) {
+  EdgeCalculator(String inputFileName, int additionalPixelLayers) {
     img = loadImage("input/"+inputFileName );
 
     filterToBlackAndWhiteOnly();
     trimSpurs();
+    addPixelLayer(additionalPixelLayers);
+
     removeAllButEdgePixels();
     buildVectors();
     createEdgeOnlyPDF(INPUT_FILE_NAME+"_traced.pdf", 72 * WIDTH_IN_INCHES );
+  }
+
+  void addPixelLayer(int numLayers) {
+    img.loadPixels();
+    for (int layer = 0; layer < numLayers; ++layer) {
+      int[] pxlCopy = new int[img.pixels.length];
+      arrayCopy(img.pixels, pxlCopy);
+      for (int i = 1; i < width-1; ++i) {
+        for (int j = 1; j < height-1; ++j) {
+          if (isBlack(i, j)) {
+            for (int dx = -1; dx < 2; ++dx) {
+              for (int dy = -1; dy < 2; ++dy) {
+                pxlCopy[(j+dy) * width + i + dx] = BLACK ;
+              }
+            }
+          }
+        }
+      }
+      arrayCopy(pxlCopy, img.pixels);
+    }
+    img.updatePixels();
   }
 
   void filterToBlackAndWhiteOnly() {

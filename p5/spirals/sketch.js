@@ -19,7 +19,7 @@ var fixedPenWidthCheckbox;
 function setup() {
   createCanvas(960, 960);
 
-  baseSlider = makeSlider("base", 1.1, 5, 1.61, 90, 20, 0.01);
+  baseSlider = makeSlider("base", 0.05, 2, 0.306, 90, 20, 0.001);
   cwSpiralSlider = makeSlider("CW spirals", 1, 21, 5, 90, 50, 1);
   ccwSpiralSlider = makeSlider("CCW spirals", 1, 21, 8, 90, 80, 1);
 }
@@ -48,9 +48,10 @@ function draw() {
   pop();
 
   //slider value labels
-  text("" + baseSlider.value(), 185, 33);
-  text("" + cwSpiralSlider.value(), 185, 63);
-  text("" + ccwSpiralSlider.value(), 185, 93);
+  var x = 305;
+  text("" + baseSlider.value(), x, 33);
+  text("" + cwSpiralSlider.value(), x, 63);
+  text("" + ccwSpiralSlider.value(), x, 93);
 
 }
 
@@ -61,23 +62,32 @@ function spiral(numArms) {
   }
 }
 
+function radiusExponential(theta) {
+  return exp(baseSlider.value() * theta);
+}
+
+function radiusQuadratic(theta) {
+  return sqrt(theta) * 80;
+}
+
 function spiralArm() {
   var base = baseSlider.value();
-  var angle = -PI;
-  var dAngle = PI / 60;
-  var rMultiplier = pow(base, dAngle);
+  var theta = 0;//-PI;
+  var dTheta = PI / 360;
+  // var rMultiplier = pow(base, dtheta);
   var x, y, xPrev, yPrev;
-  var r = pow(base, angle);
-  while (r < width) {
-    x = r * cos(angle);
-    y = r * sin(angle);
+  var r;
+  var radius = radiusExponential;
+  while ((r = radius(theta)) < width) {
+    x = r * cos(theta);
+    y = r * sin(theta);
     if (xPrev != null) {
       strokeWeight(dist(0, 0, x, y) / width * 20);
+      // strokeWeight(2);
       line(xPrev, yPrev, x, y);
     }
     xPrev = x;
     yPrev = y;
-    angle += dAngle;
-    r *= rMultiplier;
+    theta += dTheta;
   }
 }
