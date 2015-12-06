@@ -9,11 +9,13 @@ var fixedPenWidth = false;
 var needsRedraw = true;
 var WIDTH_MULTIPLIER = 0.44;
 
-var canvas, overlapSlider, lobeSlider, radiusSlider, outsideScaleSlider, insideScaleSlider, maxPenWidthSlider;
+var overlapSlider, lobeSlider, radiusSlider;
+var outsideScaleSlider, insideScaleSlider, maxPenWidthSlider;
+var twistSlider;
 var outsideCheckbox, insideCheckbox, fixedPenWidthCheckbox;
 
 function setup() {
-  canvas = createCanvas(800, 800);
+  createCanvas(800, 800);
 
   overlapSlider = makeSlider("Overlap", 1, 50, 2, 70, 20, 1);
   lobeSlider = makeSlider("Lobes", 1, 50, 3, 70, 50, 1);
@@ -25,6 +27,7 @@ function setup() {
   outsideCheckbox = makeCheckbox("outside", true, 70, 230);
   fixedPenWidthCheckbox = makeCheckbox("fixed width pen", false, 120, 260);
   maxPenWidthSlider = makeSlider("pen width scale", 1, 30, 15, 130, 290, 0.5);
+  twistSlider = makeSlider("twist", 0, 100, 0, 130, 320, 1);
 }
 
 function draw() {

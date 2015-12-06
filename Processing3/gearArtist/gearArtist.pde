@@ -1,15 +1,16 @@
 
 /* TODO:
  Fix bug with amplitudeMultipler below.
+ Create PDF capability.
  */
 
-int n1 = 1;
-int n2 = 1;
+int n1 = 7;
+int n2 = 4;
 float gearSpeed = 0.003;
 float axleSeparation;
 int numIterationsPerGear = 100;
 
-float amplitudeMultipler = 0.236;//try 0.236, 0.237, then 0.238 with
+float amplitudeMultipler = 0.03;//try n1=n2=1, and ampMulti =0.236, 0.237, then 0.238 with
 //  return height * 0.2 * (1 + amplitudeMultipler * (cos(theta * n1) +  sin(theta * n1 * 2 )+   cos(theta * n1 * 3 )+   sin(theta * n1 * 5 )));
 
 void setup() {
@@ -29,7 +30,7 @@ float radius(float theta) {
 
 void calibrateAxleSeparation() {
   float gearOneAngle = 2 * PI;
-  float maxSeparation = 2000;
+  float maxSeparation = 5000;
   float minSeparation = 0;
   while (maxSeparation - minSeparation > 0.0001) {
     axleSeparation = (maxSeparation + minSeparation) * 0.5;

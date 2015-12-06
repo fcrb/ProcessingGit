@@ -16,24 +16,30 @@ var Wheel = class Wheel {
     var angle = time * this.angularRate;
     var xNew = xCenter + this.x(angle);
     var yNew = yCenter + this.y(angle);
+    //now we have xNew and yNew, but no twisting yet
+    var twist = dist(0,0,xNew, yNew) * twistSlider.value() * 0.0001;
+    var xTwisted = xNew * cos(twist) - yNew * sin(twist);
+    var yTwisted = xNew * sin(twist) + yNew * cos(twist);
+    
     if (this.wheelAtPenRadius == null) {
       if (this.initialized) {
         stroke(this.colour);
         if (fixedPenWidth) {
           strokeWeight(maxPenWidth);
         } else {
-          strokeWeight(sqrt(xNew * xNew + yNew * yNew) / width / WIDTH_MULTIPLIER * maxPenWidth);
+          strokeWeight(dist(0,0,xTwisted, yTwisted) / width / WIDTH_MULTIPLIER * maxPenWidth);
         }
-        line(this.xPrevious, this.yPrevious, xNew, yNew);
+        line(this.xPrevious, this.yPrevious, xTwisted, yTwisted);
       }
       this.initialized = true;
     } else {
-      this.wheelAtPenRadius.drawCenteredAt(xNew, yNew);
+      this.wheelAtPenRadius.drawCenteredAt(xTwisted, yTwisted);
     }
 
-    this.xPrevious = xNew;
-    this.yPrevious = yNew;
+    this.xPrevious = xTwisted;
+    this.yPrevious = yTwisted;
   }
+
 
   setSubwheel(wheelAtPenRadius) {
     if (this.wheelAtPenRadius == null) {

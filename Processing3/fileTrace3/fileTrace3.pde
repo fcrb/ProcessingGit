@@ -12,11 +12,11 @@ int WIDTH_IN_INCHES =  6;
 
 EdgeCalculator edgeCalculator;
 
-String INPUT_FILE_NAME = "MaxBirthday";
+String INPUT_FILE_NAME = "ThankYouRobbs";
 String FILE_EXTENSION = "png";
 
 void setup() {
-  size(6299,2099);
+  size(6341,1824);
   initializeNeighborPixelArray();
   int additionalPixelLayers = 0;
   edgeCalculator = new EdgeCalculator(INPUT_FILE_NAME + '.' + FILE_EXTENSION, additionalPixelLayers);
