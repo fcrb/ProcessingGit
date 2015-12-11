@@ -1,6 +1,6 @@
 import processing.pdf.*;
 
-String inputFile = "test.js";
+String inputFile = "box01.js";
 String outputFile = "output.pdf";
 
 void setup() {
@@ -31,7 +31,13 @@ void handleCommand(JSONObject command) {
   } else if (functionName.equals("fill")) {
     int arg1 = command.getInt("arg1");
     fill(arg1);
-  } else if (functionName.equals("noFill")) {    
+  }else if (functionName.equals("line")) {
+    float arg1 = command.getFloat("arg1");
+    float arg2 = command.getFloat("arg2");
+    float arg3 = command.getFloat("arg3");
+    float arg4 = command.getFloat("arg4");
+    line(arg1, arg2, arg3, arg4);
+  }  else if (functionName.equals("noFill")) {    
     noFill();
   } else if (functionName.equals("noStroke")) {    
     noStroke();
