@@ -1,7 +1,7 @@
 import processing.pdf.*;
 
-String inputFile = "box01.js";
-String outputFile = "output.pdf";
+String inputFile = "pentagons.js";
+String outputFile = "pentagonsOutput.pdf";
 
 void setup() {
   size(800, 800, PDF, outputFile);

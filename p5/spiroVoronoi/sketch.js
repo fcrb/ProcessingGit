@@ -10,7 +10,7 @@ function setup() {
   createCanvas(800, 800);
 
   var widgetOffset = 120;
-  numPointsSlider = makeSlider("Number points", 11, 1001, 51, widgetOffset, 20, 2);
+  numPointsSlider = makeSlider("Number points", 11, 251, 51, widgetOffset, 20, 2);
   fixedRingSlider = makeSlider("Fixed ring", 1, 20, 4, widgetOffset, 50, 1);
   rollingRingSlider = makeSlider("Rolling ring", 1, 20, 7, widgetOffset, 80, 1);
   innerRadiusSlider = makeSlider("Inner radius", 0, width / 4, 0, widgetOffset, 110, 1);
