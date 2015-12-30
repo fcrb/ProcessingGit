@@ -9,35 +9,34 @@
 var polygons = [];
 var needsRedraw = true;
 var sideLength = 50.0;
-var altitude, distToVertex;
 
 // UI
-var scaleSlider, numVerticesSlider, edgeNumbersCheckbox;
+var baseVerticesSlider, scaleSlider, numVerticesSlider;
 
 function setup() {
   createCanvas(900, 900);
+  clear();
 
   var sliderInset = 150;
-  numVerticesSlider = makeSlider("number of vertices", 3, 15, 5, sliderInset, 20, 2);
-  numVerticesSlider.input(numVerticesChanged);
-  scaleSlider = makeSlider("scale", 0.5, 2, 1, sliderInset, 50, 0.05);
-  edgeNumbersCheckbox = makeCheckbox("show edge numbers", false, sliderInset, 80);
+  baseVerticesSlider = makeSlider("starting # of vertices", 3, 15, 5, sliderInset, 20, 1);
+  baseVerticesSlider.input(baseVerticesChanged);
+  numVerticesSlider = makeSlider("next # of vertices", 3, 15, 4, sliderInset, 50, 1);
+  scaleSlider = makeSlider("scale", 0.5, 2, 1, sliderInset, 80, 0.05);
 
-  numVerticesChanged();
+  baseVerticesChanged();
 }
 
-function numberOfSides() {
+function baseVerticesChanged() {
+  polygons = [];
+  polygons.push(new Polygon(baseVerticesSlider.value(), 0, 0, 0));
+}
+
+function nextNumberOfSides() {
   return numVerticesSlider.value();
 }
 
-function numVerticesChanged() {
-  // sideLength = 40;//200.0 / numberOfSides();
-  altitude = sideLength / 2 / tan(PI / numberOfSides());
-  distToVertex = sqrt(altitude * altitude + sideLength * sideLength / 4);
-  polygons = [];
-  println(numberOfSides());
-  polygons.push(new Polygon(numberOfSides(), 0, 0, true));
-  needsRedraw = true;
+function nextPolygonAlitude() {
+  return sideLength / 2 / tan(PI / nextNumberOfSides());
 }
 
 function mousePressed() {
@@ -88,11 +87,6 @@ function draw() {
   for (var polygonIndex in polygons) {
     polygons[polygonIndex].draw(scale_);
   }
-  if (edgeNumbersCheckbox.checked()) {
-    for (var polygonIndex in polygons) {
-      polygons[polygonIndex].drawEdgeNumbers(scale_);
-    }
-  }
   for (var polygonIndex in polygons) {
     polygons[polygonIndex].drawRings(scale_);
   }
@@ -102,31 +96,10 @@ function draw() {
   fill(0);
   text(msg, (width - textWidth(msg)) / 2, 15);
 
-  var labelInset = 280;
-  text(numVerticesSlider.value(), labelInset, 33);
-  text(scaleSlider.value(), labelInset, 63);
-
-  //all edges
-  var edgeNumberTotals = edgeCounts();
-  var rowSeparation = 18;
-  var yOffset = 120;
-  var numSides = numVerticesSlider.value();
-  for (var edgeIndex = 0; edgeIndex < numSides; ++edgeIndex) {
-    text("Edge " + edgeIndex + "=" + edgeNumberTotals[edgeIndex], 10, yOffset + rowSeparation * edgeIndex);
-    text("Edge " + (edgeIndex + numSides) + "=" + edgeNumberTotals[edgeIndex + numSides], 120, yOffset + rowSeparation * edgeIndex);
-  }
-
-  //edges in path starting at first polygon
-  var edgeNumberTotals = edgeCountsFromFirstPolygon();
-  var rowSeparation = 18;
-  var numSides = numVerticesSlider.value();
-  yOffset = 130 + numSides * rowSeparation;
-  text("Edge counts for cycle starting from original polygon", 10, yOffset);
-  for (var edgeIndex = 0; edgeIndex < numSides; ++edgeIndex) {
-    var y = yOffset + rowSeparation * (edgeIndex + 1);
-    text("Edge " + edgeIndex + "=" + edgeNumberTotals[edgeIndex], 10, y);
-    text("Edge " + (edgeIndex + numSides) + "=" + edgeNumberTotals[edgeIndex + numSides], 120, y);
-  }
+  var labelInset = 340;
+  text(baseVerticesSlider.value(), labelInset, 33);
+  text(numVerticesSlider.value(), labelInset, 63);
+  text(scaleSlider.value(), labelInset, 93);
 
 }
 

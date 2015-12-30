@@ -5,7 +5,7 @@ function makeSlider(name, min, max, initialValue, x, y, step) {
   label.position(10, y - 17);
   var slider = createSlider(min, max, initialValue);
   slider.position(x, y);
-  slider.style('width', '120px');
+  slider.style('width', '180px');
   slider.input(forceRedraw);
   slider.attribute('step', step);
   slider.value(initialValue);

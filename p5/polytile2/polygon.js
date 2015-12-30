@@ -1,19 +1,26 @@
 "use strict";
 
 var Polygon = class Polygon {
-  constructor(numVertices, x, y, pointRight) {
+  constructor(numVertices, x, y, rotation) {
     this.numVertices = numVertices;
     this.x = x;
     this.y = y;
-    this.pointRight = pointRight;
+    while (rotation >= TWO_PI / numVertices) {
+      rotation -= TWO_PI / numVertices;
+    }
+    this.rotation = rotation;
+    println(rotation);
     this.vertices = [];
     this.midPoints = [];
+    this.altitude = sideLength / 2 / tan(PI / this.numVertices);
+    this.distToVertex = sqrt(this.altitude * this.altitude + sideLength * sideLength / 4);
+
     var previousVertex = null;
     var firstVertex = null;
-    var angle = (this.pointRight ? 0 : PI / this.numVertices);
+    var angle = this.rotation + (numVertices % 2 == 0 ? PI / numVertices : 0);
     for (var sideCtr = 0; sideCtr < numVertices; ++sideCtr) {
-      var x = this.x + distToVertex * cos(angle);
-      var y = this.y + distToVertex * sin(angle);
+      var x = this.x + this.distToVertex * cos(angle);
+      var y = this.y + this.distToVertex * sin(angle);
       var vertx = new Vector2D(x, y);
       this.vertices.push(vertx);
       if (!previousVertex) {
@@ -45,7 +52,7 @@ var Polygon = class Polygon {
   }
 
   hasFocus(scale_) {
-    return this.distFromMouse(scale_, this.x, this.y) < altitude * 1.1;
+    return this.distFromMouse(scale_, this.x, this.y) < this.altitude * 1.1;
   }
 
   drawRings(scale_) {
@@ -62,44 +69,8 @@ var Polygon = class Polygon {
     pop();
   }
 
-  drawEdgeNumbers(scale_) {
-    push();
-    fill(100, 10);
-    scale(scale_);
-    var txtSize = 10.0;
-    textSize(txtSize);
-    var edgeNumber = this.pointRight ? 1 : 0;
-    var easing = 0.8;
-    for (var sideCtr = 0; sideCtr < this.numVertices; ++sideCtr) {
-      var lowerLeftOfText = new Vector2D(this.x, this.y).easeTowards(this.midPoints[sideCtr], easing);
-      text(edgeNumber, lowerLeftOfText.x - textWidth(edgeNumber) * 0.5, lowerLeftOfText.y + txtSize * 0.5);
-      edgeNumber += 2;
-    }
-    pop();
-  }
-
   edgeRingDiameter() {
     return sideLength * 0.3;
-  }
-
-  edgeTouching(otherPoly) {
-    //there is a better way to do this...
-    var epsilon = 1e-4;
-    if (abs(dist(this.x, this.y, otherPoly.x, otherPoly.y) - altitude * 2) > epsilon) {
-      return -1;
-    }
-    //they are touching!
-    var edgeNumber = this.pointRight ? 1 : 0;
-
-    for (var sideCtr = 0; sideCtr < this.numVertices; ++sideCtr) {
-      var midPoint = this.midPoints[sideCtr];
-      var xNew = this.x + 2 * (midPoint.x - this.x);
-      var yNew = this.y + 2 * (midPoint.y - this.y);
-      if (dist(xNew, yNew, otherPoly.x, otherPoly.y) < epsilon) {
-        return edgeNumber;
-      }
-      edgeNumber += 2;
-    }
   }
 
   spawnedPolygon(scale_) {
@@ -109,9 +80,11 @@ var Polygon = class Polygon {
       var midPoint = this.midPoints[sideCtr];
       if (this.distFromMouse(scale_, midPoint.x, midPoint.y) < this.edgeRingDiameter() / 2) {
         //cursor in the ring! create a Polygon...
-        var xNew = this.x + 2 * (midPoint.x - this.x);
-        var yNew = this.y + 2 * (midPoint.y - this.y);
-        return new Polygon(this.numVertices, xNew, yNew, !this.pointRight);
+        var thisCenter = new Vector2D(this.x, this.y);
+        var vecToPoly = midPoint.minus(thisCenter);
+        var rotation = vecToPoly.angle();// + (this.numVertices % 2 == 0) ? HALF_PI/2 : 0;
+        var polyCenter = vecToPoly.scaleBy((this.altitude + nextPolygonAlitude()) / this.altitude).plus(thisCenter);
+        return new Polygon(nextNumberOfSides(), polyCenter.x, polyCenter.y, rotation);
       }
     }
   }
