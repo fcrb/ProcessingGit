@@ -9,7 +9,6 @@ var Polygon = class Polygon {
       rotation -= TWO_PI / numVertices;
     }
     this.rotation = rotation;
-    println(rotation);
     this.vertices = [];
     this.midPoints = [];
     this.altitude = sideLength / 2 / tan(PI / this.numVertices);

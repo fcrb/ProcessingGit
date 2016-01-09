@@ -1,7 +1,4 @@
-
-/* TODO:
- Create PDF capability.
- */
+import processing.pdf.*;
 
 int n1 = 1;
 int n2 = 1;
@@ -9,15 +6,18 @@ float gearSpeed = 0.003;
 float axleSeparation;
 int numIterationsPerGear = 100;
 
-float amplitudeMultipler = 0.238;//try n1=n2=1, and ampMulti =0.236, 0.237, then 0.238 with
-//  return height * 0.2 * (1 + amplitudeMultipler * (cos(theta * n1) +  sin(theta * n1 * 2 )+   cos(theta * n1 * 3 )+   sin(theta * n1 * 5 )));
+float amplitudeMultipler = 0.238;
+
+PGraphics pdf;
+int numIterationsPerGearPDF = 1000;
+float axleDiameterPDF = 72*0.5;
 
 void setup() {
   size(960, 720);
 
   calibrateAxleSeparation();
+  printPDF();
 }
-
 
 float radius(float theta) {
   //return height * 0.1 * (1 + 0.3 * (cos(theta * n1) + cos(theta * n1 * 2)));
@@ -25,6 +25,17 @@ float radius(float theta) {
   return height * 0.2 * (1 + amplitudeMultipler * (cos(theta * n1) +  sin(theta * n1 * 2 )+   cos(theta * n1 * 3 )+   sin(theta * n1 * 5 )));
   //return height * 0.1 * (1 + 0.8 * cos(theta * n1) ); 
   //return height * 0.1 * (1 + 0.7 * sin(theta * n1) );
+}
+
+void printPDF() {
+  String filename =  "pdf/gear_"+n1+'_'+n2+'_' + ((int) (1000* radius(1)))+".pdf";
+  pdf = createGraphics(width, height, PDF, filename);
+  pdf.beginDraw();
+  pdf.translate(width/2, height/2);
+  pdf.strokeWeight(0.01);
+  drawFirstGearPDF();
+  pdf.dispose();
+  pdf.endDraw();
 }
 
 void calibrateAxleSeparation() {
@@ -103,9 +114,33 @@ void drawFirstGear() {
   popMatrix();
 }
 
+void drawFirstGearPDF() {
+  pdf.pushMatrix();
+  pdf.rotate(-gearOneRotation());
+  pdf.line(0, 0, radius(0), 0);
+  drawAxlePDF();  
+  float dTheta = 2 * PI / n1 / numIterationsPerGearPDF;
+  float x = radius(0);
+  float y = 0;
+  for (int i = 0; i < numIterationsPerGearPDF * n1; ++i) {
+    float theta = dTheta * (i + 1);
+    float r = radius(theta);
+    float newX = r * cos(theta);
+    float newY = r * sin(theta);
+    pdf.line(x, y, newX, newY);
+    x = newX;
+    y = newY;
+  }
+  pdf.popMatrix();
+}
+
 void drawAxle() {
   float axleDiameter = width * 0.01;
   ellipse(0, 0, axleDiameter, axleDiameter);
+}
+
+void drawAxlePDF() {
+  pdf.ellipse(0, 0, axleDiameterPDF, axleDiameterPDF);
 }
 
 void drawSecondGear() {

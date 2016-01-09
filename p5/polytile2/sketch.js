@@ -91,7 +91,7 @@ function draw() {
     polygons[polygonIndex].drawRings(scale_);
   }
   pop();
-  var msg = "press '-' to remove most recently added polygon";
+  var msg = "Click edges to add polygons. Press '-' to remove most recently added polygon.";
   noStroke();
   fill(0);
   text(msg, (width - textWidth(msg)) / 2, 15);
