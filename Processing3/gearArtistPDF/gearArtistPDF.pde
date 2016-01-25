@@ -1,12 +1,12 @@
 import processing.pdf.*;
 
-int n1 = 1;
-int n2 = 1;
-float gearSpeed = 0.003;
+int n1 = 2;
+int n2 = 3;
+float gearSpeed = 0.01;
 float axleSeparation;
 int numIterationsPerGear = 100;
 
-float amplitudeMultipler = 0.238;
+float amplitudeMultipler = 0.1;
 
 PGraphics pdf;
 int numIterationsPerGearPDF = 1000;
@@ -31,9 +31,11 @@ void printPDF() {
   String filename =  "pdf/gear_"+n1+'_'+n2+'_' + ((int) (1000* radius(1)))+".pdf";
   pdf = createGraphics(width, height, PDF, filename);
   pdf.beginDraw();
-  pdf.translate(width/2, height/2);
+  pdf.translate(width/4, height/2);
   pdf.strokeWeight(0.01);
   drawFirstGearPDF();
+  pdf.translate(width/2, 0);
+  drawSecondGearPDF();
   pdf.dispose();
   pdf.endDraw();
 }
@@ -165,4 +167,28 @@ void drawSecondGear() {
     y = newY;
   }
   popMatrix();
+}
+
+void drawSecondGearPDF() {
+  pdf.pushMatrix();
+  pdf.rotate(gearTwoRotation(gearOneRotation()));
+  float x = radius(0) - axleSeparation;
+  pdf.line(0, 0, x, 0);
+  drawAxlePDF();
+  float numStepsForSecondGear = numIterationsPerGear * 10;
+  float dTheta = 2 * PI / n1 / numStepsForSecondGear;
+  float y = 0;
+  float theta2 = 0;
+  for (int i = 0; i < numStepsForSecondGear * n2; ++i) {
+    float theta1 = dTheta * (i + 1);
+    float r1 = radius(theta1);
+    float r2 = axleSeparation - r1;
+    theta2 += dTheta * r1 / r2;
+    float newX = - r2 * cos(theta2);
+    float newY = r2 * sin(theta2);
+    pdf.line(x, y, newX, newY);
+    x = newX;
+    y = newY;
+  }
+  pdf.popMatrix();
 }

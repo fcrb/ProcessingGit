@@ -3,38 +3,65 @@ class EdgeCalculator {
   PImage img;
   ArrayList<EdgePath> paths;
 
-  EdgeCalculator(String inputFileName, int additionalPixelLayers) {
+  EdgeCalculator(String inputFileName) {
     img = loadImage("input/"+inputFileName );
 
     filterToBlackAndWhiteOnly();
     trimSpurs();
-    addPixelLayer(additionalPixelLayers);
+    fatten(FATTEN_BY_PIXELS);
+    filterToBlackAndWhiteOnly();//do it again because fatten aliases
 
     removeAllButEdgePixels();
     buildVectors();
     createEdgeOnlyPDF(INPUT_FILE_NAME+"_traced.pdf", 72 * WIDTH_IN_INCHES );
   }
 
-  void addPixelLayer(int numLayers) {
+  void fatten(int depth) {
+    if (depth == 0) {
+      return;
+    }
+    println("fattening by " + depth + " pixels");
+    fill(0);
+    noStroke();
+    int diameter = depth * 2;
     img.loadPixels();
-    for (int layer = 0; layer < numLayers; ++layer) {
-      int[] pxlCopy = new int[img.pixels.length];
-      arrayCopy(img.pixels, pxlCopy);
-      for (int i = 1; i < width-1; ++i) {
-        for (int j = 1; j < height-1; ++j) {
-          if (isBlack(i, j)) {
-            for (int dx = -1; dx < 2; ++dx) {
-              for (int dy = -1; dy < 2; ++dy) {
-                pxlCopy[(j+dy) * width + i + dx] = BLACK ;
-              }
-            }
-          }
+    loadPixels();
+    arrayCopy(img.pixels, pixels);
+    updatePixels();
+    //image(img, 0, 0);//display it so that we can draw
+    for (int y = 1; y < height-1; ++y) {
+      for (int x = 1; x < width-1; ++x) {
+        if (isBlack(x, y) && numberOfWhiteNeighbors(x, y) > 0) {
+          ellipse(x, y, diameter, diameter);
         }
       }
-      arrayCopy(pxlCopy, img.pixels);
     }
+    println("done fatten");
+    loadPixels();
+    arrayCopy(pixels, img.pixels);
     img.updatePixels();
   }
+
+  //  void addPixelLayer(int numLayers) {
+  //    img.loadPixels();
+  //    for (int layer = 0; layer < numLayers; ++layer) {
+  //      int[] pxlCopy = new int[img.pixels.length];
+  //      arrayCopy(img.pixels, pxlCopy);
+  //      for (int i = 1; i < width-1; ++i) {
+  //        for (int j = 1; j < height-1; ++j) {
+  //          if (isBlack(i, j)) {
+  //            for (int dx = -1; dx < 2; ++dx) {
+  //              for (int dy = -1; dy < 2; ++dy) {
+  //                pxlCopy[(j+dy) * width + i + dx] = BLACK ;
+  //              }
+  //            }
+  //          }
+  //        }
+  //      }
+  //      arrayCopy(pxlCopy, img.pixels);
+  //    }
+  //    img.updatePixels();
+  //  }
 
   void filterToBlackAndWhiteOnly() {
     img.loadPixels();
@@ -81,10 +108,11 @@ class EdgeCalculator {
     int drawingHeight = 1 + (int) (height * pixelWidth / width);
 
     float scale = pixelWidth / width;
-
+    //String fattenedFileName = FATTEN_BY_PIXELS == 0 ? filename : filename + "_"+FATTEN_BY_PIXELS;
+    println("Creating pdf "+ filename);
     PGraphics pdf = createGraphics(drawingWidth, drawingHeight, PDF, "pdf/"+filename);
     pdf.beginDraw();
-    pdf.background(255);
+    //pdf.background(255, 255, 255, 0);
     noFill();
     pdf.strokeWeight(0.072);
     for (EdgePath path : paths) {
@@ -92,6 +120,7 @@ class EdgeCalculator {
     }
     pdf.dispose();
     pdf.endDraw();
+    println("pdf written");
   }
 
   void buildVectors() {
